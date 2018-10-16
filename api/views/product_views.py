@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
 from api.models.product_model import Product
 from api.validators import check_empty_fields
 from datetime import datetime
@@ -14,7 +14,7 @@ def create_product():
     data = request.get_json()
     validate = check_empty_fields(data)
     try:
-        if validate == "valid":
+        if validate == "Valid":
             product_id = len(products)
             product_id += 1
             date_added = datetime.now()
@@ -23,6 +23,7 @@ def create_product():
                                   data['price'], data['product_quantity'],
                                   date_added, date_modified)
             products.append(new_product)
-        return jsonify({"message": "Product successfully created"}), 201
+            return jsonify({"message": "Product successfully created"}), 201
+        return make_response(validate)
     except ValueError:
-        return jsonify({"message": validate}), 400
+        return jsonify({"message": "Invalid fields"}), 400
