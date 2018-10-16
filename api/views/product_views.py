@@ -18,12 +18,18 @@ def create_product():
             product_id = len(products)
             product_id += 1
             date_added = datetime.now()
-            date_modified = datetime.now()
             new_product = Product(product_id, data['product_name'],
                                   data['price'], data['product_quantity'],
-                                  date_added, date_modified)
+                                  date_added)
             products.append(new_product)
             return jsonify({"message": "Product successfully created"}), 201
         return make_response(validate)
     except ValueError:
         return jsonify({"message": "Invalid fields"}), 400
+
+
+@product.route('/api/v1/products', methods=['GET'])
+def fetch_products():
+    """Fetches all the available products"""
+    Products = [product.serialize() for product in products]
+    return jsonify({"Products": Products}), 200

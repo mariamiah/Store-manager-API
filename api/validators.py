@@ -14,7 +14,7 @@ def validate_product(data):
         if data["product_quantity"] == "":
             return jsonify({"message": "Enter the product quantity"}), 400
 
-        if not re.match(r"^[a-zA-Z0-9_]*$", data['product_name']):
+        if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
             return jsonify({
                 "message": "productname should contain alphanumerics only"}),\
                 400
