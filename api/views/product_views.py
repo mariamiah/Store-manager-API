@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, make_response
 from api.models.product_model import Product
-from api.validators import validate_product
+from api.validators import Validate
 from datetime import datetime
 
 product = Blueprint('product', __name__)
@@ -12,9 +12,10 @@ products = []
 def create_product():
     """Creates a new product"""
     data = request.get_json()
-    validate = validate_product(data)
+    validate = Validate(data)
+    valid = validate.validate_product()
     try:
-        if validate == "Valid":
+        if valid == "Valid":
             product_id = len(products)
             product_id += 1
             date_added = datetime.now()
