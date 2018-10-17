@@ -36,3 +36,13 @@ def fetch_sale_orders():
     """This endpoint fetches all sale records"""
     Sales = [record.get_dict() for record in sales]
     return jsonify({"All Sales": Sales}), 200
+
+
+@sale.route('/api/v1/sales/<int:sale_id>', methods=['GET'])
+def get_single_record(sale_id):
+    single_record = []
+    if sale_id != 0 and sale_id <= len(sales):
+        record = sales[sale_id - 1]
+        single_record.append(record.get_dict())
+        return jsonify({"Record": single_record}), 200
+    return jsonify({"message": "Index out of range!"}), 400   
