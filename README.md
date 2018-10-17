@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/mariamiah/Store-manager-challenge-2.svg?branch=develop)](https://travis-ci.org/mariamiah/Store-manager-challenge-2)
+[![Coverage Status](https://coveralls.io/repos/github/mariamiah/Store-manager-challenge-2/badge.svg?branch=develop)](https://coveralls.io/github/mariamiah/Store-manager-challenge-2?branch=develop)
 # StoreManager-API
 Store Manager is a web application that helps store owners manage sales and product inventory records. This application is meant for use in a single store.
 
