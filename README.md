@@ -63,5 +63,6 @@ Test your setup using [postman](www.getpostman.com) REST-client
 * Use `nosetests tests/` to run the tests
 * To run tests with coverage, use `nosetests --with-coverage --cover-package=app && coverage report`
 
-
+### Link to Store Manager on Heroku
+### [StoreManager](https://storemanager15.herokuapp.com)
 
