@@ -45,4 +45,4 @@ def get_single_record(sale_id):
         record = sales[sale_id - 1]
         single_record.append(record.get_dict())
         return jsonify({"Record": single_record}), 200
-    return jsonify({"message": "Index out of range!"}), 400   
+    return jsonify({"message": "Index out of range!"}), 400
