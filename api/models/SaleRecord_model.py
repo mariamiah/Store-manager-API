@@ -7,3 +7,14 @@ class SaleRecord:
         self.product_quantity = product_quantity
         self.total_amount = total_amount
         self.date_added = date_added
+
+    def get_dict(self):
+        dict = {
+            "record_id": self.record_id,
+            "product_name": self.product_name,
+            "price": self.price,
+            "product_quantity": self.product_quantity,
+            "total_amount": self.total_amount,
+            "date_added": self.date_added
+        }
+        return dict
