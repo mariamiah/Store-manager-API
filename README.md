@@ -1,4 +1,7 @@
 # StoreManager-API
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/865de88d58cd4b8ca39ba7daba6d7a71)](https://app.codacy.com/app/mariamiah/Store-manager-challenge-2?utm_source=github.com&utm_medium=referral&utm_content=mariamiah/Store-manager-challenge-2&utm_campaign=Badge_Grade_Settings)
+
 Store Manager is a web application that helps store owners manage sales and product inventory records. This application is meant for use in a single store.
 
 ## Features 
