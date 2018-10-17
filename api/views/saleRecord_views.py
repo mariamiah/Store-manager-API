@@ -29,3 +29,10 @@ def create_sale_record():
         return jsonify({"message": "Invalid fields"}), 400
     except ValueError:
         return jsonify({"message": "Invalid"})
+
+
+@sale.route('/api/v1/sales', methods=['GET'])
+def fetch_sale_orders():
+    """This endpoint fetches all sale records"""
+    Sales = [record.get_dict() for record in sales]
+    return jsonify({"All Sales": Sales}), 200
