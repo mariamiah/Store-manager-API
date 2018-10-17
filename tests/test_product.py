@@ -13,14 +13,30 @@ class TestProduct(unittest.TestCase):
         self.product.product_id = 8
         self.assertEqual(self.product.product_id, 8, "product_id is now 8")
 
+    def test_product_id_type(self):
+        # Tests the datatype of the product id
+        self.assertNotIsInstance(self.product.product_id, str)
+        self.assertIsInstance(self.product.product_id, int)
+
     def test_product_quantity(self):
         # Tests that the product quantity is equal to the given quantity
         self.assertEqual(self.product.product_quantity, 5,
                          "Quantity should be 5")
 
+    def test_product_quantity_type(self):
+        # Tests the datatype of the product quantity
+        self.assertIsInstance(self.product.product_quantity, int)
+        self.assertNotIsInstance(self.product.product_quantity, str)
+
     def test_product_price(self):
         # Tests that the price is equal to the given product price
         self.assertEqual(self.product.price, 50000, "price must be 50000")
+
+    def test_price_datatype(self):
+        # Tests the price of the product
+        self.assertIsInstance(self.product.price, int)
+        self.assertNotIsInstance(self.product.price, float)
+        self.assertNotIsInstance(self.product.price, str)
 
     def test_product_name(self):
         # Tests that the product name is equal to the given product name
