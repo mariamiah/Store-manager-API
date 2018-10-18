@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, make_response
 from api.models.product_model import Product
 from api.validators import Validate
 from datetime import datetime
+from flasgger import swag_from
 
 product = Blueprint('product', __name__)
 
@@ -9,6 +10,7 @@ products = []
 
 
 @product.route('/api/v1/products', methods=['POST'])
+@swag_from('../apidocs/products/create_product.yml')
 def create_product():
     """Creates a new product"""
     data = request.get_json()
@@ -24,12 +26,13 @@ def create_product():
                                   date_added)
             products.append(new_product)
             return jsonify({"message": "Product successfully created"}), 201
-        return make_response(validate)
+        return make_response(valid)
     except ValueError:
         return jsonify({"message": "Invalid fields"}), 400
 
 
 @product.route('/api/v1/products', methods=['GET'])
+@swag_from('../apidocs/products/get_products.yml')
 def fetch_products():
     """Fetches all the available products"""
     Products = [product.serialize() for product in products]
@@ -37,6 +40,7 @@ def fetch_products():
 
 
 @product.route('/api/v1/products/<int:product_id>', methods=['GET'])
+@swag_from('../apidocs/products/get_single_product.yml')
 def fetch_single_product(product_id):
     fetched_product = []
     if product_id != 0 and product_id <= len(products):
