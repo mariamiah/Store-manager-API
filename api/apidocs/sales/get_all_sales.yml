@@ -1,0 +1,49 @@
+Endpoint fetching all sales
+---
+tags:
+  - Sale Record
+definitions:
+  Record:
+    type: object
+    properties:
+      record_id:
+        type: integer
+        format: int64
+      product_name:
+        type: string
+      product_quantity:
+          type: string
+      price:
+          type: string
+      date_added:
+          type: string
+          format: date-time
+      total_amount:
+          type: string
+      
+responses:
+  200:
+    description: A list of all created sale record
+    schema:
+      $ref: '#/definitions/Record'
+    examples:
+      [ "Records",
+  [   
+    {
+            "date_added": "Thur, 18 Oct 2018 23:44:14 GMT",
+            "price": "4000",
+            "product_name": "jeans",
+            "product_quantity": "20",
+            "record_id": 2,
+            "total_amount": "80000"
+    },
+      {
+            "date_added": "Wed, 17 Oct 2018 23:44:14 GMT",
+            "price": "20000",
+            "product_name": "shirt",
+            "product_quantity": "2",
+            "record_id": 2,
+            "total_amount": "40000"
+      }
+  ]]
+

@@ -1,0 +1,40 @@
+Endpoint to fetch a single product
+---
+  tags:
+    - Product
+  parameters:
+    - name: product_id
+      in: path
+      description: "id for the product to return"
+      required: true
+      type: integer
+      format: int64
+  definitions:
+    Product:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: int64
+        product_name:
+          type: string
+        date_added:
+          type: string
+          format: date-time
+        
+  responses:
+    200:
+      description: Fetches a single product
+      schema:
+        $ref: '#/definitions/Product'
+      examples:
+        Product: [{
+            "date_added": "Wed, 17 Oct 2018 15:09:53 GMT",
+            "price": "50000",
+            "product_id": 1,
+            "product_name": "covert jeans",
+            "product_quantity": "4"
+      }]
+    400:
+      description: Index out of range
+
