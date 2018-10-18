@@ -1,0 +1,70 @@
+Endpoint for registering a store attendant
+---
+tags:
+  - User
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: body
+    in: body
+    description: User Details
+    required: true
+    schema :
+      $ref: '#/definitions/create_user'
+definitions:
+  User:
+    type: object
+    properties:
+      employee_id:
+        type: integer
+        format: int64
+      employee_name:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      user_name:
+        type: string
+      password:
+        type: string
+  create_user:
+    type: object
+    properties:
+      employee_name:
+        type: string
+        example: "maria"
+      email:
+        type: string
+        example: "maria@gmail.com"
+      gender:
+        type: string
+        example: "female"
+      user_name:
+        type: string
+        example: "mimi"
+      password:
+        type: string
+        example: "1234567"
+responses:
+  201:
+    description: Store Attendant created successfully
+    schema:
+      $ref: '#/definitions/User'
+    examples:
+      [{
+        "message":"Attendant created successfully"
+      }]
+  400:
+    description: No user added
+    description: User name cannot be blank
+    description: Email cannot be blank
+    description: Password cannot be blank
+    description: Invalid email format
+    description: Only alpha numeric characters allowed in user name
+    description: user name cannot contain numbers only
+    description: password too short
+    
+
