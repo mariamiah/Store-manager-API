@@ -14,8 +14,8 @@ products = []
 def create_product():
     """Creates a new product"""
     data = request.get_json()
-    validate = Validate(data)
-    valid = validate.validate_product()
+    validate = Validate()
+    valid = validate.validate_product(data)
     try:
         if valid == "Valid":
             product_id = len(products)
