@@ -1,0 +1,45 @@
+Endpoint fetching all products
+---
+tags:
+  - Product
+definitions:
+  Product:
+    type: object
+    properties:
+      product_id:
+        type: integer
+        format: int64
+      product_name:
+        type: string
+      product_quantity:
+          type: string
+      price:
+          type: string
+      date_added:
+          type: string
+          format: date-time
+      
+responses:
+  200:
+    description: A list of all created products
+    schema:
+      $ref: '#/definitions/Product'
+    examples:
+      [ "Products",
+  [   
+    {
+            "date_added": "Wed, 17 Oct 2018 15:09:53 GMT",
+            "price": "50000",
+            "product_id": 1,
+            "product_name": "5",
+            "product_quantity": "covertjeans"
+    },
+      {
+            "date_added": "Wed, 17 Oct 2018 15:09:59 GMT",
+            "price": "60005",
+            "product_id": 2,
+            "product_name": "5",
+            "product_quantity": "dresses"
+      }
+  ]]
+

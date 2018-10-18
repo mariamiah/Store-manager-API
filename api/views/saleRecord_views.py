@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, make_response
 from api.models.SaleRecord_model import SaleRecord
 from api.validators import Validate
 from datetime import datetime
+from flasgger import swag_from
 
 sale = Blueprint('sale', __name__)
 
@@ -9,6 +10,7 @@ sales = list()
 
 
 @sale.route('/api/v1/sales', methods=['POST'])
+@swag_from('../apidocs/sales/create_sale_record.yml')
 def create_sale_record():
     """ Creates a new sale record"""
     data = request.get_json()
@@ -32,6 +34,7 @@ def create_sale_record():
 
 
 @sale.route('/api/v1/sales', methods=['GET'])
+@swag_from('../apidocs/sales/get_all_sales.yml')
 def fetch_sale_orders():
     """This endpoint fetches all sale records"""
     Sales = [record.get_dict() for record in sales]
@@ -39,6 +42,7 @@ def fetch_sale_orders():
 
 
 @sale.route('/api/v1/sales/<int:sale_id>', methods=['GET'])
+@swag_from('../apidocs/sales/get_single_sale.yml')
 def get_single_record(sale_id):
     single_record = []
     if sale_id != 0 and sale_id <= len(sales):

@@ -13,17 +13,17 @@ class TestSaleRecord(unittest.TestCase):
         # Tests if the object is an instance of the class
         self.assertIsInstance(self.new_record, SaleRecord)
 
-    def test_record_id(self):
+    def test_sale_id(self):
         # Tests that the id is equal to the given id
-        self.assertNotEqual(self.new_record.record_id, 1)
-        self.assertNotEqual(self.new_record.record_id, "str")
-        self.assertEqual(self.new_record.record_id, 5)
+        self.assertNotEqual(self.new_record.sale_id, 1)
+        self.assertNotEqual(self.new_record.sale_id, "str")
+        self.assertEqual(self.new_record.sale_id, 5)
 
-    def test_record_id_data_type(self):
+    def test_sale_id_data_type(self):
         # Tests the data type of the id
-        self.assertNotIsInstance(self.new_record.record_id, str)
-        self.assertNotIsInstance(self.new_record.record_id, float)
-        self.assertIsInstance(self.new_record.record_id, int)
+        self.assertNotIsInstance(self.new_record.sale_id, str)
+        self.assertNotIsInstance(self.new_record.sale_id, float)
+        self.assertIsInstance(self.new_record.sale_id, int)
 
     def test_sold_product_name(self):
         # Tests the existence of the product name
