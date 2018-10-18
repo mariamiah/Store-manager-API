@@ -14,8 +14,8 @@ sales = list()
 def create_sale_record():
     """ Creates a new sale record"""
     data = request.get_json()
-    validate = Validate(data)
-    valid = validate.validate_product()
+    validate = Validate()
+    valid = validate.validate_product(data)
     try:
         if valid == "Valid":
             record_id = len(sales)
