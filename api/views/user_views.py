@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint, make_response
 from api.models.user_models import User
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from flasgger import swag_from
 from api.validators import Validate
 from datetime import datetime, timedelta
