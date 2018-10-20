@@ -51,3 +51,29 @@ def fetch_single_product(product_id):
         fetched_product.append(product.serialize())
         return jsonify({"Product": fetched_product}), 200
     return jsonify({"message": "Index out of range!"}), 400
+
+
+@product.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
+@swag_from('../apidocs/products/delete_product.yml')
+def delete_product(product_id):
+    if product_id == 0 or product_id > len(products):
+        return jsonify({"message": "Index out of range"}), 400
+    for product in products:
+        if product.product_id == product_id:
+            products.remove(product)
+    return jsonify({"message": "product successfully removed"}), 200
+
+
+@product.route('/api/v1/products/<int:product_id>', methods=['PUT'])
+@swag_from('../apidocs/products/update_product.yml')
+def modify_product(product_id):
+    """Updates an entry"""
+    if product_id == 0 or product_id > len(products):
+        return jsonify({"message": "Index is out of range"}), 400
+    data = request.get_json()
+    for product in products:
+        if int(product.product_id) == int(product_id):
+            product.product_name = data['product_name']
+            product.product_quantity == data['product_quantity']
+            product.price = data['price']
+    return jsonify({'message': "successfully updated"}), 200

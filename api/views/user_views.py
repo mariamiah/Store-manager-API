@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint, make_response
 from api.models.user_models import User
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flasgger import swag_from
 from api.validators import Validate
 from datetime import datetime, timedelta
@@ -67,14 +67,15 @@ def login():
         if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) and\
            is_valid == "Credentials valid":
             return assigns_token(data)
-        return jsonify({"message": "not registered"})
+        return make_response(is_valid)
     except KeyError:
         return "Invalid data"
 
 
 def assigns_token(data):
     for employee in users:
-        if employee.email == data['email']:
+        if employee.email == data['email'] and\
+           check_password_hash(employee.password, data['password']):
             if employee.role == 'admin':
                 token = jwt.encode({'user': employee.role,
                                     'exp': datetime.utcnow() +
@@ -88,4 +89,5 @@ def assigns_token(data):
                                     'roles': ["Attendant"]},
                                    Config.SECRET_KEY)
                 return jsonify({'token': token.decode('UTF-8')}), 200
-    return "User not registered"
+    return jsonify({
+        "message": "User either not registered or forgot password"}), 400
