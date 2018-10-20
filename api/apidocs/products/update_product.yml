@@ -1,0 +1,35 @@
+Endpoint for modifying a product
+---
+  tags:
+    - Product
+  parameters:
+    - name: product_id
+      in: path
+      description: Id for product to modify
+      required: true
+      type: integer
+      format: int64
+  definitions:
+    Product:
+      type: object
+      properties:
+        product_name:
+          type: string
+        price:
+          type: integer
+          format: int64
+        product_quantity:
+          type: integer
+          format: int64
+
+  responses:
+    200:
+      description: Product Successfully modified 
+      schema:
+        $ref: '#/definitions/Product'
+      examples:
+        [{
+          "message": "Successfully updated"
+        }]
+    400:
+      description: Index out of range
