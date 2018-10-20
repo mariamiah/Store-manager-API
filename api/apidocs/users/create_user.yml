@@ -1,4 +1,4 @@
-Endpoint for registering a store attendant
+Endpoint for registering a User
 ---
 tags:
   - User
@@ -26,9 +26,11 @@ definitions:
         type: string
       gender:
         type: string
-      user_name:
+      username:
         type: string
       password:
+        type: string
+      role:
         type: string
   create_user:
     type: object
@@ -48,14 +50,17 @@ definitions:
       password:
         type: string
         example: "1234567"
+      role:
+        type: string
+        example: attendant"
 responses:
   201:
-    description: Store Attendant created successfully
+    description: User created successfully
     schema:
       $ref: '#/definitions/User'
     examples:
       [{
-        "message":"Attendant created successfully"
+        "message":"User created successfully"
       }]
   400:
     description: No user added
