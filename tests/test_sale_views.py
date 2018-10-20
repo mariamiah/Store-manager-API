@@ -12,7 +12,7 @@ class TestSaleViews(unittest.TestCase):
         post_data = ({
             "product_name": "Brown shirt",
             "price": "88000",
-            "product_quantity": "6"
+            "product_quantity": "44"
         })
         response = self.client().post('/api/v1/sales',
                                       content_type='application/json',
@@ -20,10 +20,10 @@ class TestSaleViews(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_fetch_all_sales(self):
-        # Tests that the end point fetches all sale records
+        # Tests that the end point fetches no sales if token is not provided
         response = self.client().get('/api/v1/sales',
                                      content_type='application/json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_fetch_a_single_record(self):
         # Tests that the end point successfully returns a single sale record

@@ -7,6 +7,11 @@ consumes:
 produces:
   - application/json
 parameters:
+  - name: x-access-token
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
   - name: body
     in: body
     description: Product Details

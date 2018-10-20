@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, make_response
 from api.models.SaleRecord_model import SaleRecord
 from api.validators import Validate
 from datetime import datetime
+from api.views.user_views import token_required
 from flasgger import swag_from
 
 sale = Blueprint('sale', __name__)
@@ -35,6 +36,7 @@ def create_sale_record():
 
 @sale.route('/api/v1/sales', methods=['GET'])
 @swag_from('../apidocs/sales/get_all_sales.yml')
+@token_required
 def fetch_sale_orders():
     """This endpoint fetches all sale records"""
     Sales = [record.get_dict() for record in sales]

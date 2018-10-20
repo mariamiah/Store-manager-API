@@ -2,6 +2,12 @@ Endpoint fetching all sales
 ---
 tags:
   - Sale Record
+parameters:
+  - name: x-access-token
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
 definitions:
   Record:
     type: object

@@ -3,6 +3,8 @@ from api.models.product_model import Product
 from api.validators import Validate
 from datetime import datetime
 from flasgger import swag_from
+from api.views.user_views import token_required
+
 
 product = Blueprint('product', __name__)
 
@@ -11,6 +13,7 @@ products = []
 
 @product.route('/api/v1/products', methods=['POST'])
 @swag_from('../apidocs/products/create_product.yml')
+@token_required
 def create_product():
     """Creates a new product"""
     data = request.get_json()
