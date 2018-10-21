@@ -8,7 +8,7 @@ class TestProductViews(unittest.TestCase):
         self.client = app.test_client()
 
     def test_create_a_product(self):
-        # Tests that the product will not be created if token is not provided
+        # Tests that the product is not created if token is  not provided
         post_data = ({
             "product_name": "Leather Jacket",
             "price": "50000",
