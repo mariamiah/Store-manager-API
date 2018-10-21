@@ -1,8 +1,8 @@
 from flask import request, jsonify, Blueprint, make_response
+from api.validators import Validate
 from api.models.user_models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flasgger import swag_from
-from api.validators import Validate
 from datetime import datetime, timedelta
 from functools import wraps
 from config import Config
@@ -12,7 +12,8 @@ import re
 user = Blueprint('user', __name__)
 
 users = []
-created_token = {}
+created_token = []
+validate = Validate()
 
 
 def token_required(f):
@@ -23,7 +24,7 @@ def token_required(f):
             return jsonify({"message": "Missing Token"}), 403
         try:
             data_token = jwt.decode(token, Config.SECRET_KEY)
-            created_token['token'] = data_token
+            created_token.append(data_token)
         except:
             return jsonify({"message": "Invalid token"}), 403
         return f(*args, **kwargs)
@@ -35,8 +36,7 @@ def token_required(f):
 def register_user():
     """ registers a user"""
     data = request.get_json()
-    validate_user = Validate()
-    is_valid = validate_user.validate_user(data)
+    is_valid = validate.validate_user(data)
     for user in users:
         if user.email == data['email']:
             return "user already exists!", 400
@@ -62,10 +62,9 @@ def register_user():
 def login():
     """Logs in a user"""
     data = request.get_json()
-    validate_data = Validate()
     email = data['email']
     try:
-        is_valid = validate_data.validate_login(data)
+        is_valid = validate.validate_login(data)
         if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) and\
            is_valid == "Credentials valid":
             return assigns_token(data)
