@@ -3,7 +3,8 @@ from api.models.product_model import Product
 from api.validators import Validate
 from datetime import datetime
 from flasgger import swag_from
-from api.views.user_views import token_required
+from api.views.user_views import token_required, created_token
+from config import Config
 
 
 product = Blueprint('product', __name__)
@@ -16,6 +17,9 @@ products = []
 @token_required
 def create_product():
     """Creates a new product"""
+    if created_token['token']['roles'] != 'Admin':
+        return jsonify({
+            "Message": "Permission denied, Not an admin"}), 401
     data = request.get_json()
     validate = Validate()
     valid = validate.validate_product(data)
