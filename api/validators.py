@@ -4,6 +4,7 @@ import re
 
 class Validate:
     """This class contains validators for the different entries"""
+
     def validate_product(self, data):
         # Validates the product fields
         try:
