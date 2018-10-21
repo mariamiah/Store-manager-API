@@ -1,6 +1,5 @@
 import unittest
 from api import app
-from flask import json
 
 
 class TestSaleViews(unittest.TestCase):
