@@ -12,6 +12,7 @@ import re
 user = Blueprint('user', __name__)
 
 users = []
+created_token = {}
 
 
 def token_required(f):
@@ -21,7 +22,8 @@ def token_required(f):
         if not token:
             return jsonify({"message": "Missing Token"}), 403
         try:
-            jwt.decode(token, Config.SECRET_KEY)
+            data_token = jwt.decode(token, Config.SECRET_KEY)
+            created_token['token'] = data_token
         except:
             return jsonify({"message": "Invalid token"}), 403
         return f(*args, **kwargs)
@@ -79,14 +81,14 @@ def assigns_token(data):
             if employee.role == 'admin':
                 token = jwt.encode({'user': employee.role,
                                     'exp': datetime.utcnow() +
-                                    timedelta(minutes=30), 'roles': ["Admin"]},
+                                    timedelta(minutes=30), 'roles': "Admin"},
                                    Config.SECRET_KEY)
                 return jsonify({'token': token.decode('UTF-8')}), 200
             if employee.role == 'attendant':
                 token = jwt.encode({'user': employee.role,
                                     'exp': datetime.utcnow() +
                                     timedelta(minutes=30),
-                                    'roles': ["Attendant"]},
+                                    'roles': "Attendant"},
                                    Config.SECRET_KEY)
                 return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({

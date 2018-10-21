@@ -4,6 +4,7 @@ import re
 
 class Validate:
     """This class contains validators for the different entries"""
+
     def validate_product(self, data):
         # Validates the product fields
         try:
@@ -51,7 +52,7 @@ class Validate:
             if not re.match(r"([a-zA-Z ]*$)", data['employee_name']):
                 return "Only alphanumerics allowed in employee name", 400
 
-            if not re.match(r"([a-zA-Z0-9])", data['username']):
+            if not re.match(r"([a-zA-Z0-9]*$)", data['username']):
                 return "Only alphanumerics allowed in user name", 400
 
             if re.match(r"([0-9])", data['username']):

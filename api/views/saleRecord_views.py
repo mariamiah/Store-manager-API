@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, make_response
 from api.models.SaleRecord_model import SaleRecord
 from api.validators import Validate
 from datetime import datetime
-from api.views.user_views import token_required
+from api.views.user_views import token_required, created_token
 from flasgger import swag_from
 
 sale = Blueprint('sale', __name__)
@@ -14,6 +14,8 @@ sales = list()
 @swag_from('../apidocs/sales/create_sale_record.yml')
 def create_sale_record():
     """ Creates a new sale record"""
+    if created_token['token']['roles'] != 'Attendant':
+        return jsonify({"Message": "Permission denied, Not an attendant"}), 401
     data = request.get_json()
     validate = Validate()
     valid = validate.validate_product(data)
@@ -39,6 +41,8 @@ def create_sale_record():
 @token_required
 def fetch_sale_orders():
     """This endpoint fetches all sale records"""
+    if created_token['token']['roles'] != 'Admin':
+        return jsonify({"Message": "Permission denied, Not an admin"}), 401
     Sales = [record.get_dict() for record in sales]
     return jsonify({"All Sales": Sales}), 200
 

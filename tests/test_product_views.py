@@ -8,7 +8,7 @@ class TestProductViews(unittest.TestCase):
         self.client = app.test_client()
 
     def test_create_a_product(self):
-        # Tests that the product will not be created if token is not provided
+        # Tests that the product is not created if token is  not provided
         post_data = ({
             "product_name": "Leather Jacket",
             "price": "50000",
@@ -35,4 +35,10 @@ class TestProductViews(unittest.TestCase):
         # Tests that the function returns invalid for wrong indices
         response = self.client.get('/api/v1/products/0',
                                    content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_delete_for_invalid_product_id(self):
+        # Tests that the product is not deleted given wrong id
+        response = self.client.delete('/api/v1/products/0',
+                                      content_type='application/json')
         self.assertEqual(response.status_code, 400)
