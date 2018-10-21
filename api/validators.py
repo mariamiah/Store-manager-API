@@ -1,4 +1,3 @@
-from flask import jsonify, request
 import re
 
 
@@ -85,3 +84,16 @@ class Validate:
                 return "Credentials valid"
         except KeyError:
             return "Invalid fields"
+
+    def validate_id(self, item_id, item_list):
+        if item_id != 0 and item_id <= len(item_list):
+            return True
+        return False
+
+    def check_role(self, created_token):
+        try:
+            if created_token[0]['roles'] != 'Attendant':
+                return True
+            return False
+        except IndexError:
+            return "Index out of range"

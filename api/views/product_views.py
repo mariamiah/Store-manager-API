@@ -9,6 +9,7 @@ from api.views.user_views import token_required, created_token
 product = Blueprint('product', __name__)
 
 products = []
+validate = Validate()
 
 
 @product.route('/api/v1/products', methods=['POST'])
@@ -16,11 +17,10 @@ products = []
 @token_required
 def create_product():
     """Creates a new product"""
-    if created_token['token']['roles'] != 'Admin':
+    if validate.check_role(created_token) is False:
         return jsonify({
             "Message": "Permission denied, Not an admin"}), 401
     data = request.get_json()
-    validate = Validate()
     valid = validate.validate_product(data)
     try:
         if valid == "Valid":
@@ -49,11 +49,14 @@ def fetch_products():
 @swag_from('../apidocs/products/get_single_product.yml')
 def fetch_single_product(product_id):
     fetched_product = []
-    if product_id != 0 and product_id <= len(products):
-        product = products[product_id - 1]
-        fetched_product.append(product.serialize())
-        return jsonify({"Product": fetched_product}), 200
-    return jsonify({"message": "Index out of range!"}), 400
+    try:
+        if validate.validate_id(product_id, products):
+            product = products[product_id - 1]
+            fetched_product.append(product.serialize())
+            return jsonify({"Product": fetched_product}), 200
+        return jsonify({"message": "Index out of range!"}), 400
+    except IndexError:
+        return "Index out of range", 400
 
 
 @product.route('/api/v1/products/<int:product_id>', methods=['DELETE'])

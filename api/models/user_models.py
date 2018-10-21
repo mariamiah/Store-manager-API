@@ -8,8 +8,3 @@ class User(object):
         self.username = username
         self.password = password
         self.role = role
-
-    def check_role(self):
-        if self.role == "admin":
-            return "Is_admin"
-        return "Is_attendant"
