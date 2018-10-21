@@ -4,7 +4,6 @@ from api.validators import Validate
 from datetime import datetime
 from flasgger import swag_from
 from api.views.user_views import token_required, created_token
-from config import Config
 
 
 product = Blueprint('product', __name__)
