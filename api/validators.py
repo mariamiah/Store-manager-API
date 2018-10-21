@@ -85,3 +85,16 @@ class Validate:
                 return "Credentials valid"
         except KeyError:
             return "Invalid fields"
+
+    def validate_id(self, id, item_list):
+        if id != 0 and id <= len(item_list):
+            return True
+        return False
+
+    def check_role(self, created_token):
+        try:
+            if created_token[0]['roles'] != 'Attendant':
+                return True
+            return False
+        except IndexError:
+            return "Index out of range"
