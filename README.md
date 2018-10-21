@@ -6,11 +6,11 @@
 Store Manager is a web application that helps store owners manage sales and product inventory records. This application is meant for use in a single store.
 
 ## Features 
--  Admin can add a product
--  Admin or store attendant can get all products
--  Admin or store attendant can get a specific product.
--  Store attendant can add a sale order.
--  Admin can get all sale order details.
+- Admin can add a product
+- Admin or store attendant can get all products
+- Admin or store attendant can get a specific product.
+- Store attendant can add a sale order.
+- Admin can get all sale order details.
 
 ## API Endpoints
 | REQUEST | ROUTE | FUNCTIONALITY |
@@ -26,8 +26,8 @@ Store Manager is a web application that helps store owners manage sales and prod
 
 **Technologies used to build the application**
 
--  [Python 3.6](https://docs.python.org/3/)
--  [Flask](http://flask.pocoo.org/)
+- [Python 3.6](https://docs.python.org/3/)
+- [Flask](http://flask.pocoo.org/)
 
 
 ## Installation
@@ -57,10 +57,10 @@ Test your setup using [postman](www.getpostman.com) REST-client
 
 **Running tests**
 
--  Install nosetests 
--  Navigate to project root
--  Use `nosetests tests/` to run the tests
--  To run tests with coverage, use `nosetests --with-coverage --cover-package=app && coverage report`
+- Install nosetests 
+- Navigate to project root
+- Use `nosetests tests/` to run the tests
+- To run tests with coverage, use `nosetests --with-coverage --cover-package=app && coverage report`
 
 ### Link to Store Manager on Heroku
 ### [StoreManager](https://storemanager15.herokuapp.com)
