@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, make_response
+from flask import Blueprint, jsonify, request
 from api.models.SaleRecord_model import SaleRecord
 from api.validators import Validate
 from datetime import datetime
