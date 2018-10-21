@@ -36,3 +36,9 @@ class TestProductViews(unittest.TestCase):
         response = self.client.get('/api/v1/products/0',
                                    content_type='application/json')
         self.assertEqual(response.status_code, 400)
+
+    def test_delete_for_invalid_product_id(self):
+        # Tests that the product is not deleted given wrong id
+        response = self.client.delete('/api/v1/products/0',
+                                      content_type='application/json')
+        self.assertEqual(response.status_code, 400)
