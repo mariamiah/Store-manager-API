@@ -1,12 +1,11 @@
 class SaleRecord:
-    def __init__(self, sale_id, product_name, price, product_quantity,
-                 total_amount, date_added):
-        self.sale_id = sale_id
-        self.product_name = product_name
-        self.price = price
-        self.product_quantity = product_quantity
-        self.total_amount = total_amount
-        self.date_added = date_added
+    def __init__(self, **kwargs):
+        self.sale_id = kwargs['sale_id']
+        self.product_name = kwargs['product_name']
+        self.price = kwargs['price']
+        self.product_quantity = kwargs['product_quantity']
+        self.total_amount = kwargs['total_amount']
+        self.date_added = kwargs['date_added']
 
     def get_dict(self):
         dict = {

@@ -4,8 +4,14 @@ from api.models.product_model import Product
 
 class TestProduct(unittest.TestCase):
     def setUp(self):
-        self.product = Product(1, 5, 50000, "Slim Mom Jeans",
-                               "Tue, 16 Oct 2018 18:42:38 GMT")
+        kwargs = {
+            "product_id": 1,
+            "product_quantity": 5,
+            "price": 50000,
+            "product_name": "Slim Mom Jeans",
+            "date_added": "Tue, 16 Oct 2018 18:42:38 GMT"
+        }
+        self.product = Product(**kwargs)
 
     def test_product_id(self):
         # Tests that the prodct_id is equal to the given id

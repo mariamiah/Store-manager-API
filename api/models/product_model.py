@@ -1,12 +1,11 @@
 class Product:
     """This class defines the product sold by the store"""
-    def __init__(self, product_id, product_quantity, price, product_name,
-                 date_added):
-        self.product_id = product_id
-        self.product_quantity = product_quantity
-        self.price = price
-        self.product_name = product_name
-        self.date_added = date_added
+    def __init__(self, **kwargs):
+        self.product_id = kwargs['product_id']
+        self.product_quantity = kwargs['product_quantity']
+        self.price = kwargs['price']
+        self.product_name = kwargs['product_name']
+        self.date_added = kwargs['date_added']
 
     def serialize(self):
         return {
