@@ -46,9 +46,16 @@ def register_user():
             employee_id += 1
             hashed_password = generate_password_hash(data['password'],
                                                      method='sha256')
-            user = User(employee_id, data['employee_name'], data['email'],
-                        data['gender'], data['username'], hashed_password,
-                        data['role'])
+            kwargs = {
+                "employee_id": employee_id,
+                "employee_name": data['employee_name'],
+                "email": data['email'],
+                "gender": data['gender'],
+                "username": data['username'],
+                "password": hashed_password,
+                "role": data['role']
+            }
+            user = User(**kwargs)
             users.append(user)
             return jsonify({"message":
                             "User registered successfully"}), 201
