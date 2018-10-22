@@ -44,7 +44,7 @@ definitions:
       gender:
         type: string
         example: "female"
-      user_name:
+      username:
         type: string
         example: "mimi"
       password:
@@ -52,7 +52,7 @@ definitions:
         example: "1234567"
       role:
         type: string
-        example: attendant"
+        example: "attendant"
 responses:
   201:
     description: User created successfully
