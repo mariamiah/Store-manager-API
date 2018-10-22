@@ -4,8 +4,16 @@ from api.models.user_models import User
 
 class TestProduct(unittest.TestCase):
     def setUp(self):
-        self.user = User(1, "sarah", "sarah@gmail.com", "female", "sara",
-                         "1234567", "admin")
+        kwargs = {
+            "employee_id": 1,
+            "employee_name": "sarah",
+            "email": "sarah@gmail.com",
+            "gender": "female",
+            "username": "sara",
+            "password": "1234567",
+            "role": "admin"
+        }
+        self.user = User(**kwargs)
 
     def test_employee_id(self):
         # Tests that the employee_id is equal to the given id

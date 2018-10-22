@@ -5,8 +5,15 @@ from api.models.SaleRecord_model import SaleRecord
 class TestSaleRecord(unittest.TestCase):
     def setUp(self):
         # Creates an instance of the SaleRecord class
-        self.new_record = SaleRecord(5, "floral blouse", "75000", "20",
-                                     "150000", "Tue, 16 Oct 2018 18:42:38 GMT")
+        kwargs = {
+            "sale_id": 5,
+            "product_name": "floral blouse",
+            "price": "75000",
+            "product_quantity": "20",
+            "total_amount": "150000",
+            "date_added": "Tue, 16 Oct 2018 18:42:38 GMT"
+        }
+        self.new_record = SaleRecord(**kwargs)
         return self.new_record
 
     def test_if_class_is_instance(self):

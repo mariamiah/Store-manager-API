@@ -25,10 +25,15 @@ def create_sale_record():
             record_id += 1
             total = int(data['price']) * int(data['product_quantity'])
             date_added = datetime.now()
-            new_record = SaleRecord(record_id, data['product_name'],
-                                    data['price'],
-                                    data['product_quantity'],
-                                    str(total), date_added)
+            kwargs = {
+                "sale_id": sale_id,
+                "product_name": data['product_name'],
+                "price": data['price'],
+                "product_quantity": data['product_quantity'],
+                "total": str(total),
+                "date_added": date_added
+            }
+            new_record = SaleRecord(**kwargs)
             sales.append(new_record)
             return jsonify({"message": "record created successfully"}), 201
         return jsonify({"message": "Invalid fields"}), 400

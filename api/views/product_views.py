@@ -27,9 +27,14 @@ def create_product():
             product_id = len(products)
             product_id += 1
             date_added = datetime.now()
-            new_product = Product(product_id, data['product_name'],
-                                  data['price'], data['product_quantity'],
-                                  date_added)
+            kwargs = {
+                'product_id': product_id,
+                "product_name": data['product_name'],
+                "price": data['price'],
+                "product_quantity": data['product_quantity'],
+                "date_added": date_added
+            }
+            new_product = Product(**kwargs)
             products.append(new_product)
             return jsonify({"message": "Product successfully created"}), 201
         return make_response(valid)
