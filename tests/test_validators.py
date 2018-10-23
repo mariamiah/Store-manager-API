@@ -105,7 +105,7 @@ class TestValidator(unittest.TestCase):
             "username": "sara",
             "password": "1323443",
             "email": "sarah@gmail.com",
-            "role": "admin"
+            "role": "Admin"
         }
         self.assertEqual(self.validate.validate_user(user_data), "is_valid")
 
@@ -124,7 +124,7 @@ class TestValidator(unittest.TestCase):
             "username": "sara",
             "password": "1323443",
             "email": "sarah@gmail.com",
-            "role": "admin"
+            "role": "Attendant"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
@@ -230,4 +230,4 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Role must be either admin or attendant", 400))
+                             ("Role must be either Admin or Attendant", 400))

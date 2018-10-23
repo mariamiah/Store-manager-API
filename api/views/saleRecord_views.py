@@ -21,8 +21,8 @@ def create_sale_record():
     valid = validate.validate_product(data)
     try:
         if valid == "Valid":
-            record_id = len(sales)
-            record_id += 1
+            sale_id = len(sales)
+            sale_id += 1
             total = int(data['price']) * int(data['product_quantity'])
             date_added = datetime.now()
             kwargs = {
@@ -30,7 +30,7 @@ def create_sale_record():
                 "product_name": data['product_name'],
                 "price": data['price'],
                 "product_quantity": data['product_quantity'],
-                "total": str(total),
+                "total_amount": str(total),
                 "date_added": date_added
             }
             new_record = SaleRecord(**kwargs)

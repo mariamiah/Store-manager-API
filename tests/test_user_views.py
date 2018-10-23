@@ -15,7 +15,7 @@ class TestUserViews(unittest.TestCase):
             "username": "sara",
             "password": "475677r",
             "email": "sara@gmail.com",
-            "role": "admin"
+            "role": "Admin"
         }
         response = self.client.post('/api/v1/users',
                                     content_type='application/json',
