@@ -20,4 +20,21 @@ class TestUserViews(unittest.TestCase):
         response = self.client.post('/api/v1/users',
                                     content_type='application/json',
                                     data=json.dumps(user_data))
+        msg = json.loads(response.data)
+        self.assertIn("User registered successfully", msg['message'])
         self.assertEqual(response.status_code, 201)
+
+    def test_login_user_if_not_registered(self):
+        # Tests that a user cannot log in if wrong details are passed or no
+        #  registered
+        user_details = {
+            "email": "maria@gmail.com",
+            "password": "1234"
+        }
+        response = self.client.post('/api/v1/login',
+                                    content_type='application/json',
+                                    data=json.dumps(user_details))
+        msg = json.loads(response.data)
+        self.assertIn("User either not registered or forgot password",
+                      msg['message'])
+        self.assertEqual(response.status_code, 400)

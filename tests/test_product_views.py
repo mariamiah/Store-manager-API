@@ -17,6 +17,8 @@ class TestProductViews(unittest.TestCase):
         response = self.client.post('/api/v1/products',
                                     content_type='application/json',
                                     data=json.dumps(post_data))
+        msg = json.loads(response.data)
+        self.assertIn("Missing Token", msg['message'])
         self.assertEqual(response.status_code, 403)
 
     def test_fetch_all_products(self):
@@ -29,16 +31,22 @@ class TestProductViews(unittest.TestCase):
         # Tests that the end point does not return the product if not created
         response = self.client.get('/api/v1/products/1',
                                    content_type='application/json')
+        msg = json.loads(response.data)
+        self.assertIn("Index out of range!", msg['message'])
         self.assertEqual(response.status_code, 400)
 
     def test_fetch_one_product_id(self):
         # Tests that the function returns invalid for wrong indices
         response = self.client.get('/api/v1/products/0',
                                    content_type='application/json')
+        msg = json.loads(response.data)
+        self.assertIn("Index out of range!", msg['message'])
         self.assertEqual(response.status_code, 400)
 
     def test_delete_for_invalid_product_id(self):
         # Tests that the product is not deleted given wrong id
         response = self.client.delete('/api/v1/products/0',
                                       content_type='application/json')
+        msg = json.loads(response.data)
+        self.assertIn("Index out of range", msg['message'])
         self.assertEqual(response.status_code, 400)
