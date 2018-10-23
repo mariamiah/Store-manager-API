@@ -230,4 +230,4 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Role must be either admin or attendant", 400))
+                             ("Role must be either Admin or Attendant", 400))

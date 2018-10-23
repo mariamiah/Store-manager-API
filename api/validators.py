@@ -60,8 +60,8 @@ class Validate:
             if len(data['password']) < 5:
                 return "Password too short", 400
 
-            if data['role'] != 'admin' and data['role'] != 'attendant':
-                return "Role must be either admin or attendant", 400
+            if data['role'] != 'Admin' and data['role'] != 'Attendant':
+                return "Role must be either Admin or Attendant", 400
 
             if data['employee_name'] == "":
                 return "Employee name cannot be blank", 400

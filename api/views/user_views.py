@@ -84,17 +84,10 @@ def assigns_token(data):
     for employee in users:
         if employee.email == data['email'] and\
            check_password_hash(employee.password, data['password']):
-            if employee.role == 'admin':
-                token = jwt.encode({'user': employee.role,
-                                    'exp': datetime.utcnow() +
-                                    timedelta(minutes=30), 'roles': "Admin"},
-                                   Config.SECRET_KEY)
-                return jsonify({'token': token.decode('UTF-8')}), 200
-            if employee.role == 'attendant':
-                token = jwt.encode({'user': employee.role,
+                token = jwt.encode({'user': employee.username,
                                     'exp': datetime.utcnow() +
                                     timedelta(minutes=30),
-                                    'roles': "Attendant"},
+                                    'roles': employee.role},
                                    Config.SECRET_KEY)
                 return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({
