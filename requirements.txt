@@ -2,8 +2,12 @@ atomicwrites==1.2.1
 attrs==18.2.0
 Click==7.0
 colorama==0.4.0
+coverage==4.5.1
 flasgger==0.9.1
 Flask==1.0.2
+Flask-JWT==0.3.2
+Flask-JWT-Extended==3.13.1
+Flask-JWT-Simple==0.0.3
 Flask-Login==0.4.1
 gunicorn==19.9.0
 itsdangerous==0.24
@@ -19,6 +23,8 @@ pluggy==0.8.0
 py==1.7.0
 PyJWT==1.4.2
 pytest==3.8.2
+pytest-cov==2.6.0
 PyYAML==3.13
 six==1.11.0
+undecorated==0.3.0
 Werkzeug==0.14.1

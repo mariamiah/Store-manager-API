@@ -115,6 +115,33 @@ class TestValidator(unittest.TestCase):
             self.assertEqual(self.validate.validate_user(user_data),
                              ("No user added"))
 
+    def test_invalid_email_format(self):
+        # Tests return value if an email is not in correct format
+        user_data = {
+            "employee_name": "maria",
+            "gender": "female",
+            "username": "sara",
+            "password": "1323443",
+            "email": "rtsmdmss",
+            "role": "Attendant"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("Invalid email format"))
+
+    def test_wrong_username_format(self):
+        user_data = {
+            "employee_name": "maria",
+            "gender": "female",
+            "username": "12345665",
+            "password": "1323443",
+            "email": "maria@gmail.com",
+            "role": "Attendant"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("user name cannot contain numbers only"))
+
     def test_return_if_employeename_is_blank(self):
         # Tests the value returned if the employeename is left blank
         user_data = {
@@ -223,13 +250,13 @@ class TestValidator(unittest.TestCase):
             "username": "sara",
             "password": "475677r",
             "email": "sara@gmail.com",
-            "role": "Admin"
+            "role": "administ"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
                              ("Role must be either Admin or Attendant"))
 
-    def test_return_if_wrong_role_entered(self):
+    def test_return_if_wrong_gender_value_entered(self):
         # Tests to ensure that only admin and attendant are acceptable
         user_data = {
             "employee_name": "sarah",
@@ -237,8 +264,65 @@ class TestValidator(unittest.TestCase):
             "username": "sara",
             "password": "475677r",
             "email": "sara@gmail.com",
-            "role": "Administrat"
+            "role": "Admin"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
                              ("gender can only be female or male"))
+
+    def test_to_ensure_an_exception_raised_for_wrong_key(self):
+        # Tests to ensure an exception is raised for wrong keys
+        user_data = {
+            "": "sarah",
+            "gender": "female",
+            "username": "sara",
+            "password": "475677r",
+            "email": "sara@gmail.com",
+            "role": "Admin"
+        }
+        with app.app_context():
+            self.assertRaises(KeyError)
+
+    def test_validate_login(self):
+        # Tests that the correct login details pass
+        user_data = {
+            "email": "maria@gmail.com",
+            "password": "12345",
+            "user": "mara"
+        }
+        self.assertEqual(self.validate.validate_login(user_data),
+                         "Only email and password for login")
+
+    def test_login_email_key_is_missing(self):
+        # Tests that without an email, cannot login
+        user_data = {
+            "user": "maria@gmail.com",
+            "password": "12345",
+        }
+        self.assertEqual(self.validate.validate_login(user_data),
+                         "Email is missing")
+
+    def test_login_password_key_is_missing(self):
+        # Tests that without a password key, cannot login
+        user_data = {
+            "email": "maria@gmail.com",
+            "user": "maria",
+        }
+        self.assertEqual(self.validate.validate_login(user_data),
+                         "Missing password")
+
+    def test_login_if_no_credentials_provided(self):
+        # Tests that one cannot login if credentials are missing
+        user_data = {
+            "email": "",
+            "password": "",
+        }
+        self.assertEqual(self.validate.validate_login(user_data),
+                         "Input email or password")
+
+    def test_exception_raised_for_wrong_fields(self):
+        user_data = {
+            "user": "mimi",
+            "firstname": "mimi",
+        }
+        self.assertRaises(KeyError)
