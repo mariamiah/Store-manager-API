@@ -13,6 +13,7 @@ validate = Validate()
 
 @sale.route('/api/v1/sales', methods=['POST'])
 @swag_from('../apidocs/sales/create_sale_record.yml')
+@token_required
 def create_sale_record():
     """ Creates a new sale record"""
     if validate.check_role(created_token):
@@ -36,18 +37,15 @@ def create_sale_record():
             new_record = SaleRecord(**kwargs)
             sales.append(new_record)
             return jsonify({"message": "record created successfully"}), 201
-        return jsonify({"message": "Invalid fields"}), 400
+        return jsonify({"message": valid}), 400
     except ValueError:
         return jsonify({"message": "Invalid"})
 
 
 @sale.route('/api/v1/sales', methods=['GET'])
 @swag_from('../apidocs/sales/get_all_sales.yml')
-@token_required
 def fetch_sale_orders():
     """This endpoint fetches all sale records"""
-    if validate.check_role(created_token) is False:
-        return jsonify({"Message": "Permission denied, Not an admin"}), 401
     Sales = [record.get_dict() for record in sales]
     return jsonify({"All Sales": Sales}), 200
 

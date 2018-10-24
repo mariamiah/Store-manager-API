@@ -6,24 +6,20 @@ class Validate:
 
     def validate_product(self, data):
         # Validates the product fields
+        product_fields = ['product_name', 'product_quantity', 'price']
         try:
-            if data['product_name'] == "":
-                return "Enter Product name", 400
-
-            if data['price'] == "":
-                return "Enter the price of the product", 400
-
-            if data["product_quantity"] == "":
-                return "Enter the product quantity", 400
+            for product_field in product_fields:
+                if data[product_field] == "":
+                    return product_field + " cannot be blank"
 
             if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
-                return "productname should contain alphanumerics only", 400
+                return "productname should contain alphanumerics only"
 
             if not re.match(r"^[0-9_]*$", data['price']):
-                return "price should contain integers only", 400
+                return "price should contain integers only"
 
             if not re.match(r"^[0-9_]*$", data['product_quantity']):
-                return "quantity should contain integers only", 400
+                return "quantity should contain integers only"
             else:
                 return "Valid"
         except KeyError:
@@ -31,57 +27,54 @@ class Validate:
 
     def validate_user(self, data):
         # Validates user fields
+        user_fields = ['username', 'email', 'password', 'employee_name',
+                       'role', 'gender']
         try:
             if len(data.keys()) == 0:
-                return "No user added", 400
-
-            if data['username'] == "":
-                return "User name cannot be blank", 400
-
-            if data['email'] == "":
-                return "Email cannot be blank", 400
-
-            if data['password'] == "":
-                return "Password cannot be blank", 400
+                return "No user added"
+            for user_field in user_fields:
+                if data[user_field] == "":
+                    return user_field + " cannot be blank"
 
             if not re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)",
                             data['email']):
-                return "Invalid email format", 400
+                return "Invalid email format"
 
             if not re.match(r"([a-zA-Z ]*$)", data['employee_name']):
-                return "Only alphanumerics allowed in employee name", 400
+                return "Only alphanumerics allowed in employee name"
 
             if not re.match(r"([a-zA-Z0-9]*$)", data['username']):
-                return "Only alphanumerics allowed in user name", 400
+                return "Only alphanumerics allowed in user name"
 
             if re.match(r"([0-9])", data['username']):
-                return "user name cannot contain numbers only", 400
+                return "user name cannot contain numbers only"
 
             if len(data['password']) < 5:
-                return "Password too short", 400
+                return "Password too short"
+            if data['gender'] != "female" and data['gender'] != "male":
+                return "gender can only be female or male"
 
             if data['role'] != 'Admin' and data['role'] != 'Attendant':
-                return "Role must be either Admin or Attendant", 400
-
-            if data['employee_name'] == "":
-                return "Employee name cannot be blank", 400
+                return "Role must be either Admin or Attendant"
             else:
                 return "is_valid"
         except KeyError:
-            return "Invalid, Key fields missing", 400
+            return "Invalid, Key fields missing"
 
     def validate_login(self, data):
         try:
+            login_credentials = ['email', 'password']
             if len(data.keys()) == 0 or len(data.keys()) > 2:
-                return "Only email and password for login", 400
-
-            if 'email' not in data.keys():
-                return "Email is missing", 400
-
-            if 'password' not in data.keys():
-                return "Missing password", 400
-            else:
-                return "Credentials valid"
+                return "Only email and password for login"
+            for credential in login_credentials:
+                if 'email' not in data.keys():
+                    return "Email is missing"
+                if 'password' not in data.keys():
+                    return "Missing password"
+                if data['email'] == "" or data['password'] == "":
+                    return "Input email or password"
+                else:
+                    return "Credentials valid"
         except KeyError:
             return "Invalid fields"
 

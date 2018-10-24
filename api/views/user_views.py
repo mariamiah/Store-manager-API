@@ -39,7 +39,7 @@ def register_user():
     is_valid = validate.validate_user(data)
     for user in users:
         if user.email == data['email']:
-            return "user already exists!", 400
+            return jsonify({"message": "user already exists!"}), 400
     try:
         if is_valid == "is_valid":
             employee_id = len(users)
@@ -59,7 +59,7 @@ def register_user():
             users.append(user)
             return jsonify({"message":
                             "User registered successfully"}), 201
-        return make_response(is_valid)
+        return jsonify({"message": is_valid}), 400
     except KeyError:
         return "Invalid key fields"
 
@@ -69,15 +69,15 @@ def register_user():
 def login():
     """Logs in a user"""
     data = request.get_json()
-    email = data['email']
     try:
+        email = data['email']
         is_valid = validate.validate_login(data)
-        if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) and\
+        if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) or\
            is_valid == "Credentials valid":
             return assigns_token(data)
-        return make_response(is_valid)
+        return jsonify({"message": is_valid}), 400
     except KeyError:
-        return "Invalid data"
+        return jsonify({"message": "Invalid keys"}), 400
 
 
 def assigns_token(data):

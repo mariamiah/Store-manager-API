@@ -38,3 +38,14 @@ class TestUserViews(unittest.TestCase):
         self.assertIn("User either not registered or forgot password",
                       msg['message'])
         self.assertEqual(response.status_code, 400)
+
+    def test_exception_raised(self):
+        # Tests that a key error is raised for wrong keys
+        user_details = {
+            "user": "maria@gmail.com",
+            "password": "1234567"
+        }
+        response = self.client.post('/api/v1/login',
+                                    content_type='application/json',
+                                    data=json.dumps(user_details))
+        self.assertRaises(KeyError)
