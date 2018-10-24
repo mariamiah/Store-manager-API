@@ -37,7 +37,7 @@ def create_product():
             new_product = Product(**kwargs)
             products.append(new_product)
             return jsonify({"message": "Product successfully created"}), 201
-        return make_response(valid)
+        return jsonify({"message": valid}), 400
     except ValueError:
         return jsonify({"message": "Invalid fields"}), 400
 

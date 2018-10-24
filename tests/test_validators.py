@@ -28,7 +28,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
-                             ("Enter Product name", 400))
+                             ("product_name cannot be blank"))
 
     def test_empty_product_price(self):
         # Tests to ensure the function fails if price is empty
@@ -39,7 +39,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
-                             ("Enter the price of the product", 400))
+                             ("price cannot be blank"))
 
     def test_empty_product_quantity(self):
         # Tests the function fails if product quantity is empty
@@ -50,7 +50,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
-                             ("Enter the product quantity", 400))
+                             ("product_quantity cannot be blank"))
 
     def test_product_name_characters(self):
         # Tests the product name doesnot accept non alphanumeric characters
@@ -61,8 +61,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
-                             ("productname should contain alphanumerics only",
-                             400))
+                             ("productname should contain alphanumerics only"))
 
     def test_price_value(self):
         # Tests the price accepts integers only
@@ -73,7 +72,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
-                             ("price should contain integers only", 400))
+                             ("price should contain integers only"))
 
     def test_product_quantity_value(self):
         # Tests the product quantity only accepts integers
@@ -84,7 +83,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
-                             ("quantity should contain integers only", 400))
+                             ("quantity should contain integers only"))
 
     def test_wrong_key_values(self):
         # Tests that the function raises an exception with wrong key value
@@ -114,7 +113,7 @@ class TestValidator(unittest.TestCase):
         user_data = {}
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("No user added", 400))
+                             ("No user added"))
 
     def test_return_if_employeename_is_blank(self):
         # Tests the value returned if the employeename is left blank
@@ -128,7 +127,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Employee name cannot be blank", 400))
+                             ("employee_name cannot be blank"))
 
     def test_return_if_username_is_blank(self):
         # Tests the value returned if the username is left blank
@@ -142,7 +141,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("User name cannot be blank", 400))
+                             ("username cannot be blank"))
 
     def test_return_if_password_is_blank(self):
         # Tests the value returned if the password is left blank
@@ -156,7 +155,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Password cannot be blank", 400))
+                             ("password cannot be blank"))
 
     def test_return_if_email_is_blank(self):
         # Tests the value returned if the email is left blank
@@ -170,7 +169,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Email cannot be blank", 400))
+                             ("email cannot be blank"))
 
     def test_employee_name_regex(self):
         # Tests that the function only allows alphanumeric characters in the
@@ -185,8 +184,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Only alphanumerics allowed in employee name",
-                             400))
+                             ("Only alphanumerics allowed in employee name"))
 
     def test_user_name_regex(self):
         # Tests that the function only allows alphanumeric characters in the
@@ -201,8 +199,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Only alphanumerics allowed in user name",
-                             400))
+                             ("Only alphanumerics allowed in user name"))
 
     def test_password_length(self):
         # Tests the length of the password
@@ -216,7 +213,7 @@ class TestValidator(unittest.TestCase):
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Password too short", 400))
+                             ("Password too short"))
 
     def test_return_if_wrong_role_entered(self):
         # Tests to ensure that only admin and attendant are acceptable
@@ -226,8 +223,22 @@ class TestValidator(unittest.TestCase):
             "username": "sara",
             "password": "475677r",
             "email": "sara@gmail.com",
+            "role": "Admin"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("Role must be either Admin or Attendant"))
+
+    def test_return_if_wrong_role_entered(self):
+        # Tests to ensure that only admin and attendant are acceptable
+        user_data = {
+            "employee_name": "sarah",
+            "gender": "onetwothree",
+            "username": "sara",
+            "password": "475677r",
+            "email": "sara@gmail.com",
             "role": "Administrat"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
-                             ("Role must be either Admin or Attendant", 400))
+                             ("gender can only be female or male"))
