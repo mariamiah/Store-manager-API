@@ -2,7 +2,6 @@ import unittest
 from api.validators import Validate
 from api import app
 
-
 class TestValidator(unittest.TestCase):
     """ Tests Product validators """
 
@@ -321,9 +320,9 @@ class TestValidator(unittest.TestCase):
                          "Input email or password")
 
     def test_exception_raised_for_wrong_fields(self):
-        user_data = {
+        {
             "user": "mimi",
             "firstname": "mimi",
         }
-        with self.assertRaises(KeyError):
-            raise KeyError
+        with app.app_context():
+            self.assertRaises(KeyError)
