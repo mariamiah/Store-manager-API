@@ -1,4 +1,4 @@
-from flask import request, jsonify, Blueprint, make_response
+from flask import request, jsonify, Blueprint
 from api.validators import Validate
 from api.models.user_models import User
 from werkzeug.security import generate_password_hash, check_password_hash

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, make_response
+from flask import Blueprint, jsonify, request
 from api.models.product_model import Product
 from api.validators import Validate
 from datetime import datetime
