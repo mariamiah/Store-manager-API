@@ -2,6 +2,7 @@ import unittest
 from api.validators import Validate
 from api import app
 
+
 class TestValidator(unittest.TestCase):
     """ Tests Product validators """
 
