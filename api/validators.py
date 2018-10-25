@@ -63,18 +63,16 @@ class Validate:
 
     def validate_login(self, data):
         try:
-            login_credentials = ['email', 'password']
             if len(data.keys()) == 0 or len(data.keys()) > 2:
                 return "Only email and password for login"
-            for credential in login_credentials:
-                if 'email' not in data.keys():
-                    return "Email is missing"
-                if 'password' not in data.keys():
-                    return "Missing password"
-                if data['email'] == "" or data['password'] == "":
-                    return "Input email or password"
-                else:
-                    return "Credentials valid"
+            if 'email' not in data.keys():
+                return "Email is missing"
+            if 'password' not in data.keys():
+                return "Missing password"
+            if data['email'] == "" or data['password'] == "":
+                return "Input email or password"
+            else:
+                return "Credentials valid"
         except KeyError:
             return "Invalid fields"
 

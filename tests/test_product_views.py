@@ -7,8 +7,43 @@ class TestProductViews(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
+    def test_register_data(self):
+        register_data = {
+            "username": "maria",
+            "password": "1234567",
+            "email": "maria@gmail.com",
+            "employee_name": "maria",
+            "gender": "female",
+            "role": "Admin"
+        }
+        response = self.client.post('/api/v1/users',
+                                    content_type='application/json',
+                                    data=json.dumps(register_data))
+        msg = json.loads(response.data)
+        self.assertIn("User registered successfully", msg['message'])
+
+    def test_login(self):
+        login_details = {
+            "email": "maria@gmail.com",
+            "password": "1234567"
+        }
+
     def test_create_a_product(self):
-        # Tests that the product is not created if token is  not provided
+        # Tests that the product is not created if token is invalid
+        post_data = ({
+            "product_name": "Leather Jacket",
+            "price": "50000",
+            "product_quantity": "44"
+        })
+        response = self.client.post('/api/v1/products?token=token',
+                                    content_type='application/json',
+                                    data=json.dumps(post_data))
+        msg = json.loads(response.data)
+        self.assertIn("Invalid token", msg['message'])
+        self.assertEqual(response.status_code, 403)
+
+    def test_cannot_create_product_if_no_token(self):
+        # Tests that a product cannot be created if token is not provided
         post_data = ({
             "product_name": "Leather Jacket",
             "price": "50000",
