@@ -57,9 +57,9 @@ class TestUserViews(unittest.TestCase):
             "user": "maria@gmail.com",
             "password": "1234567"
         }
-        response = self.client.post('/api/v1/login',
-                                    content_type='application/json',
-                                    data=json.dumps(user_details))
+        self.client.post('/api/v1/login',
+                         content_type='application/json',
+                         data=json.dumps(user_details))
         self.assertRaises(KeyError)
 
     def test_user_cant_register_if_already_exists(self):
