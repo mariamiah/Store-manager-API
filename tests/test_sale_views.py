@@ -2,7 +2,6 @@ import unittest
 from api import app
 import json
 from api.validators import Validate
-from config import Config
 
 
 class TestSaleViews(unittest.TestCase):

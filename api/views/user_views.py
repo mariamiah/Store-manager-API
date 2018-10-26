@@ -72,7 +72,7 @@ def login():
     try:
         email = data['email']
         is_valid = validate.validate_login(data)
-        if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) or\
+        if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) and\
            is_valid == "Credentials valid":
             return assigns_token(data)
         return jsonify({"message": is_valid}), 400

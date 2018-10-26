@@ -1,8 +1,6 @@
 import unittest
 from api import app
 import json
-import re
-import string
 
 
 class TestProductViews(unittest.TestCase):
