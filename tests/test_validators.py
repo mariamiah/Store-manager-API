@@ -313,9 +313,5 @@ class TestValidator(unittest.TestCase):
                          "Input email or password")
 
     def test_exception_raised_for_wrong_fields(self):
-        {
-            "user": "mimi",
-            "firstname": "mimi",
-        }
         with app.app_context():
             self.assertRaises(KeyError)
