@@ -272,14 +272,6 @@ class TestValidator(unittest.TestCase):
 
     def test_to_ensure_an_exception_raised_for_wrong_key(self):
         # Tests to ensure an exception is raised for wrong keys
-        user_data = {
-            "employee_name": "sarah",
-            "gender": "female",
-            "username": "sara",
-            "password": "475677r",
-            "email": "sara@gmail.com",
-            "role": "Admin"
-        }
         with self.assertRaises(KeyError):
             raise KeyError
 
@@ -321,9 +313,5 @@ class TestValidator(unittest.TestCase):
                          "Input email or password")
 
     def test_exception_raised_for_wrong_fields(self):
-        user_data = {
-            "user": "mimi",
-            "firstname": "mimi",
-        }
-        with self.assertRaises(KeyError):
-            raise KeyError
+        with app.app_context():
+            self.assertRaises(KeyError)

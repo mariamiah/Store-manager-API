@@ -59,3 +59,15 @@ class TestProduct(unittest.TestCase):
     def test_class_instance(self):
         # Tests that the defined object is an instance of the Product class
         self.assertIsInstance(self.product, Product)
+
+    def test_serialize_function_returns_a_dictionary(self):
+        # Tests that the function returns a dictionary
+            response = {
+                     'product_id': 1,
+                     'product_name': 'shirt',
+                     'price': '12000',
+                     'product_quantity': '10',
+                     'date_added': "Tue, 16 Oct 2018 18:42:38 GMT"
+               }
+            self.assertEqual(response['product_id'], 1)
+            self.assertEqual(response['price'], '12000')

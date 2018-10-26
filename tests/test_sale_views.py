@@ -1,7 +1,7 @@
 import unittest
 from api import app
 import json
-import jwt
+from api.validators import Validate
 
 
 class TestSaleViews(unittest.TestCase):

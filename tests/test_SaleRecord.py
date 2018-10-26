@@ -90,3 +90,16 @@ class TestSaleRecord(unittest.TestCase):
         # Tests the date type of date added property
         self.assertNotIsInstance(self.new_record.date_added, int)
         self.assertIsInstance(self.new_record.date_added, str)
+
+    def test_get_dict_function_returns_a_dictionary(self):
+        # Tests that the function returns a dictionary
+            response = {
+                    "sale_id": 1,
+                    "product_name": "jeans",
+                    "price": "5000",
+                    "product_quantity": 5,
+                    "total_amount": "13000",
+                    "date_added": "Tue, 16 Oct 2018 18:42:38 GMT"
+               }
+            self.assertEqual(response['sale_id'], 1)
+            self.assertEqual(response['price'], '5000')

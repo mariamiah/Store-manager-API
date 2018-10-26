@@ -7,27 +7,6 @@ class TestProductViews(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-    def test_register_data(self):
-        register_data = {
-            "username": "maria",
-            "password": "1234567",
-            "email": "maria@gmail.com",
-            "employee_name": "maria",
-            "gender": "female",
-            "role": "Admin"
-        }
-        response = self.client.post('/api/v1/users',
-                                    content_type='application/json',
-                                    data=json.dumps(register_data))
-        msg = json.loads(response.data)
-        self.assertIn("User registered successfully", msg['message'])
-
-    def test_login(self):
-        login_details = {
-            "email": "maria@gmail.com",
-            "password": "1234567"
-        }
-
     def test_create_a_product(self):
         # Tests that the product is not created if token is invalid
         post_data = ({
@@ -35,8 +14,7 @@ class TestProductViews(unittest.TestCase):
             "price": "50000",
             "product_quantity": "44"
         })
-        response = self.client.post('/api/v1/products?token=token',
-                                    content_type='application/json',
+        response = self.client.post("/api/v1/products?token=token",
                                     data=json.dumps(post_data))
         msg = json.loads(response.data)
         self.assertIn("Invalid token", msg['message'])
