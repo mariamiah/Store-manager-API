@@ -14,7 +14,7 @@ class DbConn:
                 self.conn = psycopg2.connect(**database_config)
             self.cur = self.conn.cursor()
         except Exception as err:
-            print(err)
+            print("Falied to connect to database")
 
     def create_users_table(self):
         """A function to create the users table"""
