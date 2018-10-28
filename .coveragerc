@@ -1,4 +1,4 @@
 [run]
 include=api/views/product_views.py, api/views/saleRecord_views.py, api/views/user_views.py, api/validators.py, api/models/product_model, api/models/product_model, api/models/SaleRecord_model.py,api/models/shoppingcart_model.py, api/models/user_models.py
-omit= api\apidocs\*, venv\*, api\__init__.py, api\views\__init__.py, api\models\__init__.py, api\apidocs\__init__.py   
+omit= api/apidocs/*, venv/*, api/__init__.py, api/views/__init__.py, api/models/__init__.py, api/apidocs/__init__.py   
 
