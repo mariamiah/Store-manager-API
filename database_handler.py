@@ -7,25 +7,24 @@ class DbConn:
     def create_connection(self):
         """ Function that creates the database based on the application
             environment"""
-        try:
-            if os.environ.get('APP_SETTINGS') == 'testing':
-                self.conn = psycopg2.connect(**test_database_config)
-            else:
-                self.conn = psycopg2.connect(**database_config)
-            self.cur = self.conn.cursor()
-        except Exception as err:
-            print("Falied to connect to database")
+        if os.environ.get('APP_SETTINGS') == 'testing':
+            self.conn = psycopg2.connect(**test_database_config)
+        else:
+            self.conn = psycopg2.connect(**database_config)
+        self.conn.autocommit = True
+        self.cur = self.conn.cursor()
+        return self.cur
 
     def create_users_table(self):
         """A function to create the users table"""
         self.cur.execute('''CREATE TABLE IF NOT EXISTS users
             (employee_id  SERIAL PRIMARY KEY  NOT NULL,
             employee_name VARCHAR(60) NOT NULL,
-            email VARCHAR(60) NOT NULL UNIQUE,
-            gender VARCHAR(10) NOT NULL,
-            username VARCHAR(25) NOT NULL,
-            password VARCHAR(25) NOT NULL,
-            admin BOOLEAN NOT NULL); ''')
+            email VARCHAR(250) NOT NULL UNIQUE,
+            gender VARCHAR(60) NOT NULL,
+            username VARCHAR(100) NOT NULL,
+            password VARCHAR(100) NOT NULL,
+            role VARCHAR(100) NOT NULL); ''')
         print("Table users created successfully")
 
     def create_products_table(self):
@@ -35,7 +34,7 @@ class DbConn:
                       product_quantity INT NOT NULL,
                       price INT NOT NULL,
                       product_code UUID NOT NULL UNIQUE,
-                      product_name VARCHAR(25) NOT NULL); ''')
+                      product_name VARCHAR(100) NOT NULL); ''')
         print("Table products created successfully")
 
     def create_sales_table(self):
@@ -43,7 +42,7 @@ class DbConn:
         self.cur.execute('''CREATE TABLE IF NOT EXISTS sales_records
                      (sale_id SERIAL PRIMARY KEY NOT NULL,
                       total_amount INT NOT NULL,
-                      employee_email VARCHAR(60) REFERENCES users(email) ON\
+                      employee_email VARCHAR(100) REFERENCES users(email) ON\
                       DELETE CASCADE,
                       product_code UUID REFERENCES products(product_code) ON\
                       DELETE CASCADE,
@@ -54,7 +53,7 @@ class DbConn:
         "A function to create the categories table"
         self.cur.execute('''CREATE TABLE IF NOT EXISTS categories
                            (category_id  SERIAL PRIMARY KEY   NOT NULL ,
-                            category_name VARCHAR(25) NOT NULL,
+                            category_name VARCHAR(100) NOT NULL,
                             product_id INT REFERENCES products(product_id) ON\
                             DELETE CASCADE ,
                             created_at  DATE); ''')
