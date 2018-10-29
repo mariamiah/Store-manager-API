@@ -22,7 +22,7 @@ class DbConn:
             employee_name VARCHAR(60) NOT NULL,
             email VARCHAR(250) NOT NULL UNIQUE,
             gender VARCHAR(60) NOT NULL,
-            username VARCHAR(100) NOT NULL,
+            username VARCHAR(100) NOT NULL UNIQUE,
             password VARCHAR(100) NOT NULL,
             role VARCHAR(100) NOT NULL); ''')
         print("Table users created successfully")

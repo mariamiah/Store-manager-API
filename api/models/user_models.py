@@ -47,10 +47,9 @@ class User:
 
     def fetch_password(self):
         data = request.get_json()
-        sql = """SELECT password FROM users WHERE email='{}'"""
-        self.cur.execute(sql.format(data['email']))
-        row = cur.fetchone()
-        print(row)
+        sql = """SELECT password FROM users WHERE username='{}'"""
+        self.cur.execute(sql.format(data['username']))
+        row = self.cur.fetchone()
         if check_password_hash(row[0], data['password']):
             return True
         return False
