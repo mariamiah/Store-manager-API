@@ -1,4 +1,4 @@
-Endpoint for registering a User
+Endpoint for registering a store attendant
 ---
 tags:
   - User
@@ -50,9 +50,12 @@ definitions:
       password:
         type: string
         example: "1234567"
+      confirm_password:
+        type: string
+        example: "1234567"
       role:
         type: string
-        example: "attendant"
+        example: "Attendant"
 responses:
   201:
     description: User created successfully
