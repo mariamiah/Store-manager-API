@@ -56,7 +56,7 @@ class Validate:
 
             if data['role'] != 'Admin' and data['role'] != 'Attendant':
                 return "Role must be either Admin or Attendant"
-            if data['password']!= data['confirm_password']:
+            if data['password'] != data['confirm_password']:
                 return "passwords dont match"
             else:
                 return "is_valid"
