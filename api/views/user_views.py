@@ -11,7 +11,6 @@ import re
 
 user = Blueprint('user', __name__)
 
-users = []
 created_token = []
 validate = Validate()
 
@@ -31,40 +30,25 @@ def token_required(f):
     return decorated
 
 
-@user.route('/api/v1/users', methods=['POST'])
+@user.route('/api/v2/users', methods=['POST'])
 @swag_from('../apidocs/users/create_user.yml')
 def register_user():
     """ registers a user"""
     data = request.get_json()
+    user = User()
     is_valid = validate.validate_user(data)
-    for user in users:
-        if user.email == data['email']:
-            return jsonify({"message": "user already exists!"}), 400
-    try:
-        if is_valid == "is_valid":
-            employee_id = len(users)
-            employee_id += 1
-            hashed_password = generate_password_hash(data['password'],
-                                                     method='sha256')
-            kwargs = {
-                "employee_id": employee_id,
-                "employee_name": data['employee_name'],
-                "email": data['email'],
-                "gender": data['gender'],
-                "username": data['username'],
-                "password": hashed_password,
-                "role": data['role']
-            }
-            user = User(**kwargs)
-            users.append(user)
-            return jsonify({"message":
-                            "User registered successfully"}), 201
-        return jsonify({"message": is_valid}), 400
-    except KeyError:
-        return "Invalid key fields"
+    hashed_password = generate_password_hash(data['password'], 'sha256')
+    if is_valid == "is_valid":
+        if user.check_for_existing_user(data['email']):
+            return jsonify({"message": "user already registered, login"})
+        user.add_user(data['employee_name'], data['email'], data['gender'],
+                      data['username'], hashed_password, data['role'])
+        return jsonify({"message":
+                        "User registered successfully"}), 201
+    return jsonify({"message": is_valid}), 400
 
 
-@user.route('/api/v1/login', methods=['POST'])
+@user.route('/api/v2/login', methods=['POST'])
 @swag_from('../apidocs/users/login_user.yml')
 def login():
     """Logs in a user"""
