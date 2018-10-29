@@ -30,7 +30,7 @@ def token_required(f):
     return decorated
 
 
-@user.route('/api/v2/users', methods=['POST'])
+@user.route('/api/v2/auth/signup', methods=['POST'])
 @swag_from('../apidocs/users/create_user.yml')
 def register_user():
     """ registers a user"""
