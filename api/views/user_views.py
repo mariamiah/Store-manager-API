@@ -38,41 +38,41 @@ def register_user():
     user = User()
     is_valid = validate.validate_user(data)
     hashed_password = generate_password_hash(data['password'], 'sha256')
-    if is_valid == "is_valid":
-        if user.check_for_existing_user(data['email']):
-            return jsonify({"message": "user already registered, login"})
-        user.add_user(data['employee_name'], data['email'], data['gender'],
-                      data['username'], hashed_password, data['role'])
-        return jsonify({"message":
-                        "User registered successfully"}), 201
-    return jsonify({"message": is_valid}), 400
+    try:
+        if is_valid == "is_valid":
+            if user.check_for_existing_user(data['email']):
+                return jsonify({"message": "Email already exists, login"})
+            user.add_user(data['employee_name'], data['email'], data['gender'],
+                          data['username'], hashed_password, data['role'])
+            return jsonify({"message":
+                            "User registered successfully"}), 201
+        return jsonify({"message": is_valid}), 400
+    except Exception:
+        return jsonify({"message": "Username already taken"}), 400
 
 
-@user.route('/api/v2/login', methods=['POST'])
+@user.route('/api/v2/auth/login', methods=['POST'])
 @swag_from('../apidocs/users/login_user.yml')
 def login():
     """Logs in a user"""
     data = request.get_json()
     try:
-        email = data['email']
         is_valid = validate.validate_login(data)
-        if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) and\
-           is_valid == "Credentials valid":
+        if is_valid == "Credentials valid":
             return assigns_token(data)
         return jsonify({"message": is_valid}), 400
-    except KeyError:
-        return jsonify({"message": "Invalid keys"}), 400
+    except Exception:
+        return jsonify({"message": "Username doesnot exist"}), 400
 
 
 def assigns_token(data):
-    for employee in users:
-        if employee.email == data['email'] and\
-           check_password_hash(employee.password, data['password']):
-                token = jwt.encode({'user': employee.username,
-                                    'exp': datetime.utcnow() +
-                                    timedelta(minutes=30),
-                                    'roles': employee.role},
-                                   Config.SECRET_KEY)
-                return jsonify({'token': token.decode('UTF-8')}), 200
+    user = User()
+    if user.fetch_password():
+        token = jwt.encode({'user': "employee.username",
+                            'exp': datetime.utcnow() +
+                            timedelta(minutes=30),
+                            'roles': "employee.role"},
+                           Config.SECRET_KEY)
+        return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({
         "message": "User either not registered or forgot password"}), 400
