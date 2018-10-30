@@ -5,42 +5,33 @@ from datetime import datetime
 from flasgger import swag_from
 from api.views.user_views import token_required
 from config import Config
+from uuid import uuid4
 import jwt
 
 product = Blueprint('product', __name__)
 
-products = []
 validate = Validate()
 
 
-@product.route('/api/v1/products', methods=['POST'])
+@product.route('/api/v2/products', methods=['POST'])
 @swag_from('../apidocs/products/create_product.yml')
-@token_required
 def create_product():
     """Creates a new product"""
-    token = request.headers['Authorization']
-    data_token = jwt.decode(token, Config.SECRET_KEY)
-    if data_token['roles'] != ['Admin']:
-        return jsonify({
-            "Message": "Permission denied, Not an admin"}), 401
     data = request.get_json()
+    product = Product()
+    product_code = uuid4()
     valid = validate.validate_product(data)
+    date_added = datetime.now()
     try:
         if valid == "Valid":
-            product_id = len(products)
-            product_id += 1
-            date_added = datetime.now()
-            kwargs = {
-                'product_id': product_id,
-                "product_name": data['product_name'],
-                "price": data['price'],
-                "product_quantity": data['product_quantity'],
-                "date_added": date_added
-            }
-            new_product = Product(**kwargs)
-            products.append(new_product)
-            return jsonify({"message": "Product successfully created"}), 201
+            if product.check_if_product_exists(data['product_name']):
+                return jsonify({"message": "Product already exists"})
+            product.add_new_product(data['product_quantity'], data['price'],
+                                    product_code, data['product_name'])
+            return jsonify({"message":
+                            "Product added successfully"}), 201
         return jsonify({"message": valid}), 400
+        created_token.remove(data_token)
     except ValueError:
         return jsonify({"message": "Invalid fields"}), 400
 
