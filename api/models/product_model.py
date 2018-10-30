@@ -31,13 +31,29 @@ class Product:
 
     def check_if_product_exists(self, product_name):
         """ Checks if the product exists"""
-        sql = """SELECT product_name from products"""
+        sql = """SELECT product_name FROM products\
+              where product_name = '{}' """
+        self.cur.execute(sql.format(product_name))
+        row = self.cur.fetchone()
+        if row:
+            return True
+        return False
+
+    def fetch_product(self):
+        items = []
+        sql = """ SELECT * FROM products"""
         self.cur.execute(sql)
-        row = self.cur.fetchall()
-        for value in row:
-            if value[0] == product_name:
-                return True
-            return False
+        rows = self.cur.fetchall()
+        print(rows)
+        for row in rows:
+            items.append({
+                "product_id": row[0],
+                "product_quantity": row[1],
+                "price": row[2],
+                "product_code": row[3],
+                "product_name": row[4]
+                })
+        return items
 
 if __name__ == "__main__":
     product = Product()

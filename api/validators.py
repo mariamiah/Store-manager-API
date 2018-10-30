@@ -11,7 +11,8 @@ class Validate:
             for product_field in product_fields:
                 if data[product_field] == "":
                     return product_field + " cannot be blank"
-
+            if len(data.keys()) == 0 or len(data.keys()) > 3:
+                return "Invalid key fields"
             if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
                 return "productname should contain alphanumerics only"
 

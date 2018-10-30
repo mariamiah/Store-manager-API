@@ -15,8 +15,14 @@ validate = Validate()
 
 @product.route('/api/v2/products', methods=['POST'])
 @swag_from('../apidocs/products/create_product.yml')
+@token_required
 def create_product():
     """Creates a new product"""
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")
+    decoded_token = jwt.decode(token[1], Config.SECRET_KEY)
+    if decoded_token['roles'] != ['Admin']:
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()
     product = Product()
     product_code = uuid4()
@@ -36,12 +42,13 @@ def create_product():
         return jsonify({"message": "Invalid fields"}), 400
 
 
-@product.route('/api/v1/products', methods=['GET'])
+@product.route('/api/v2/products', methods=['GET'])
 @swag_from('../apidocs/products/get_products.yml')
 def fetch_products():
     """Fetches all the available products"""
-    Products = [product.serialize() for product in products]
-    return jsonify({"Products": Products}), 200
+    product = Product()
+    fetched_products = product.fetch_product()
+    return jsonify({"Products": fetched_products}), 200
 
 
 @product.route('/api/v1/products/<int:product_id>', methods=['GET'])

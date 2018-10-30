@@ -22,10 +22,7 @@ def token_required(f):
             token = request.headers['Authorization']
         if not token:
             return jsonify({"message": "Missing Token"}), 403
-        try:
             data_token = jwt.decode(token, Config.SECRET_KEY)
-        except:
-            return jsonify({"message": "Invalid token"}), 403
         return f(*args, **kwargs)
     return decorated
 
@@ -67,7 +64,6 @@ def login():
 
 def assigns_token(data):
     user = User()
-
     if user.fetch_password():
         token = jwt.encode({'user': data['username'],
                             'exp': datetime.utcnow() +
