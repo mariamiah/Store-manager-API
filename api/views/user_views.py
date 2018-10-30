@@ -11,7 +11,6 @@ import re
 
 user = Blueprint('user', __name__)
 
-created_token = []
 validate = Validate()
 
 
@@ -25,7 +24,6 @@ def token_required(f):
             return jsonify({"message": "Missing Token"}), 403
         try:
             data_token = jwt.decode(token, Config.SECRET_KEY)
-            created_token.append(data_token)
         except:
             return jsonify({"message": "Invalid token"}), 403
         return f(*args, **kwargs)
