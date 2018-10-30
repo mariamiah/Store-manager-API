@@ -5,52 +5,50 @@ from datetime import datetime
 from flasgger import swag_from
 from api.views.user_views import token_required
 from config import Config
+from uuid import uuid4
 import jwt
 
 product = Blueprint('product', __name__)
 
-products = []
 validate = Validate()
 
 
-@product.route('/api/v1/products', methods=['POST'])
+@product.route('/api/v2/products', methods=['POST'])
 @swag_from('../apidocs/products/create_product.yml')
 @token_required
 def create_product():
     """Creates a new product"""
-    token = request.headers['Authorization']
-    data_token = jwt.decode(token, Config.SECRET_KEY)
-    if data_token['roles'] != ['Admin']:
-        return jsonify({
-            "Message": "Permission denied, Not an admin"}), 401
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")
+    decoded_token = jwt.decode(token[1], Config.SECRET_KEY)
+    if decoded_token['roles'] != ['Admin']:
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()
+    product = Product()
+    product_code = uuid4()
     valid = validate.validate_product(data)
+    date_added = datetime.now()
     try:
         if valid == "Valid":
-            product_id = len(products)
-            product_id += 1
-            date_added = datetime.now()
-            kwargs = {
-                'product_id': product_id,
-                "product_name": data['product_name'],
-                "price": data['price'],
-                "product_quantity": data['product_quantity'],
-                "date_added": date_added
-            }
-            new_product = Product(**kwargs)
-            products.append(new_product)
-            return jsonify({"message": "Product successfully created"}), 201
+            if product.check_if_product_exists(data['product_name']):
+                return jsonify({"message": "Product already exists"})
+            product.add_new_product(data['product_quantity'], data['price'],
+                                    product_code, data['product_name'])
+            return jsonify({"message":
+                            "Product added successfully"}), 201
         return jsonify({"message": valid}), 400
+        created_token.remove(data_token)
     except ValueError:
         return jsonify({"message": "Invalid fields"}), 400
 
 
-@product.route('/api/v1/products', methods=['GET'])
+@product.route('/api/v2/products', methods=['GET'])
 @swag_from('../apidocs/products/get_products.yml')
 def fetch_products():
-    """Fetches all the available products"""
-    Products = [product.serialize() for product in products]
-    return jsonify({"Products": Products}), 200
+    """Fetches all the available products from the database"""
+    product = Product()
+    fetched_products = product.fetch_product()
+    return jsonify({"Products": fetched_products}), 200
 
 
 @product.route('/api/v1/products/<int:product_id>', methods=['GET'])
@@ -67,14 +65,14 @@ def fetch_single_product(product_id):
         return "Index out of range", 400
 
 
-@product.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
+@product.route('/api/v2/products/<int:product_id>', methods=['DELETE'])
 @swag_from('../apidocs/products/delete_product.yml')
+@token_required
 def delete_product(product_id):
-    if product_id == 0 or product_id > len(products):
+    product = Product()
+    if product_id == 0 or product.check_if_id_exists(product_id):
         return jsonify({"message": "Index out of range"}), 400
-    for product in products:
-        if product.product_id == product_id:
-            products.remove(product)
+    product.delete_product(product_id)
     return jsonify({"message": "product successfully removed"}), 200
 
 
