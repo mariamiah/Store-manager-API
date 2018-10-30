@@ -45,7 +45,7 @@ def create_product():
 @product.route('/api/v2/products', methods=['GET'])
 @swag_from('../apidocs/products/get_products.yml')
 def fetch_products():
-    """Fetches all the available products"""
+    """Fetches all the available products from the database"""
     product = Product()
     fetched_products = product.fetch_product()
     return jsonify({"Products": fetched_products}), 200
