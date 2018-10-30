@@ -17,16 +17,16 @@ definitions:
   User:
     type: object
     properties:
-      email:
+      username:
         type: string
       password:
         type: string
   login_user:
     type: object
     properties:
-      email:
+      username:
         type: string
-        example: "maria@gmail.com"
+        example: "maria"
       password:
         type: string
         example: "1234567"

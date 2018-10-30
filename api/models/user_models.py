@@ -54,5 +54,12 @@ class User:
             return True
         return False
 
+    def get_role(self):
+        data = request.get_json()
+        sql = """SELECT role FROM users WHERE username = '{}'"""
+        self.cur.execute(sql.format(data['username']))
+        role = self.cur.fetchone()
+        if role:
+            return role
 if __name__ == "__main__":
     user = User()
