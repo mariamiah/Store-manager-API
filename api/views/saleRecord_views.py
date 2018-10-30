@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from api.models.SaleRecord_model import SaleRecord
 from api.validators import Validate
 from datetime import datetime
-from api.views.user_views import token_required, created_token
+from api.views.user_views import token_required
 from flasgger import swag_from
 
 sale = Blueprint('sale', __name__)

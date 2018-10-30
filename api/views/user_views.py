@@ -11,19 +11,19 @@ import re
 
 user = Blueprint('user', __name__)
 
-created_token = []
 validate = Validate()
 
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
+        token = None
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization']
         if not token:
             return jsonify({"message": "Missing Token"}), 403
         try:
             data_token = jwt.decode(token, Config.SECRET_KEY)
-            created_token.append(data_token)
         except:
             return jsonify({"message": "Invalid token"}), 403
         return f(*args, **kwargs)
