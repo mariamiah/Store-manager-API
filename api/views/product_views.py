@@ -65,14 +65,14 @@ def fetch_single_product(product_id):
         return "Index out of range", 400
 
 
-@product.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
+@product.route('/api/v2/products/<int:product_id>', methods=['DELETE'])
 @swag_from('../apidocs/products/delete_product.yml')
+@token_required
 def delete_product(product_id):
-    if product_id == 0 or product_id > len(products):
+    product = Product()
+    if product_id == 0 or product.check_if_id_exists(product_id):
         return jsonify({"message": "Index out of range"}), 400
-    for product in products:
-        if product.product_id == product_id:
-            products.remove(product)
+    product.delete_product(product_id)
     return jsonify({"message": "product successfully removed"}), 200
 
 

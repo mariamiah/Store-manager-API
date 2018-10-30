@@ -55,5 +55,17 @@ class Product:
                 })
         return items
 
+    def delete_product(self, product_id):
+        sql = """ DELETE FROM products WHERE product_id = '{}'"""
+        self.cur.execute(sql.format(product_id))
+
+    def check_if_id_exists(self, product_id):
+        """ Checks if id exists"""
+        sql = """SELECT * FROM products WHERE product_id ='{}'"""
+        self.cur.execute(sql.format(product_id))
+        row = self.cur.fetchone()
+        if not row:
+            return True
+        return False
 if __name__ == "__main__":
     product = Product()
