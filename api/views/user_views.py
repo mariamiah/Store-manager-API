@@ -67,11 +67,12 @@ def login():
 
 def assigns_token(data):
     user = User()
+
     if user.fetch_password():
-        token = jwt.encode({'user': "employee.username",
+        token = jwt.encode({'user': data['username'],
                             'exp': datetime.utcnow() +
                             timedelta(minutes=30),
-                            'roles': "employee.role"},
+                            'roles': user.get_role()},
                            Config.SECRET_KEY)
         return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({
