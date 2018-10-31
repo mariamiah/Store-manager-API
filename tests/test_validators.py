@@ -33,7 +33,7 @@ class TestValidator(unittest.TestCase):
     def test_empty_product_price(self):
         # Tests to ensure the function fails if price is empty
         data = {
-            "product_name": "mimi",
+            "product_name": "cabbage",
             "product_quantity": "3",
             "price": ""
         }
@@ -44,7 +44,7 @@ class TestValidator(unittest.TestCase):
     def test_empty_product_quantity(self):
         # Tests the function fails if product quantity is empty
         data = {
-            "product_name": "mimi",
+            "product_name": "jeans",
             "product_quantity": "",
             "price": "40000"
         }
@@ -55,7 +55,7 @@ class TestValidator(unittest.TestCase):
     def test_product_name_characters(self):
         # Tests the product name doesnot accept non alphanumeric characters
         data = {
-            "product_name": "maria****",
+            "product_name": "&%^&short##$$#sleeved shirt",
             "product_quantity": "54",
             "price": "40000"
         }
@@ -66,9 +66,9 @@ class TestValidator(unittest.TestCase):
     def test_price_value(self):
         # Tests the price accepts integers only
         data = {
-            "product_name": "maria",
+            "product_name": "shorts",
             "product_quantity": "54",
-            "price": "price"
+            "price": "thisisprice"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_product(data),
@@ -77,8 +77,8 @@ class TestValidator(unittest.TestCase):
     def test_product_quantity_value(self):
         # Tests the product quantity only accepts integers
         data = {
-            "product_name": "maria",
-            "product_quantity": "quantity",
+            "product_name": "shirts",
+            "product_quantity": "productquantity",
             "price": "17000"
         }
         with app.app_context():
@@ -88,8 +88,8 @@ class TestValidator(unittest.TestCase):
     def test_wrong_key_values(self):
         # Tests that the function raises an exception with wrong key value
         data = {
-            "": "maria",
-            "product_quantity": "5000",
+            "product_name": "shirts",
+            "%&": "5000",
             "price": "17000"
              }
         with app.app_context():
@@ -99,13 +99,14 @@ class TestValidator(unittest.TestCase):
     def test_validate_user(self):
         # Tests that the correct user definitions pass
         user_data = {
-            "employee_name": "sarah",
-            "gender": "female",
-            "username": "sara",
-            "password": "1323443",
-            "email": "sarah@gmail.com",
-            "role": "Admin"
-        }
+                "employee_name": "jjdjdjs",
+                "email": "dorre@gmail.com",
+                "gender": "male",
+                "username": "mimimimi",
+                "password": "123456789",
+                "confirm_password": "123456789",
+                "role": "Admin"
+                }
         self.assertEqual(self.validate.validate_user(user_data), "is_valid")
 
     def test_if_no_user_added(self):
@@ -122,7 +123,8 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "1323443",
-            "email": "rtsmdmss",
+            "confirm_password": "1323443",
+            "email": "124wekldsmsa",
             "role": "Attendant"
         }
         with app.app_context():
@@ -133,8 +135,9 @@ class TestValidator(unittest.TestCase):
         user_data = {
             "employee_name": "maria",
             "gender": "female",
-            "username": "12345665",
+            "username": "123444282",
             "password": "1323443",
+            "confirm_password": "1323443",
             "email": "maria@gmail.com",
             "role": "Attendant"
         }
@@ -149,6 +152,7 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "1323443",
+            "confirm_password": "1323443",
             "email": "sarah@gmail.com",
             "role": "Attendant"
         }
@@ -163,8 +167,9 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "",
             "password": "1323443",
+            "confirm_password": "1323443",
             "email": "sarah@gmail.com",
-            "role": "admin"
+            "role": "Admin"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
@@ -177,6 +182,7 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "",
+            "confirm_password": "",
             "email": "sarah@gmail.com",
             "role": "admin"
         }
@@ -190,6 +196,7 @@ class TestValidator(unittest.TestCase):
             "employee_name": "sarah",
             "gender": "female",
             "username": "sara",
+            "password": "475543",
             "password": "475543",
             "email": "",
             "role": "admin"
@@ -206,8 +213,9 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "475543",
+            "confirm_password": "475543",
             "email": "sara@gmail.com",
-            "role": "admin"
+            "role": "Admin"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
@@ -221,6 +229,7 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara#^#^@&@",
             "password": "475543",
+            "confirm_password": "475543",
             "email": "sara@gmail.com",
             "role": "admin"
         }
@@ -235,8 +244,9 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "47",
+            "confirm_password": "47",
             "email": "sara@gmail.com",
-            "role": "admin"
+            "role": "Admin"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
@@ -249,6 +259,7 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "475677r",
+            "confirm_password": "475677r",
             "email": "sara@gmail.com",
             "role": "administ"
         }
@@ -263,55 +274,10 @@ class TestValidator(unittest.TestCase):
             "gender": "onetwothree",
             "username": "sara",
             "password": "475677r",
+            "confirm_password": "475677r",
             "email": "sara@gmail.com",
             "role": "Admin"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
                              ("gender can only be female or male"))
-
-    def test_to_ensure_an_exception_raised_for_wrong_key(self):
-        # Tests to ensure an exception is raised for wrong keys
-        with self.assertRaises(KeyError):
-            raise KeyError
-
-    def test_validate_login(self):
-        # Tests that the correct login details pass
-        user_data = {
-            "email": "maria@gmail.com",
-            "password": "12345",
-            "user": "mara"
-        }
-        self.assertEqual(self.validate.validate_login(user_data),
-                         "Only email and password for login")
-
-    def test_login_email_key_is_missing(self):
-        # Tests that without an email, cannot login
-        user_data = {
-            "user": "maria@gmail.com",
-            "password": "12345",
-        }
-        self.assertEqual(self.validate.validate_login(user_data),
-                         "Email is missing")
-
-    def test_login_password_key_is_missing(self):
-        # Tests that without a password key, cannot login
-        user_data = {
-            "email": "maria@gmail.com",
-            "user": "maria",
-        }
-        self.assertEqual(self.validate.validate_login(user_data),
-                         "Missing password")
-
-    def test_login_if_no_credentials_provided(self):
-        # Tests that one cannot login if credentials are missing
-        user_data = {
-            "email": "",
-            "password": "",
-        }
-        self.assertEqual(self.validate.validate_login(user_data),
-                         "Input email or password")
-
-    def test_exception_raised_for_wrong_fields(self):
-        with app.app_context():
-            self.assertRaises(KeyError)

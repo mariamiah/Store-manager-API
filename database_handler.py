@@ -8,9 +8,13 @@ class DbConn:
         """ Function that creates the database based on the application
             environment"""
         if os.environ.get('APP_SETTINGS') == 'testing':
-            self.conn = psycopg2.connect(**test_database_config)
+            database_name = "test_storemanagerdb"
         else:
-            self.conn = psycopg2.connect(**database_config)
+            database_name = "storemanagerdb"
+
+        self.conn = psycopg2.connect(dbname=database_name, user="postgres",
+                                     password="123", port="5432",
+                                     host="localhost")
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
         return self.cur
@@ -30,7 +34,7 @@ class DbConn:
     def create_products_table(self):
         "A function to create the products table"
         self.cur.execute('''CREATE TABLE IF NOT EXISTS products
-                     (product_id  SERIAL PRIMARY KEY    NOT NULL ,
+                     (product_id  SERIAL PRIMARY KEY NOT NULL ,
                       product_quantity INT NOT NULL,
                       price INT NOT NULL,
                       product_code UUID NOT NULL UNIQUE,
@@ -66,16 +70,12 @@ class DbConn:
                             token VARCHAR(300) NOT NULL);''')
         print("Table blacklisted successfully created")
 
+    def drop_tables(self, table_name):
+        """ Drops the tables that exist in the database"""
+        sql = """ DROP TABLE {} CASCADE;"""
+        self.cur.execute(sql.format(table_name))
+        print("Table '{}' successfully dropped".format(table_name))
+
     def close_DB(self):
         self.conn.commit()
         self.conn.close()
-
-if __name__ == '__main__':
-        db = DbConn()
-        db.create_connection()
-        db.create_users_table()
-        db.create_products_table()
-        db.create_sales_table()
-        db.create_categories_table()
-        db.create_blacklisted_tokens()
-        db.close_DB()

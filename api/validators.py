@@ -1,8 +1,10 @@
 import re
+import jwt
+from config import Config
 
 
 class Validate:
-    """This class contains validators for the different entries"""
+    """This class contains validators for the different inputs"""
 
     def validate_product(self, data):
         # Validates the product fields
@@ -11,6 +13,7 @@ class Validate:
             for product_field in product_fields:
                 if data[product_field] == "":
                     return product_field + " cannot be blank"
+
             if len(data.keys()) == 0 or len(data.keys()) > 3:
                 return "Invalid key fields"
             if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
@@ -81,5 +84,12 @@ class Validate:
 
     def validate_id(self, item_id, item_list):
         if item_id != 0 and item_id <= len(item_list):
+            return True
+        return False
+
+    def check_permission(self, token):
+        """ Decodes an encoded token"""
+        decoded_token = jwt.decode(token, Config.SECRET_KEY)
+        if decoded_token['roles'] != ['Admin']:
             return True
         return False

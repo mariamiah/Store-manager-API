@@ -21,11 +21,10 @@ def create_product():
     """Creates a new product"""
     user = User()
     fetched_token = request.headers['Authorization']
-    token = fetched_token.split(" ")
-    decoded_token = jwt.decode(token[1], Config.SECRET_KEY)
-    if user.token_in_blacklisted(token[1]):
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
         return jsonify({"message": "Token blacklisted, login again"}), 400
-    if decoded_token['roles'] != ['Admin']:
+    if validate.check_permission(token):
         return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()
     product = Product()
@@ -73,6 +72,13 @@ def fetch_single_product(product_id):
 @swag_from('../apidocs/products/delete_product.yml')
 @token_required
 def delete_product(product_id):
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
     product = Product()
     if product_id == 0 or product.check_if_id_exists(product_id):
         return jsonify({"message": "Index out of range"}), 400
@@ -85,6 +91,13 @@ def delete_product(product_id):
 @token_required
 def modify_product(product_id):
     """Updates a product"""
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
     product = Product()
     if product_id == 0 or product.check_if_id_exists(product_id):
         return jsonify({"message": "Index is out of range"}), 400

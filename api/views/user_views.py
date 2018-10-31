@@ -63,14 +63,13 @@ def login():
 
 
 @user.route('/api/v2/auth/logout', methods=['POST'])
-@token_required
 def logout():
     """Logs out a user"""
     user = User()
-    token = request.headers['Authorization']
-    data_token = token.split(" ")[1]
-    user.logout_user(data_token)
-    return jsonify({"message": "Logout successful"}), 200
+    user_token = request.headers['Authorization']
+    token = user_token.split(" ")[1]
+    if user.blacklist_token(token):
+        return jsonify({"message": "log out successful"}), 200
 
 
 def assigns_token(data):

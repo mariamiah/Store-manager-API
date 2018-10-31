@@ -1,18 +1,19 @@
-class SaleRecord:
-    def __init__(self, **kwargs):
-        self.sale_id = kwargs['sale_id']
-        self.product_name = kwargs['product_name']
-        self.price = kwargs['price']
-        self.product_quantity = kwargs['product_quantity']
-        self.total_amount = kwargs['total_amount']
-        self.date_added = kwargs['date_added']
+from database_handler import DbConn
+import psycopg2
+from flask import jsonify, request
 
-    def get_dict(self):
-        return {
-            "sale_id": self.sale_id,
-            "product_name": self.product_name,
-            "price": self.price,
-            "product_quantity": self.product_quantity,
-            "total_amount": self.total_amount,
-            "date_added": self.date_added
-        }
+
+class SaleRecord:
+    """This class defines the sales made by the store"""
+    def __init__(self):
+        self._id = 0
+        self.total_amount = ""
+        self.employee_email = ""
+        self.product_code = ""
+        self.date_sold = ""
+        conn = DbConn()
+        self.cur = conn.create_connection()
+
+    def add_sale_record(self):
+        """Adds a sale record"""
+        pass

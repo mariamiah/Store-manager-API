@@ -62,18 +62,18 @@ class User:
         if role:
             return role
 
-    def logout_user(self, token):
+    def blacklist_token(self, token):
         sql = """INSERT INTO blacklisted(token) VALUES ('{}')"""
         self.cur.execute(sql.format(token))
+        return True
 
-    def token_in_blacklisted(self, token):
-        """ Checks if the blacklisted token exists in database"""
-        sql = """select token from blacklisted where token ='{}'"""
+    def validate_token(self, token):
+        """ Checks if token exists in blacklist database"""
+        sql = """SELECT token FROM blacklisted WHERE token = '{}'"""
         self.cur.execute(sql.format(token))
         row = self.cur.fetchone()
         if row:
             return True
         return False
-
 if __name__ == "__main__":
     user = User()
