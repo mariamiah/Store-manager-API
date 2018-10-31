@@ -62,6 +62,17 @@ def login():
         return jsonify({"message": "Username doesnot exist"}), 400
 
 
+@user.route('/api/v2/auth/logout', methods=['POST'])
+@token_required
+def logout():
+    """Logs out a user"""
+    user = User()
+    token = request.headers['Authorization']
+    data_token = token.split(" ")[1]
+    user.logout_user(data_token)
+    return jsonify({"message": "Logout successful"}), 200
+
+
 def assigns_token(data):
     user = User()
     if user.fetch_password():
