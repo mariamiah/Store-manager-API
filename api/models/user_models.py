@@ -65,7 +65,7 @@ class User:
     def logout_user(self, token):
         sql = """INSERT INTO blacklisted(token) VALUES ('{}')"""
         self.cur.execute(sql.format(token))
-        
+
     def token_in_blacklisted(self, token):
         """ Checks if the blacklisted token exists in database"""
         sql = """select token from blacklisted where token ='{}'"""

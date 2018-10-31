@@ -48,7 +48,7 @@ def create_product():
 
 @product.route('/api/v2/products', methods=['GET'])
 @swag_from('../apidocs/products/get_products.yml')
-def fetch_products():
+def fetch_all_products():
     """Fetches all the available products from the database"""
     product = Product()
     fetched_products = product.fetch_product()
