@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from api.models.product_model import Product
+from api.models.user_models import User
 from api.validators import Validate
 from datetime import datetime
 from flasgger import swag_from
@@ -18,9 +19,12 @@ validate = Validate()
 @token_required
 def create_product():
     """Creates a new product"""
+    user = User()
     fetched_token = request.headers['Authorization']
     token = fetched_token.split(" ")
     decoded_token = jwt.decode(token[1], Config.SECRET_KEY)
+    if user.token_in_blacklisted(token[1]):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
     if decoded_token['roles'] != ['Admin']:
         return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()

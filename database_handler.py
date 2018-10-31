@@ -50,7 +50,7 @@ class DbConn:
         print("Table sales_records created successfully")
 
     def create_categories_table(self):
-        "A function to create the categories table"
+        """A function to create the categories table"""
         self.cur.execute('''CREATE TABLE IF NOT EXISTS categories
                            (category_id  SERIAL PRIMARY KEY   NOT NULL ,
                             category_name VARCHAR(100) NOT NULL,
@@ -58,6 +58,13 @@ class DbConn:
                             DELETE CASCADE ,
                             created_at  DATE); ''')
         print("Table categories created successfully")
+
+    def create_blacklisted_tokens(self):
+        """Creates a table for the blacklisted tokens """
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS blacklisted
+                            (token_id SERIAL PRIMARY KEY NOT NULL,
+                            token VARCHAR(300) NOT NULL);''')
+        print("Table blacklisted successfully created")
 
     def close_DB(self):
         self.conn.commit()
@@ -70,4 +77,5 @@ if __name__ == '__main__':
         db.create_products_table()
         db.create_sales_table()
         db.create_categories_table()
+        db.create_blacklisted_tokens()
         db.close_DB()
