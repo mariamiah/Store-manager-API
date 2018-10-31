@@ -67,5 +67,15 @@ class Product:
         if not row:
             return True
         return False
+
+    def update_product(self, product_id, product_quantity,
+                       product_name, price):
+        """Updates a product"""
+
+        sql = """UPDATE products SET product_quantity='{}',\
+                 product_name='{}', price ='{}' WHERE product_id = '{}'"""
+        self.cur.execute(sql.format(product_quantity, product_name, price,
+                         product_id))
+
 if __name__ == "__main__":
     product = Product()

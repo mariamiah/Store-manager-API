@@ -76,16 +76,18 @@ def delete_product(product_id):
     return jsonify({"message": "product successfully removed"}), 200
 
 
-@product.route('/api/v1/products/<int:product_id>', methods=['PUT'])
+@product.route('/api/v2/products/<int:product_id>', methods=['PUT'])
 @swag_from('../apidocs/products/update_product.yml')
+@token_required
 def modify_product(product_id):
-    """Updates an entry"""
-    if product_id == 0 or product_id > len(products):
+    """Updates a product"""
+    product = Product()
+    if product_id == 0 or product.check_if_id_exists(product_id):
         return jsonify({"message": "Index is out of range"}), 400
     data = request.get_json()
-    for product in products:
-        if int(product.product_id) == int(product_id):
-            product.product_name = data['product_name']
-            product.product_quantity == data['product_quantity']
-            product.price = data['price']
-    return jsonify({'message': "successfully updated"}), 200
+    valid = validate.validate_product(data)
+    if valid == "Valid":
+        product.update_product(product_id, data['product_quantity'],
+                               data['product_name'], data['price'])
+        return jsonify({'message': "successfully updated"}), 200
+    return jsonify({"message": valid}), 400
