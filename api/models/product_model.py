@@ -44,7 +44,6 @@ class Product:
         sql = """ SELECT * FROM products"""
         self.cur.execute(sql)
         rows = self.cur.fetchall()
-        print(rows)
         for row in rows:
             items.append({
                 "product_id": row[0],
@@ -87,7 +86,7 @@ class Product:
         if quantity > int(product_quantity):
             return True
         return False
-    
+
     def fetch_product_price(self, product_name):
         """ Returns the price of a given product"""
         sql = """ SELECT price FROM products WHERE product_name = '{}'"""
@@ -97,6 +96,3 @@ class Product:
             return row[0]
         except Exception:
             return False
-
-if __name__ == "__main__":
-    product = Product()

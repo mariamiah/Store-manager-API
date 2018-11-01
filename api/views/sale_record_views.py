@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from api.models.SaleRecord_model import SaleRecord
+from api.models.sale_record_model import SaleRecord
 from api.models.product_model import Product
 from api.models.user_models import User
 from api.validators import Validate
@@ -12,6 +12,7 @@ sale = Blueprint('sale', __name__)
 validate = Validate()
 product = Product()
 salerecord = SaleRecord()
+
 
 @sale.route('/api/v2/sales', methods=['POST'])
 @swag_from('../apidocs/sales/create_sale_record.yml')
@@ -50,20 +51,29 @@ def create_sale_record():
         return jsonify({"message": "Invalid"})
 
 
-@sale.route('/api/v1/sales', methods=['GET'])
+@sale.route('/api/v2/sales', methods=['GET'])
 @swag_from('../apidocs/sales/get_all_sales.yml')
+@token_required
 def fetch_sale_orders():
     """This endpoint fetches all sale records"""
-    Sales = [record.get_dict() for record in sales]
-    return jsonify({"All Sales": Sales}), 200
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
+    fetched_sales = salerecord.view_all_sales()
+    return jsonify({"All Sales": fetched_sales}), 200
 
 
-@sale.route('/api/v1/sales/<int:sale_id>', methods=['GET'])
+@sale.route('/api/v2/sales/<int:sale_id>', methods=['GET'])
 @swag_from('../apidocs/sales/get_single_sale.yml')
 def get_single_record(sale_id):
-    single_record = []
-    if sale_id != 0 and sale_id <= len(sales):
-        record = sales[sale_id - 1]
-        single_record.append(record.get_dict())
-        return jsonify({"Record": single_record}), 200
-    return jsonify({"message": "Index out of range!"}), 400
+    try:
+        if sale_id != 0 or salerecord.check_sale_id_exists(sale_id):
+            single_sale = salerecord.view_sale_by_id(sale_id)
+            return jsonify({"Record": single_sale}), 200
+        return jsonify({"message": "Index out of range!"}), 400
+    except Exception:
+        return jsonify({"message": "Invalid index"}), 400

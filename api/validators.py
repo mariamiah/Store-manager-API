@@ -33,39 +33,39 @@ class Validate:
         # Validates user fields
         user_fields = ['username', 'email', 'password', 'employee_name',
                        'role', 'gender']
-        try:
-            if len(data.keys()) == 0:
-                return "No user added"
-            for user_field in user_fields:
-                if data[user_field] == "":
-                    return user_field + " cannot be blank"
+        if len(data.keys()) == 0:
+            return "No user added"
+        for user_field in user_fields:
+            if data[user_field] == "":
+                return user_field + " cannot be blank"
+            if not isinstance(data[user_field], str):
+                return "Enter string value"
+        if not re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)",
+                        data['email']):
+            return "Invalid email format"
 
-            if not re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)",
-                            data['email']):
-                return "Invalid email format"
+        if not re.match(r"([a-zA-Z ]*$)", data['employee_name']):
+            return "Only alphanumerics allowed in employee name"
 
-            if not re.match(r"([a-zA-Z ]*$)", data['employee_name']):
-                return "Only alphanumerics allowed in employee name"
+        if not re.match(r"([a-zA-Z0-9]*$)", data['username']):
+            return "Only alphanumerics allowed in user name"
 
-            if not re.match(r"([a-zA-Z0-9]*$)", data['username']):
-                return "Only alphanumerics allowed in user name"
+        if re.match(r"([0-9])", data['username']):
+            return "user name cannot contain numbers only"
 
-            if re.match(r"([0-9])", data['username']):
-                return "user name cannot contain numbers only"
+        if len(data['password']) < 5:
+            return "Password too short"
+        if data['gender'] != "female" and data['gender'] != "male":
+            return "gender can only be female or male"
+        if len(data.keys()) > 7:
+            return "Wrong number of fields"
 
-            if len(data['password']) < 5:
-                return "Password too short"
-            if data['gender'] != "female" and data['gender'] != "male":
-                return "gender can only be female or male"
-
-            if data['role'] != 'Admin' and data['role'] != 'Attendant':
-                return "Role must be either Admin or Attendant"
-            if data['password'] != data['confirm_password']:
-                return "passwords dont match"
-            else:
-                return "is_valid"
-        except KeyError:
-            return "Invalid, Key fields missing"
+        if data['role'] != 'Admin' and data['role'] != 'Attendant':
+            return "Role must be either Admin or Attendant"
+        if data['password'] != data['confirm_password']:
+            return "passwords dont match"
+        else:
+            return "is_valid"
 
     def validate_login(self, data):
         try:

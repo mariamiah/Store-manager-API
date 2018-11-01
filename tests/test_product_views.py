@@ -368,5 +368,3 @@ class TestProductViews(unittest.TestCase):
             conn = DbConn()
             self.cur = conn.create_connection()
             conn.drop_tables('products')
-            conn.create_products_table()
-            conn.create_blacklisted_tokens()
