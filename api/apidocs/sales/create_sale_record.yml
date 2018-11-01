@@ -22,7 +22,7 @@ definitions:
   Record:
     type: object
     properties:
-      record_id:
+      sale_id:
         type: integer
         format: int64
       product_name:
@@ -36,6 +36,8 @@ definitions:
         format: int64
       date_added:
         type: string
+      username:
+        type: string
   create_record:
     type: object
     properties:
@@ -45,9 +47,6 @@ definitions:
       product_quantity:
         type: string
         example: "5"
-      price:
-        type: string
-        example: "40000"
 responses:
   201:
     description: Sale Record created successfully
