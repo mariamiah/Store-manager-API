@@ -13,11 +13,3 @@ database_config = {
         "host": "127.0.0.1",
         "port": "5432"
 }
-
-test_database_config = {
-        "dbname": "test_storemanagerdb",
-        "user": "postgres",
-        "password": "123",
-        "host": "127.0.0.1",
-        "port": "5432"
-}

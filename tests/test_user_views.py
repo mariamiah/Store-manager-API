@@ -54,7 +54,15 @@ class TestUserViews(unittest.TestCase):
 
     def test_configuration(self):
         """ Tests the API configuration key """
-        self.assertTrue(Config.SECRET_KEY, 'topsecret')
+        self.assertEqual(Config.SECRET_KEY, 'topsecret')
+
+    def tearDown(self):
+        with app.app_context():
+            conn = DbConn()
+            self.cur = conn.create_connection()
+            conn.drop_tables('users')
+            conn.create_users_table()
+            conn.create_blacklisted_tokens()
 
     def test_user_cant_register_if_already_exists(self):
         # Tests that a user cannot register again if already exists
@@ -237,11 +245,3 @@ class TestUserViews(unittest.TestCase):
         self.assertIn("User either not registered or forgot password",
                       msg['message'])
         self.assertEqual(response.status_code, 400)
-
-    def tearDown(self):
-        with app.app_context():
-            conn = DbConn()
-            self.cur = conn.create_connection()
-            conn.drop_tables('users')
-            conn.create_users_table()
-            conn.create_blacklisted_tokens()

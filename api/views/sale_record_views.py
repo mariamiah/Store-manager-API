@@ -53,8 +53,16 @@ def create_sale_record():
 
 @sale.route('/api/v2/sales', methods=['GET'])
 @swag_from('../apidocs/sales/get_all_sales.yml')
+@token_required
 def fetch_sale_orders():
     """This endpoint fetches all sale records"""
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
     fetched_sales = salerecord.view_all_sales()
     return jsonify({"All Sales": fetched_sales}), 200
 

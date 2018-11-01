@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from config import database_config, test_database_config
+from config import database_config
 
 
 class DbConn:
@@ -69,10 +69,19 @@ class DbConn:
 
     def drop_tables(self, table_name):
         """ Drops the tables that exist in the database"""
-        sql = """ DROP TABLE {} CASCADE;"""
+        sql = """ DROP TABLE {} CASCADE; """
         self.cur.execute(sql.format(table_name))
         print("Table '{}' successfully dropped".format(table_name))
 
     def close_DB(self):
         self.conn.commit()
         self.conn.close()
+
+db = DbConn()
+db.create_connection()
+db.create_users_table()
+db.create_products_table()
+db.create_sales_table()
+db.create_categories_table()
+db.create_blacklisted_tokens()
+db.close_DB()
