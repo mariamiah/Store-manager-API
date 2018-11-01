@@ -1,0 +1,41 @@
+Endpoint for logging out a User
+---
+tags:
+  - User
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: body
+    in: body
+    description: User Details
+    required: true
+    schema :
+      $ref: '#/definitions/logout_user'
+definitions:
+  User:
+    type: object
+    properties:
+      token:
+        type: string
+  logout_user:
+    type: object
+    properties:
+      token:
+        type: string
+responses:
+  201:
+    description: log out successful
+    schema:
+      $ref: '#/definitions/User'
+    examples:
+      [{
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJleHAiOjE1Mzk5NTk5NjB9.aYgS8c5lseVo4hxiVJ_EKibXO5jO3Q6bBeDwQ5Gxeh8"
+      }]
+  401:
+    description: Could not verify
+    
+
+
+

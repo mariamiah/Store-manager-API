@@ -25,7 +25,8 @@ definitions:
       date_added:
         type: string
         format: date-time
-      
+      username:
+        type: string     
 responses:
   200:
     description: Information about a sale record
@@ -33,12 +34,13 @@ responses:
       $ref: '#/definitions/Record'
     examples:
       Record: [{
-      "date_added": "Wed, 17 Oct 2018 15:09:53 GMT",
+      "date_sold": "Wed, 17 Oct 2018 15:09:53 GMT",
       "price": "50000",
       "sale_id": 1,
       "product_name": "covert jeans",
       "product_quantity": "10",
-      "total_amount": "500000"
+      "total_amount": "500000",
+      "username": "maria"
     }]
   404:
     description: Sale record does not exist

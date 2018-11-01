@@ -62,6 +62,7 @@ def login():
 
 
 @user.route('/api/v2/auth/logout', methods=['POST'])
+@swag_from('../apidocs/users/logout_user.yml')
 def logout():
     """Logs out a user"""
     user = User()

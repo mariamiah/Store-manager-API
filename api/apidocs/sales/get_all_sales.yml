@@ -36,20 +36,22 @@ responses:
       [ "Records",
   [   
     {
-            "date_added": "Thur, 18 Oct 2018 23:44:14 GMT",
+            "date_sold": "Thur, 18 Oct 2018 23:44:14 GMT",
             "price": "4000",
             "product_name": "jeans",
             "product_quantity": "20",
-            "record_id": 2,
-            "total_amount": "80000"
+            "sale_id": 2,
+            "total_amount": "80000",
+            "username": "maria"
     },
       {
-            "date_added": "Wed, 17 Oct 2018 23:44:14 GMT",
+            "date_sold": "Wed, 17 Oct 2018 23:44:14 GMT",
             "price": "20000",
             "product_name": "shirt",
             "product_quantity": "2",
-            "record_id": 2,
-            "total_amount": "40000"
+            "sale_id": 2,
+            "total_amount": "40000",
+            "username":"sandra"
       }
   ]]
 
