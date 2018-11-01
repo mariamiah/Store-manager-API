@@ -54,20 +54,6 @@ def fetch_all_products():
     return jsonify({"Products": fetched_products}), 200
 
 
-@product.route('/api/v1/products/<int:product_id>', methods=['GET'])
-@swag_from('../apidocs/products/get_single_product.yml')
-def fetch_single_product(product_id):
-    fetched_product = []
-    try:
-        if validate.validate_id(product_id, products):
-            product = products[product_id - 1]
-            fetched_product.append(product.serialize())
-            return jsonify({"Product": fetched_product}), 200
-        return jsonify({"message": "Index out of range!"}), 400
-    except IndexError:
-        return "Index out of range", 400
-
-
 @product.route('/api/v2/products/<int:product_id>', methods=['DELETE'])
 @swag_from('../apidocs/products/delete_product.yml')
 @token_required

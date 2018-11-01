@@ -205,6 +205,39 @@ class TestUserViews(unittest.TestCase):
         self.assertIn("log out successful", message['message'])
         self.assertEqual(response.status_code, 200)
 
+    def test_assigns_token(self):
+        # Tests that a user cannot obtain a token if not logged in
+        user_data = {
+                    "employee_name": "ttuehe",
+                    "email": "monica@gmail.com",
+                    "gender": "female",
+                    "username": "monica",
+                    "password": "123456789",
+                    "confirm_password": "123456789",
+                    "role": "Attendant"
+                }
+        response = self.client.post('/api/v2/auth/signup',
+                                    content_type='application/json',
+                                    json=user_data)
+        login_details = {
+            "username": "monica",
+            "password": "123456789"
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        login_details = {
+            "username": "monica",
+            "password": "monica"
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        self.assertIn("User either not registered or forgot password",
+                      msg['message'])
+        self.assertEqual(response.status_code, 400)
+
     def tearDown(self):
         with app.app_context():
             conn = DbConn()

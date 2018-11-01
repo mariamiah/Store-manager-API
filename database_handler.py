@@ -37,8 +37,8 @@ class DbConn:
                      (product_id  SERIAL PRIMARY KEY NOT NULL ,
                       product_quantity INT NOT NULL,
                       price INT NOT NULL,
-                      product_code UUID NOT NULL UNIQUE,
-                      product_name VARCHAR(100) NOT NULL); ''')
+                      product_code UUID NOT NULL,
+                      product_name VARCHAR(100) NOT NULL UNIQUE); ''')
         print("Table products created successfully")
 
     def create_sales_table(self):
@@ -46,10 +46,10 @@ class DbConn:
         self.cur.execute('''CREATE TABLE IF NOT EXISTS sales_records
                      (sale_id SERIAL PRIMARY KEY NOT NULL,
                       total_amount INT NOT NULL,
-                      employee_email VARCHAR(100) REFERENCES users(email) ON\
+                      username VARCHAR(100) REFERENCES users(username) ON\
                       DELETE CASCADE,
-                      product_code UUID REFERENCES products(product_code) ON\
-                      DELETE CASCADE,
+                      product_name VARCHAR(100) REFERENCES\
+                      products(product_name) ON DELETE CASCADE,
                       date_sold DATE NOT NULL); ''')
         print("Table sales_records created successfully")
 

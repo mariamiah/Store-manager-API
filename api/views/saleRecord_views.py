@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from api.models.SaleRecord_model import SaleRecord
+from api.models.product_model import Product
+from api.models.user_models import User
 from api.validators import Validate
 from datetime import datetime
 from api.views.user_views import token_required
@@ -7,35 +9,41 @@ from flasgger import swag_from
 
 sale = Blueprint('sale', __name__)
 
-sales = list()
 validate = Validate()
+product = Product()
+salerecord = SaleRecord()
 
-
-@sale.route('/api/v1/sales', methods=['POST'])
+@sale.route('/api/v2/sales', methods=['POST'])
 @swag_from('../apidocs/sales/create_sale_record.yml')
 @token_required
 def create_sale_record():
     """ Creates a new sale record"""
-    if validate.check_role(created_token):
-        return jsonify({"Message": "Permission denied, Not an attendant"}), 401
+    user = User()
     data = request.get_json()
-    valid = validate.validate_product(data)
+    date_sold = datetime.now()
+    price = product.fetch_product_price(data['product_name'])
+    current_user = user.fetch_current_user()
+    total_amount = int(price) * int(data['product_quantity'])
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token) is False:
+        return jsonify({"message": "Permission Denied, Not an Attendant"}), 400
+    valid = validate.validate_sale(data)
     try:
-        if valid == "Valid":
-            sale_id = len(sales)
-            sale_id += 1
-            total = int(data['price']) * int(data['product_quantity'])
-            date_added = datetime.now()
-            kwargs = {
-                "sale_id": sale_id,
-                "product_name": data['product_name'],
-                "price": data['price'],
-                "product_quantity": data['product_quantity'],
-                "total_amount": str(total),
-                "date_added": date_added
-            }
-            new_record = SaleRecord(**kwargs)
-            sales.append(new_record)
+        if valid == "Sale_valid":
+            if product.check_if_product_exists(data['product_name']) is False:
+                return jsonify({"message": "Product does not exist"}), 400
+            if product.compute_stock_balance(data['product_quantity'],
+                                             data['product_name']) is False:
+                return jsonify({
+                    "message":
+                    "Stock balance less than requested quantity"}), 400
+            salerecord.make_a_sale(total_amount, current_user,
+                                   data['product_name'],
+                                   data['product_quantity'], price,
+                                   date_sold)
             return jsonify({"message": "record created successfully"}), 201
         return jsonify({"message": valid}), 400
     except ValueError:

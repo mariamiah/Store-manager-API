@@ -96,6 +96,18 @@ class TestValidator(unittest.TestCase):
             self.assertEqual(self.validate.validate_product(data),
                              ("Invalid Key Fields"))
 
+    def test_return_if_wrong_number_of_keys_are_entered(self):
+        # Tests to ensure a wrong number of key values not entered
+        data = {
+            "product_name": "shirts",
+            "product_quantity": "5000",
+            "price": "17000",
+            "extra values": "many"
+             }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_product(data),
+                             ("Invalid number of key fields"))
+
     def test_validate_user(self):
         # Tests that the correct user definitions pass
         user_data = {

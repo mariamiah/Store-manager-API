@@ -2,6 +2,8 @@ from database_handler import DbConn
 import psycopg2
 from flask import jsonify, request
 from werkzeug.security import check_password_hash
+from config import Config
+import jwt
 
 
 class User:
@@ -75,5 +77,11 @@ class User:
         if row:
             return True
         return False
-if __name__ == "__main__":
-    user = User()
+
+    def fetch_current_user(self):
+        """ Fetches the current user"""
+        token = request.headers['Authorization']
+        data_token = token.split(" ")[1]
+        decoded_token = jwt.decode(data_token, Config.SECRET_KEY)
+        current_user = decoded_token['user']
+        return current_user
