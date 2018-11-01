@@ -29,7 +29,6 @@ class DbConn:
             username VARCHAR(100) NOT NULL UNIQUE,
             password VARCHAR(100) NOT NULL,
             role VARCHAR(100) NOT NULL); ''')
-        print("Table users created successfully")
 
     def create_products_table(self):
         "A function to create the products table"
@@ -39,19 +38,19 @@ class DbConn:
                       price INT NOT NULL,
                       product_code UUID NOT NULL,
                       product_name VARCHAR(100) NOT NULL UNIQUE); ''')
-        print("Table products created successfully")
 
     def create_sales_table(self):
         "A function to create the sales_records table"
         self.cur.execute('''CREATE TABLE IF NOT EXISTS sales_records
-                     (sale_id SERIAL PRIMARY KEY NOT NULL,
-                      total_amount INT NOT NULL,
-                      username VARCHAR(100) REFERENCES users(username) ON\
-                      DELETE CASCADE,
-                      product_name VARCHAR(100) REFERENCES\
-                      products(product_name) ON DELETE CASCADE,
-                      date_sold DATE NOT NULL); ''')
-        print("Table sales_records created successfully")
+                         (sale_id SERIAL PRIMARY KEY NOT NULL,
+                          total_amount INT NOT NULL,
+                          username VARCHAR(100) REFERENCES users(username) ON\
+                          DELETE CASCADE,
+                          product_name VARCHAR(100) REFERENCES\
+                          products(product_name) ON DELETE CASCADE,
+                          product_quantity INT NOT NULL,
+                          price INT NOT NULL,
+                          date_sold DATE NOT NULL); ''')
 
     def create_categories_table(self):
         """A function to create the categories table"""
@@ -61,14 +60,12 @@ class DbConn:
                             product_id INT REFERENCES products(product_id) ON\
                             DELETE CASCADE ,
                             created_at  DATE); ''')
-        print("Table categories created successfully")
 
     def create_blacklisted_tokens(self):
         """Creates a table for the blacklisted tokens """
         self.cur.execute('''CREATE TABLE IF NOT EXISTS blacklisted
                             (token_id SERIAL PRIMARY KEY NOT NULL,
                             token VARCHAR(300) NOT NULL);''')
-        print("Table blacklisted successfully created")
 
     def drop_tables(self, table_name):
         """ Drops the tables that exist in the database"""

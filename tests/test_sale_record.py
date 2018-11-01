@@ -1,5 +1,5 @@
 import unittest
-from api.models.SaleRecord_model import SaleRecord
+from api.models.sale_record_model import SaleRecord
 
 
 class TestSaleRecord(unittest.TestCase):
