@@ -1,1 +1,1 @@
-from . import product_views, saleRecord_views, user_views
+from . import product_views, sale_record_views, user_views

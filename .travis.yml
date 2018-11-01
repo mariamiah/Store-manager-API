@@ -1,12 +1,23 @@
 language: python
 python:
-  - "3.6.5"
-install: 
-  - pip install -r requirements.txt
-  - pip install coveralls
+  - "3.6"
+services:
+  - postgresql
 
-# command to run tests
-script: nosetests  --with-coverage --cover-package=api tests/
+env:
+  global:
+    - APP_SETTINGS ='testing'
+
+install:
+  - "pip install -r requirements.txt"
+  - "pip install coveralls"
+
+before_script:
+  - "psql -c 'create database storemanagerdb;' -U postgres"
+  - "psql -c 'create database test_store_managerdb;' -U postgres"
+  
+script:
+  - python3 -m pytest -v --cov api/tests
 
 after_success:
   - coveralls

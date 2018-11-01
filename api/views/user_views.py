@@ -10,85 +10,75 @@ import jwt
 import re
 
 user = Blueprint('user', __name__)
-
-users = []
-created_token = []
+user_obj = User()
 validate = Validate()
 
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
+        token = None
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization']
         if not token:
             return jsonify({"message": "Missing Token"}), 403
-        try:
             data_token = jwt.decode(token, Config.SECRET_KEY)
-            created_token.append(data_token)
-        except:
-            return jsonify({"message": "Invalid token"}), 403
         return f(*args, **kwargs)
     return decorated
 
 
-@user.route('/api/v1/users', methods=['POST'])
+@user.route('/api/v2/auth/signup', methods=['POST'])
 @swag_from('../apidocs/users/create_user.yml')
 def register_user():
     """ registers a user"""
     data = request.get_json()
     is_valid = validate.validate_user(data)
-    for user in users:
-        if user.email == data['email']:
-            return jsonify({"message": "user already exists!"}), 400
+    hashed_password = generate_password_hash(data['password'], 'sha256')
     try:
         if is_valid == "is_valid":
-            employee_id = len(users)
-            employee_id += 1
-            hashed_password = generate_password_hash(data['password'],
-                                                     method='sha256')
-            kwargs = {
-                "employee_id": employee_id,
-                "employee_name": data['employee_name'],
-                "email": data['email'],
-                "gender": data['gender'],
-                "username": data['username'],
-                "password": hashed_password,
-                "role": data['role']
-            }
-            user = User(**kwargs)
-            users.append(user)
+            if user_obj.check_for_existing_user(data['email']):
+                return jsonify({"message": "Email already exists, login"})
+            user_obj.add_user(data['employee_name'], data['email'],
+                              data['gender'], data['username'],
+                              hashed_password, data['role'])
             return jsonify({"message":
                             "User registered successfully"}), 201
         return jsonify({"message": is_valid}), 400
-    except KeyError:
-        return "Invalid key fields"
+    except Exception:
+        return jsonify({"message": "Invalid"}), 400
 
 
-@user.route('/api/v1/login', methods=['POST'])
+@user.route('/api/v2/auth/login', methods=['POST'])
 @swag_from('../apidocs/users/login_user.yml')
 def login():
-    """Logs in a user"""
     data = request.get_json()
     try:
-        email = data['email']
         is_valid = validate.validate_login(data)
-        if re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email) and\
-           is_valid == "Credentials valid":
+        if is_valid == "Credentials valid":
             return assigns_token(data)
         return jsonify({"message": is_valid}), 400
-    except KeyError:
-        return jsonify({"message": "Invalid keys"}), 400
+    except Exception:
+        return jsonify({"message": "Username doesnot exist, register"}), 400
+
+
+@user.route('/api/v2/auth/logout', methods=['POST'])
+def logout():
+    """Logs out a user"""
+    user = User()
+    user_token = request.headers['Authorization']
+    token = user_token.split(" ")[1]
+    if user.blacklist_token(token):
+        return jsonify({"message": "log out successful"}), 200
 
 
 def assigns_token(data):
-    for employee in users:
-        if employee.email == data['email'] and\
-           check_password_hash(employee.password, data['password']):
-                token = jwt.encode({'user': employee.username,
-                                    'exp': datetime.utcnow() +
-                                    timedelta(minutes=30),
-                                    'roles': employee.role},
-                                   Config.SECRET_KEY)
-                return jsonify({'token': token.decode('UTF-8')}), 200
+    user = User()
+    if user.fetch_password():
+        token = jwt.encode({'user': data['username'],
+                            'exp': datetime.utcnow() +
+                            timedelta(minutes=30),
+                            'roles': user.get_role()},
+                           Config.SECRET_KEY)
+        return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({
         "message": "User either not registered or forgot password"}), 400
