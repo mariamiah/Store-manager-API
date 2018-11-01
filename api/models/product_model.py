@@ -77,5 +77,26 @@ class Product:
         self.cur.execute(sql.format(product_quantity, product_name, price,
                          product_id))
 
+    def compute_stock_balance(self, product_quantity, product_name):
+        """Checks for product quantity"""
+        sql = """ SELECT product_quantity FROM products
+                  WHERE product_name = '{}'"""
+        self.cur.execute(sql.format(product_name))
+        row = self.cur.fetchone()
+        quantity = row[0]
+        if quantity > int(product_quantity):
+            return True
+        return False
+    
+    def fetch_product_price(self, product_name):
+        """ Returns the price of a given product"""
+        sql = """ SELECT price FROM products WHERE product_name = '{}'"""
+        try:
+            self.cur.execute(sql.format(product_name))
+            row = self.cur.fetchone()
+            return row[0]
+        except Exception:
+            return False
+
 if __name__ == "__main__":
     product = Product()

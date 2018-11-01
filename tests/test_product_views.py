@@ -280,6 +280,89 @@ class TestProductViews(unittest.TestCase):
         self.assertIn("Permission Denied, Not Admin", message['message'])
         self.assertEqual(response.status_code, 400)
 
+    def test_invalid_token_after_logout(self):
+        # Tests that one cannot use an invalid token to create a product
+        user_data = {
+                    "employee_name": "ttuehe",
+                    "email": "stella@gmail.com",
+                    "gender": "female",
+                    "username": "stella",
+                    "password": "123456789",
+                    "confirm_password": "123456789",
+                    "role": "Admin"
+                }
+        response = self.client.post('/api/v2/auth/signup',
+                                    content_type='application/json',
+                                    json=user_data)
+        login_details = {
+            "username": "stella",
+            "password": "123456789"
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + token
+        }
+        response = self.client.post('/api/v2/auth/logout',
+                                    headers=headers)
+        product_details = {
+            "product_name": "Teeshirt",
+            "price": "100000",
+            "product_quantity": "43"
+        }
+        response = self.client.post('/api/v2/products',
+                                    headers=headers,
+                                    json=product_details)
+        message = json.loads(response.data)
+        self.assertIn("Token blacklisted, login again", message['message'])
+        self.assertEqual(response.status_code, 400)
+
+    def test_cannot_add_a_product_which_already_exists(self):
+        # Tests that a user cannot add an already exisitng product
+        user_data = {
+                    "employee_name": "ttuehe",
+                    "email": "stella@gmail.com",
+                    "gender": "female",
+                    "username": "stella",
+                    "password": "123456789",
+                    "confirm_password": "123456789",
+                    "role": "Admin"
+                }
+        response = self.client.post('/api/v2/auth/signup',
+                                    content_type='application/json',
+                                    json=user_data)
+        login_details = {
+            "username": "stella",
+            "password": "123456789"
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + token
+        }
+        product_details = {
+            "product_name": "Teeshirt",
+            "price": "100000",
+            "product_quantity": "43"
+        }
+        response = self.client.post('/api/v2/products',
+                                    headers=headers,
+                                    json=product_details)
+        response = self.client.post('/api/v2/products',
+                                    headers=headers,
+                                    json=product_details)
+        message = json.loads(response.data)
+        self.assertIn("Product already exists", message['message'])
+        self.assertEqual(response.status_code, 200)
+
     def tearDown(self):
         with app.app_context():
             conn = DbConn()

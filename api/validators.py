@@ -15,7 +15,7 @@ class Validate:
                     return product_field + " cannot be blank"
 
             if len(data.keys()) == 0 or len(data.keys()) > 3:
-                return "Invalid key fields"
+                return "Invalid number of key fields"
             if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
                 return "productname should contain alphanumerics only"
 
@@ -82,14 +82,26 @@ class Validate:
         except KeyError:
             return "Invalid fields"
 
-    def validate_id(self, item_id, item_list):
-        if item_id != 0 and item_id <= len(item_list):
-            return True
-        return False
-
     def check_permission(self, token):
         """ Decodes an encoded token"""
         decoded_token = jwt.decode(token, Config.SECRET_KEY)
         if decoded_token['roles'] != ['Admin']:
             return True
         return False
+
+    def validate_sale(self, data):
+        """ Validates the sale made """
+        if len(data.keys()) == 0 or len(data.keys()) > 2:
+            return "Invalid keys"
+        if 'product_name' and 'product_quantity' not in data.keys():
+            return "Add product name and quantity"
+        if data['product_name'] == "":
+            return "Product_name cannot be blank"
+        if data['product_quantity'] == "":
+            return "Product_quantity cannot be blank"
+        if not re.match(r"^[0-9_]*$", data['product_quantity']):
+                return "quantity should contain integers only"
+        if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
+                return "productname should contain alphanumerics only"
+        else:
+            return "Sale_valid"
