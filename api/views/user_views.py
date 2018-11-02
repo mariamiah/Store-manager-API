@@ -1,13 +1,12 @@
 from flask import request, jsonify, Blueprint
 from api.validators import Validate
 from api.models.user_models import User
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from flasgger import swag_from
 from datetime import datetime, timedelta
 from functools import wraps
 from config import Config
 import jwt
-import re
 
 user = Blueprint('user', __name__)
 user_obj = User()

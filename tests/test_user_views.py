@@ -1,7 +1,6 @@
 import unittest
-from api import app
 import json
-import jwt
+from api import app
 from config import Config
 from database_handler import DbConn
 
@@ -106,7 +105,6 @@ class TestUserViews(unittest.TestCase):
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
-        msg = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
 
     def test_login_user_if_not_registered(self):

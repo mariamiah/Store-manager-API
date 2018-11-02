@@ -1,6 +1,5 @@
 import os
 import psycopg2
-from config import database_config
 
 
 class DbConn:

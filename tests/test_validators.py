@@ -209,7 +209,7 @@ class TestValidator(unittest.TestCase):
             "gender": "female",
             "username": "sara",
             "password": "475543",
-            "password": "475543",
+            "confirm_password": "475543",
             "email": "",
             "role": "admin"
         }

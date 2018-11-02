@@ -2,7 +2,6 @@ import unittest
 from api import app
 import json
 from database_handler import DbConn
-from config import Config
 
 
 class TestSaleViews(unittest.TestCase):
