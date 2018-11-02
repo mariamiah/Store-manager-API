@@ -1,5 +1,6 @@
 import os
 import psycopg2
+from werkzeug.security import generate_password_hash
 
 
 class DbConn:
@@ -8,8 +9,17 @@ class DbConn:
             environment"""
         if os.environ.get('APP_SETTINGS') == 'testing':
             database_name = "test_storemanagerdb"
+            self.conn = psycopg2.connect(dbname=database_name, user="postgres",
+                                         password="123", port="5432",
+                                         host="localhost")
+        elif os.environ.get('APP_SETTINGS') == 'production':
+            self.conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
+
         else:
             database_name = "storemanagerdb"
+            self.conn = psycopg2.connect(dbname=database_name, user="postgres",
+                                         password="123", port="5432",
+                                         host="localhost")
 
         self.conn = psycopg2.connect(dbname=database_name, user="postgres",
                                      password="123", port="5432",
@@ -66,6 +76,15 @@ class DbConn:
                             (token_id SERIAL PRIMARY KEY NOT NULL,
                             token VARCHAR(300) NOT NULL);''')
 
+    def create_default_admin(self):
+        """Creates a default administrator """
+        hashed_password = generate_password_hash('Administrator', 'sha256')
+        sql = """INSERT INTO users(employee_name, email, gender, username,
+                                   password, role) VALUES
+              ('{}', '{}', '{}', '{}', '{}', '{}')"""
+        self.cur.execute(sql.format('Admin', 'admin@gmail.com', 'female',
+                                    'Admin', hashed_password, 'Admin'))
+
     def drop_tables(self, table_name):
         """ Drops the tables that exist in the database"""
         sql = """ DROP TABLE {} CASCADE; """
@@ -75,12 +94,3 @@ class DbConn:
     def close_DB(self):
         self.conn.commit()
         self.conn.close()
-
-db = DbConn()
-db.create_connection()
-db.create_users_table()
-db.create_products_table()
-db.create_sales_table()
-db.create_categories_table()
-db.create_blacklisted_tokens()
-db.close_DB()
