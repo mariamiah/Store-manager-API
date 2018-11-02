@@ -17,7 +17,7 @@ before_script:
   - "psql -c 'create database test_store_managerdb;' -U postgres"
   
 script:
-  - python3 -m pytest -v --cov api/tests
+  - nosetests --with-coverage --cover-package=api && coverage report
 
 after_success:
   - coveralls

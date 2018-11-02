@@ -19,12 +19,16 @@ Store Manager is a web application that helps store owners manage sales and prod
 
 | REQUEST | ROUTE                           | FUNCTIONALITY                 |
 | ------- | ------------------------------- | ----------------------------- |
-| GET     | /api/v1/products                | Fetches all products          |
-| GET     | api/v1/products/&lt;product_id> | Fetches a single product      |
-| GET     | api/v1/sales                    | Fetches all sales records     |
-| GET     | api/v1/sales/&lt;sales_id>      | Fetches a single sales record |
-| POST    | api/v1/products                 | Creates a product             |
-| POST    | api/v1/sales                    | Creates a sales order         |
+| GET     | api/v2/products                 | Fetches all products          |
+| GET     | api/v2/products/&lt;product_id> | Fetches a single product      |
+| PUT     | api/v2/products/&lt;product_id> | Updates a single product      |
+| DELETE  | api/v2/products/&lt;product_id> | Deletes a product             |
+| GET     | api/v2/sales                    | Fetches all sales records     |
+| GET     | api/v2/sales/&lt;sales_id>      | Fetches a single sales record |
+| POST    | api/v2/products                 | Creates a product             |
+| POST    | api/v2/auth/login               | Logs in a user                |
+| POST    | api/v2/auth/signup              | Registers a user              |
+| POST    | api/v2/sales                    | Creates a sales order         |
 
 ### Getting started with the app
 
@@ -32,6 +36,7 @@ Store Manager is a web application that helps store owners manage sales and prod
 
 -   [Python 3.6](https://docs.python.org/3/)
 -   [Flask](http://flask.pocoo.org/)
+-   [Postgres](http://postgresql.org/)
 
 ### Installation
 
@@ -72,7 +77,7 @@ Test your setup using [postman](www.getpostman.com) REST-client
 -   Install nosetests
 -   Navigate to project root
 -   Use `nosetests tests/` to run the tests
--   To run tests with coverage, use `nosetests --with-coverage --cover-package=app && coverage report`
+-   To run tests with coverage, use `nosetests --with-coverage --cover-package=api && coverage report`
 
 ### Link to Store Manager on Heroku
 
