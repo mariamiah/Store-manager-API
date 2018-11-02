@@ -2,7 +2,6 @@ import unittest
 from api import app
 import json
 from database_handler import DbConn
-from config import Config
 
 
 class TestProductViews(unittest.TestCase):
@@ -305,7 +304,7 @@ class TestProductViews(unittest.TestCase):
         token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearerer " + token
         }
         response = self.client.post('/api/v2/auth/logout',
                                     headers=headers)

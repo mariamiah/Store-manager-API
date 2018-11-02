@@ -1,5 +1,4 @@
 from database_handler import DbConn
-import psycopg2
 from flask import jsonify, request
 from werkzeug.security import check_password_hash
 from config import Config

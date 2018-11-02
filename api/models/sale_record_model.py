@@ -1,7 +1,5 @@
 from database_handler import DbConn
-import psycopg2
-from flask import jsonify, request
-from datetime import datetime
+from flask import request
 
 
 class SaleRecord:

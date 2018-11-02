@@ -1,5 +1,4 @@
 from database_handler import DbConn
-import psycopg2
 from flask import jsonify, request
 
 
