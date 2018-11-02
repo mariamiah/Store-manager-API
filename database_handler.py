@@ -20,10 +20,6 @@ class DbConn:
             self.conn = psycopg2.connect(dbname=database_name, user="postgres",
                                          password="123", port="5432",
                                          host="localhost")
-
-        self.conn = psycopg2.connect(dbname=database_name, user="postgres",
-                                     password="123", port="5432",
-                                     host="localhost")
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
         return self.cur
