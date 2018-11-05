@@ -12,10 +12,24 @@ class TestUserViews(unittest.TestCase):
             conn = DbConn()
             self.cur = conn.create_connection()
             conn.create_users_table()
+            conn.create_default_admin()
             conn.create_blacklisted_tokens()
 
     def test_register_user(self):
         # Tests that the user is registered
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
         user_data = {
                     "employee_name": "ttuehe",
                     "email": "sandranaggayi@gmail.com",
@@ -26,14 +40,27 @@ class TestUserViews(unittest.TestCase):
                     "role": "Admin"
                     }
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         msg = json.loads(response.data)
         self.assertIn("User registered successfully", msg['message'])
         self.assertEqual(response.status_code, 201)
 
     def test_register_with_unmatched_passwords(self):
-        # Tests that the user is registered
+        # Tests that the user cannot register with un matched passwords
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
         user_data = {
                     "employee_name": "ttuehe",
                     "email": "sandranaggayi@gmail.com",
@@ -44,7 +71,7 @@ class TestUserViews(unittest.TestCase):
                     "role": "Admin"
                     }
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         msg = json.loads(response.data)
         self.assertIn("passwords dont match", msg['message'])
@@ -56,6 +83,19 @@ class TestUserViews(unittest.TestCase):
 
     def test_user_cant_register_if_already_exists(self):
         # Tests that a user cannot register again if already exists
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
         user_data = {
                     "employee_name": "ttuehe",
                     "email": "sandranaggayi@gmail.com",
@@ -66,10 +106,10 @@ class TestUserViews(unittest.TestCase):
                     "role": "Admin"
                 }
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         msg = json.loads(response.data)
         self.assertIn("Email already exists, login", msg['message'])
@@ -77,22 +117,10 @@ class TestUserViews(unittest.TestCase):
 
     def test_login(self):
         """ Tests that a registered user successfully logs in """
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "sandranaggayi@gmail.com",
-                    "gender": "female",
-                    "username": "sandra",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "sandra",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
@@ -171,30 +199,18 @@ class TestUserViews(unittest.TestCase):
 
     def test_logout_user(self):
         # Tests that a user successfully logs out
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "monica@gmail.com",
-                    "gender": "female",
-                    "username": "monica",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Attendant"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "monica",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
         msg = json.loads(response.data)
-        token = msg['token']
+        admin_token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + admin_token
         }
         response = self.client.post('/api/v2/auth/logout',
                                     headers=headers)
@@ -202,42 +218,10 @@ class TestUserViews(unittest.TestCase):
         self.assertIn("log out successful", message['message'])
         self.assertEqual(response.status_code, 200)
 
-    def test_assigns_token(self):
-        # Tests that a user cannot obtain a token if not logged in
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "monica@gmail.com",
-                    "gender": "female",
-                    "username": "monica",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Attendant"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
-        login_details = {
-            "username": "monica",
-            "password": "123456789"
-        }
-        response = self.client.post('/api/v2/auth/login',
-                                    content_type='application/json',
-                                    json=login_details)
-        login_details = {
-            "username": "monica",
-            "password": "monica"
-        }
-        response = self.client.post('/api/v2/auth/login',
-                                    content_type='application/json',
-                                    json=login_details)
-        msg = json.loads(response.data)
-        self.assertIn("User either not registered or forgot password",
-                      msg['message'])
-        self.assertEqual(response.status_code, 400)
-
     def tearDown(self):
         with app.app_context():
             conn = DbConn()
             self.cur = conn.create_connection()
+            conn.delete_default_admin()
             conn.drop_tables('users')
             conn.drop_tables('blacklisted')
