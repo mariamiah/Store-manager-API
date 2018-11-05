@@ -63,6 +63,15 @@ class TestProductViews(unittest.TestCase):
 
     def test_cannot_add_product_if_not_admin(self):
         # Tests that a user cannot add a product if they are not admin
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
         user_data = {
                     "employee_name": "ttuehe",
                     "email": "lillian@gmail.com",
@@ -72,8 +81,12 @@ class TestProductViews(unittest.TestCase):
                     "confirm_password": "123456789",
                     "role": "Attendant"
                 }
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         login_details = {
             "username": "lillian",
@@ -102,35 +115,24 @@ class TestProductViews(unittest.TestCase):
 
     def test_delete_product_if_admin(self):
         # Tests that an admin can delete a product
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "joyce@gmail.com",
-                    "gender": "female",
-                    "username": "joyce",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "joyce",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
         product_details = {
                 "product_quantity": "6",
                 "product_name": "umbrella",
                 "price": "3000"
                 }
         msg = json.loads(response.data)
-        token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + admin_token
         }
         response = self.client.post('/api/v2/products',
                                     headers=headers,
@@ -144,7 +146,15 @@ class TestProductViews(unittest.TestCase):
 
     def test_cannot_delete_if_not_admin(self):
         # Tests that a user can not delete item if not administrator
-                # Tests that an admin can delete a product
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
         user_data = {
                     "employee_name": "ttuehe",
                     "email": "esther@gmail.com",
@@ -154,8 +164,12 @@ class TestProductViews(unittest.TestCase):
                     "confirm_password": "123456789",
                     "role": "Attendant"
                 }
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         login_details = {
             "username": "esther",
@@ -187,25 +201,15 @@ class TestProductViews(unittest.TestCase):
 
     def test_modify_product_if_admin(self):
         # Tests that its only the administrator who can modify a product
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "edith@gmail.com",
-                    "gender": "female",
-                    "username": "edith",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "edith",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
         product_details = {
                 "product_quantity": "6",
                 "product_name": "umbrella",
@@ -215,7 +219,7 @@ class TestProductViews(unittest.TestCase):
         token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + admin_token
         }
         response = self.client.post('/api/v2/products',
                                     headers=headers,
@@ -229,6 +233,15 @@ class TestProductViews(unittest.TestCase):
 
     def test_cannot_modify_product_if_not_admin(self):
         # Tests that a user cannot modify a product if not admin
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
         user_data = {
                     "employee_name": "ttuehe",
                     "email": "monica@gmail.com",
@@ -238,8 +251,12 @@ class TestProductViews(unittest.TestCase):
                     "confirm_password": "123456789",
                     "role": "Attendant"
                 }
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearerer " + admin_token
+        }
         response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
+                                    headers=headers,
                                     json=user_data)
         login_details = {
             "username": "monica",
@@ -271,30 +288,18 @@ class TestProductViews(unittest.TestCase):
 
     def test_invalid_token_after_logout(self):
         # Tests that one cannot use an invalid token to create a product
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "stella@gmail.com",
-                    "gender": "female",
-                    "username": "stella",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "stella",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
         msg = json.loads(response.data)
-        token = msg['token']
+        admin_token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearerer " + token
+            "Authorization": "Bearerer " + admin_token
         }
         response = self.client.post('/api/v2/auth/logout',
                                     headers=headers)
@@ -312,30 +317,18 @@ class TestProductViews(unittest.TestCase):
 
     def test_cannot_add_a_product_which_already_exists(self):
         # Tests that a user cannot add an already exisitng product
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "stella@gmail.com",
-                    "gender": "female",
-                    "username": "stella",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "stella",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
         msg = json.loads(response.data)
-        token = msg['token']
+        admin_token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + admin_token
         }
         product_details = {
             "product_name": "Teeshirt",

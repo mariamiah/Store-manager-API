@@ -29,8 +29,16 @@ def token_required(f):
 
 @user.route('/api/v2/auth/signup', methods=['POST'])
 @swag_from('../apidocs/users/create_user.yml')
+@token_required
 def register_user():
     """ registers a user"""
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()
     is_valid = validate.validate_user(data)
     hashed_password = generate_password_hash(data['password'], 'sha256')
