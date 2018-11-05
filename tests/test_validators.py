@@ -316,6 +316,46 @@ class TestValidator(unittest.TestCase):
             self.assertEqual(self.validate.validate_sale(sale_data),
                              ("Add product name and quantity"))
 
+    def test_return_if_quantity_for_sale_is_blank(self):
+        # Tests to ensure that product name is not blank
+        sale_data = {
+            "product_quantity": "",
+            "product_name": "shorts"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("Product_quantity cannot be blank"))
+
+    def test_return_if_quantity_contains_non_integers(self):
+        # Tests to ensure that product name contains strings
+        sale_data = {
+            "product_quantity": "quantity",
+            "product_name": "shorts"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("quantity should contain integers only"))
+
+    def test_return_if_product_name_contains_special_characters(self):
+        # Tests to ensure that product name contains special characters
+        sale_data = {
+            "product_quantity": "10",
+            "product_name": "s@$@#@###"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("productname should contain alphanumerics only"))
+
+    def test_return_if_product_name_for_sale_is_blank(self):
+        # Tests to ensure that product name is not blank
+        sale_data = {
+            "product_quantity": "5",
+            "product_name": ""
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("Product_name cannot be blank"))
+
     def test_validate_sales(self):
         # Tests to ensure that correct sales definition passes
         sale_data = {
