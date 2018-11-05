@@ -28,6 +28,7 @@ Store Manager is a web application that helps store owners manage sales and prod
 | POST    | api/v2/products                 | Creates a product             |
 | POST    | api/v2/auth/login               | Logs in a user                |
 | POST    | api/v2/auth/signup              | Registers a user              |
+| POST    | api/v2/auth/logout              | Logs out a user               |
 | POST    | api/v2/sales                    | Creates a sales order         |
 
 ### Getting started with the app
