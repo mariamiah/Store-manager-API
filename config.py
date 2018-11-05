@@ -1,10 +1,4 @@
-class Config(object):
-    """
-    Common configurations
-    """
-    SECRET_KEY = 'topsecret'
-    DEBUG = False
-
+secret_key = 'topsecret'
 
 database_config = {
         "dbname": "storemanagerdb",

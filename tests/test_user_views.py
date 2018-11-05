@@ -1,7 +1,7 @@
 import unittest
 import json
 from api import app
-from config import Config
+from config import secret_key
 from database_handler import DbConn
 
 
@@ -53,7 +53,7 @@ class TestUserViews(unittest.TestCase):
 
     def test_configuration(self):
         """ Tests the API configuration key """
-        self.assertEqual(Config.SECRET_KEY, 'topsecret')
+        self.assertEqual(secret_key, 'topsecret')
 
     def tearDown(self):
         with app.app_context():
