@@ -5,8 +5,9 @@ from werkzeug.security import generate_password_hash
 from flasgger import swag_from
 from datetime import datetime, timedelta
 from functools import wraps
-from config import Config
+from config import secret_key
 import jwt
+
 
 user = Blueprint('user', __name__)
 user_obj = User()
@@ -21,7 +22,7 @@ def token_required(f):
             token = request.headers['Authorization']
         if not token:
             return jsonify({"message": "Missing Token"}), 403
-            data_token = jwt.decode(token, Config.SECRET_KEY)
+            data_token = jwt.decode(token, secret_key)
         return f(*args, **kwargs)
     return decorated
 
@@ -78,7 +79,7 @@ def assigns_token(data):
                             'exp': datetime.utcnow() +
                             timedelta(minutes=30),
                             'roles': user.get_role()},
-                           Config.SECRET_KEY)
+                           secret_key)
         return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({
         "message": "User either not registered or forgot password"}), 400
