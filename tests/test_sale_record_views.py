@@ -33,6 +33,38 @@ class TestSaleViews(unittest.TestCase):
                                    content_type='application/json',)
         self.assertEqual(response.status_code, 403)
 
+    def test_fetch_sale_if_admin(self):
+        # Tests that a sale is viewed if admin
+        user_data = {
+                    "employee_name": "ttuehe",
+                    "email": "sandranaggayi@gmail.com",
+                    "gender": "female",
+                    "username": "sandra",
+                    "password": "123456789",
+                    "confirm_password": "123456789",
+                    "role": "Admin"
+                }
+        response = self.client.post('/api/v2/auth/signup',
+                                    content_type='application/json',
+                                    json=user_data)
+        login_details = {
+            "username": "sandra",
+            "password": "123456789"
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + token
+        }
+        response = self.client.get('/api/v2/sales',
+                                   headers=headers)
+        msg = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+
     def test_post_sale_if_admin(self):
         # Tests that a product is created if admin
         user_data = {
@@ -115,5 +147,4 @@ class TestSaleViews(unittest.TestCase):
             self.cur = conn.create_connection()
             conn.drop_tables('sales_records')
             conn.drop_tables('products')
-            conn.drop_tables('blacklisted')
             conn.drop_tables('users')
