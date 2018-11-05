@@ -11,6 +11,7 @@ class TestProductViews(unittest.TestCase):
             conn = DbConn()
             self.cur = conn.create_connection()
             conn.create_users_table()
+            conn.create_default_admin()
             conn.create_products_table()
             conn.create_blacklisted_tokens()
 
@@ -35,35 +36,23 @@ class TestProductViews(unittest.TestCase):
 
     def test_post_product_if_admin(self):
         # Tests that a product is created if admin
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "sandranaggayi@gmail.com",
-                    "gender": "female",
-                    "username": "sandra",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    content_type='application/json',
-                                    json=user_data)
         login_details = {
-            "username": "sandra",
-            "password": "123456789"
-        }
+               "username": "Admin",
+               "password": "Administrator"
+            }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
                                     json=login_details)
         msg = json.loads(response.data)
+        admin_token = msg['token']
         product_details = {
                 "product_quantity": "6",
                 "product_name": "umbrella",
                 "price": "3000"
                 }
-        token = msg['token']
         headers = {
             "content_type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + admin_token
         }
         response = self.client.post('/api/v2/products',
                                     headers=headers,
@@ -369,4 +358,5 @@ class TestProductViews(unittest.TestCase):
             self.cur = conn.create_connection()
             conn.drop_tables('products')
             conn.drop_tables('blacklisted')
+            conn.delete_default_admin()
             conn.drop_tables('users')

@@ -81,6 +81,11 @@ class DbConn:
         self.cur.execute(sql.format('Admin', 'admin@gmail.com', 'female',
                                     'Admin', hashed_password, 'Admin'))
 
+    def delete_default_admin(self):
+        """Deletes default admin"""
+        sql = """DELETE FROM users WHERE username = '{}'"""
+        self.cur.execute(sql.format('Admin'))
+
     def drop_tables(self, table_name):
         """ Drops the tables that exist in the database"""
         sql = """ DROP TABLE {} CASCADE; """
