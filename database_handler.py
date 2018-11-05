@@ -90,8 +90,3 @@ class DbConn:
     def close_DB(self):
         self.conn.commit()
         self.conn.close()
-
-db = DbConn()
-db.create_connection()
-db.create_products_table()
-db.create_sales_table()

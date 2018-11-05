@@ -10,8 +10,9 @@ class TestSaleViews(unittest.TestCase):
         with app.app_context():
             conn = DbConn()
             self.cur = conn.create_connection()
-            conn.create_sales_table()
+            conn.create_users_table()
             conn.create_products_table()
+            conn.create_sales_table()
             conn.create_blacklisted_tokens()
 
     def test_create_a_sale(self):
@@ -113,3 +114,6 @@ class TestSaleViews(unittest.TestCase):
             conn = DbConn()
             self.cur = conn.create_connection()
             conn.drop_tables('sales_records')
+            conn.drop_tables('products')
+            conn.drop_tables('blacklisted')
+            conn.drop_tables('users')
