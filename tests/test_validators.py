@@ -293,3 +293,35 @@ class TestValidator(unittest.TestCase):
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
                              ("gender can only be female or male"))
+
+    def test_return_if_more_keys_entered(self):
+        # Tests to ensure that if more than 2 keys is not accepted
+        sale_data = {
+            "product_quantity": "4",
+            "product_name": "blouse",
+            "price": "50000",
+            "category": "shoes"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("Invalid keys"))
+
+    def test_return_if_product_name_and_quantity_missing(self):
+        # Tests to ensure that if product_name and quantity not provided
+        sale_data = {
+            "price": "50000",
+            "category": "shoes"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("Add product name and quantity"))
+
+    def test_validate_sales(self):
+        # Tests to ensure that correct sales definition passes
+        sale_data = {
+            "product_quantity": "4",
+            "product_name": "blouse"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_sale(sale_data),
+                             ("Sale_valid"))
