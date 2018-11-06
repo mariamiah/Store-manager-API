@@ -45,6 +45,8 @@ def create_sale_record():
                                    data['product_name'],
                                    data['product_quantity'], price,
                                    date_sold)
+            product.reduce_stock_after_sale(data['product_quantity'],
+                                            data['product_name'])
             return jsonify({"message": "record created successfully"}), 201
         return jsonify({"message": valid}), 400
     except ValueError:
