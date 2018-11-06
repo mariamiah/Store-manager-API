@@ -95,3 +95,14 @@ class Product:
             return row[0]
         except Exception:
             return False
+
+    def reduce_stock_after_sale(self, product_quantity, product_name):
+        """ Reduces stock quantity after a sale is done """
+        sql = """ SELECT product_quantity FROM products
+                  WHERE product_name = '{}'"""
+        self.cur.execute(sql.format(product_name))
+        row = self.cur.fetchone()
+        new_quantity = row[0] - int(product_quantity)
+        sql = """UPDATE products SET product_quantity = '{}'\
+                 WHERE product_name = '{}'"""
+        self.cur.execute(sql.format(new_quantity, product_name))
