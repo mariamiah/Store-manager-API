@@ -258,6 +258,71 @@ class TestUserViews(unittest.TestCase):
         self.assertIn("Email already exists, login", msg['message'])
         self.assertEqual(response.status_code, 200)
 
+    def test_fetch_all_users(self):
+        """Tests the end point that fetches all users"""
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        users_response = self.client.get('/api/v2/users',
+                                         headers=headers)
+        msg = json.loads(users_response.data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_fetch_single_user(self):
+        """ Tests fetch single user end point """
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        users_response = self.client.get('/api/v2/users/1',
+                                         headers=headers)
+        msg = json.loads(users_response.data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_user_role(self):
+        """Tests that the admin successfully updates role"""
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        details = {
+            "role": "Admin"
+        }
+        response = self.client.put('/api/v2/users/1',
+                                   headers=headers,
+                                   json=details)
+        msg = json.loads(response.data)
+        self.assertIn("role successfully updated", msg['message'])
+        self.assertEqual(response.status_code, 200)
+
     def tearDown(self):
         with app.app_context():
             conn = DbConn()
