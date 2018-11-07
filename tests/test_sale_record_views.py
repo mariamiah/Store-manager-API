@@ -2,6 +2,7 @@ import unittest
 from api import app
 import json
 from database_handler import DbConn
+from api.models.sale_record_model import SaleRecord
 
 
 class TestSaleViews(unittest.TestCase):
@@ -210,6 +211,65 @@ class TestSaleViews(unittest.TestCase):
                                    headers=admin_headers)
         msg = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
+
+    def test_return_if_sale_id_exists(self):
+        """ Tests the value returned if sale id exists """
+        salerecord = SaleRecord()
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        user_data = {
+                    "employee_name": "ttuehe",
+                    "email": "jessica@gmail.com",
+                    "gender": "female",
+                    "username": "jessica",
+                    "password": "123456789",
+                    "confirm_password": "123456789",
+                    "role": "Attendant"
+                }
+        response = self.client.post('/api/v2/auth/signup',
+                                    headers=headers,
+                                    json=user_data)
+        login_details = {
+            "username": "jessica",
+            "password": "123456789"
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        product_details = {
+                "product_quantity": "1",
+                "product_name": "Leather Jacket",
+                "price": "120000"
+        }
+        self.client.post('/api/v2/products',
+                         headers=headers,
+                         json=product_details)
+        sale_details = {
+                "product_quantity": "1",
+                "product_name": "Leather Jacket"
+                }
+        attendant_token = msg['token']
+        attendant_headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + attendant_token
+        }
+        self.client.post('/api/v2/sales',
+                         headers=attendant_headers,
+                         json=sale_details)
+        self.assertEqual(salerecord.check_sale_id_exists(1), False)
+        self.assertEqual(salerecord.check_sale_id_exists(3), True)
 
     def tearDown(self):
         with app.app_context():
