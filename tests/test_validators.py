@@ -365,3 +365,37 @@ class TestValidator(unittest.TestCase):
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
                              ("Sale_valid"))
+
+    def test_wrong_number_of_user_fields(self):
+        """Tests the number of user keys entered at registration"""
+        user_data = {
+            "employee_name": "sarah",
+            "gender": "female",
+            "username": "sarah",
+            "password": "475543",
+            "confirm_password": "475543",
+            "email": "sara@gmail.com",
+            "role": "admin",
+            "grade": "4",
+            "address": "Masaka"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("Wrong number of fields"))
+
+    def test_datatype_for_user_fields(self):
+        """Tests the data type for the user fields"""
+        user_data = {
+            "employee_name": 5,
+            "gender": "female",
+            "username": "sarah",
+            "password": "475543",
+            "confirm_password": "475543",
+            "email": "sara@gmail.com",
+            "role": "admin",
+            "grade": "4",
+            "address": "Masaka"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("Enter string value"))
