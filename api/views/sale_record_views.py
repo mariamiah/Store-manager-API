@@ -78,4 +78,4 @@ def get_single_record(sale_id):
             return jsonify({"Record": single_sale}), 200
         return jsonify({"message": "Index out of range!"}), 400
     except Exception:
-        return jsonify({"message": "Invalid index"}), 400
+        return jsonify({"message": "Sale not found"}), 404

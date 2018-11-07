@@ -82,7 +82,7 @@ class Product:
         self.cur.execute(sql.format(product_name))
         row = self.cur.fetchone()
         quantity = row[0]
-        if quantity > int(product_quantity):
+        if quantity >= int(product_quantity):
             return True
         return False
 
