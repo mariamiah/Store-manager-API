@@ -84,3 +84,45 @@ class User:
         decoded_token = jwt.decode(data_token, secret_key)
         current_user = decoded_token['user']
         return current_user
+
+    def fetch_all_users(self):
+        """ Fetches all registered users in the system"""
+        users = []
+        sql = """ SELECT * FROM users"""
+        self.cur.execute(sql)
+        rows = self.cur.fetchall()
+        for row in rows:
+            users.append(
+                {
+                    "employee_id": row[0],
+                    "employee_name": row[1],
+                    "email": row[2],
+                    "gender": row[3],
+                    "username": row[4],
+                    "password": row[5],
+                    "role": row[6]
+                }
+            )
+        return users
+
+    def fetch_single_user(self, employee_id):
+        """Fetches a single user"""
+        specific_user = []
+        sql = """SELECT * FROM users WHERE employee_id = '{}'"""
+        self.cur.execute(sql.format(employee_id))
+        row = self.cur.fetchone()
+        specific_user.append({
+            "employee_id": row[0],
+            "employee_name": row[1],
+            "email": row[2],
+            "gender": row[3],
+            "username": row[4],
+            "password": row[5],
+            "role": row[6]
+        })
+        return specific_user
+
+    def update_user_role(self, new_role, employee_id):
+        """Updates the user role"""
+        sql = """UPDATE users SET role ='{}' WHERE employee_id = '{}'"""
+        self.cur.execute(sql.format(new_role, employee_id))

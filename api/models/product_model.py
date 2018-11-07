@@ -69,7 +69,6 @@ class Product:
     def update_product(self, product_id, product_quantity,
                        product_name, price):
         """Updates a product"""
-
         sql = """UPDATE products SET product_quantity='{}',\
                  product_name='{}', price ='{}' WHERE product_id = '{}'"""
         self.cur.execute(sql.format(product_quantity, product_name, price,

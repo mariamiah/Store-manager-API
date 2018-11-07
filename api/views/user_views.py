@@ -18,15 +18,12 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
-        try:
-            if 'Authorization' in request.headers:
-                token = request.headers['Authorization']
-            if not token:
-                return jsonify({"message": "Missing Token"}), 403
-                data_token = jwt.decode(token, secret_key)
-            return f(*args, **kwargs)
-        except Exception:
-            return jsonify({"message": "Token signature invalid"}), 400
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization']
+        if not token:
+            return jsonify({"message": "Missing Token"}), 403
+            data_token = jwt.decode(token, secret_key)
+        return f(*args, **kwargs)
     return decorated
 
 
@@ -81,6 +78,64 @@ def logout():
     token = user_token.split(" ")[1]
     if user.blacklist_token(token):
         return jsonify({"message": "log out successful"}), 200
+
+
+@user.route('/api/v2/users', methods=['GET'])
+@swag_from('../apidocs/users/fetch_users.yml')
+@token_required
+def fetch_users():
+    """ Fetches all registered users"""
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
+    all_users = user.fetch_all_users()
+    return jsonify({"Users": all_users}), 200
+
+
+@user.route('/api/v2/users/<int:employee_id>')
+@swag_from('../apidocs/users/fetch_single_user.yml')
+@token_required
+def fetch_single_user(employee_id):
+    """ Returns a single user"""
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
+    try:
+        if employee_id != 0:
+            single_user = user.fetch_single_user(employee_id)
+            return jsonify({"Record": single_user}), 200
+        return jsonify({"message": "Index out of range!"}), 400
+    except Exception:
+        return jsonify({"message": "user not found"}), 404
+
+
+@user.route('/api/v2/users/<int:employee_id>', methods=['PUT'])
+@swag_from('../apidocs/users/update_user_role.yml')
+@token_required
+def update_role(employee_id):
+    """Updates the user role"""
+    user = User()
+    data = request.get_json()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if validate.check_permission(token):
+        return jsonify({"message": "Permission Denied, Not Admin"}), 400
+    if employee_id == 0:
+        return jsonify({"message": "Index is out of range"}), 400
+    if data['role'] != 'Admin' and data['role'] != 'Attendant':
+        return jsonify({"message": "role can only be Admin or Attendant"}), 400
+    user.update_user_role(data['role'], employee_id)
+    return jsonify({'message': "role successfully updated"}), 200
 
 
 def assigns_token(data):
