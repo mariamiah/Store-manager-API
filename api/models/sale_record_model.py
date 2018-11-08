@@ -61,7 +61,9 @@ class SaleRecord:
         sql = """SELECT username FROM sales_records WHERE sale_id = '{}'"""
         self.cur.execute(sql.format(sale_id))
         row = self.cur.fetchone()
-        return row[0]
+        if row:
+            return row[0]
+        return False
 
     def check_sale_id_exists(self, sale_id):
         """ Checks if id exists"""

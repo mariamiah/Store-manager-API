@@ -5,9 +5,7 @@ from api.validators import Validate
 from datetime import datetime
 from flasgger import swag_from
 from api.views.user_views import token_required
-from config import secret_key
 from uuid import uuid4
-import jwt
 
 product = Blueprint('product', __name__)
 

@@ -6,7 +6,6 @@ from flask import request
 
 class Validate:
     """This class contains validators for the different inputs"""
-
     def validate_product(self, data):
         # Validates the product fields
         product_fields = ['product_name', 'product_quantity', 'price']
