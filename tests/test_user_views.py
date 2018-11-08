@@ -3,6 +3,7 @@ import json
 from api import app
 from config import secret_key
 from database_handler import DbConn
+from api.models.user_models import User
 
 
 class TestUserViews(unittest.TestCase):
@@ -48,6 +49,7 @@ class TestUserViews(unittest.TestCase):
 
     def test_register_with_unmatched_passwords(self):
         # Tests that the user cannot register with un matched passwords
+        user = User()
         login_details = {
                "username": "Admin",
                "password": "Administrator"
@@ -216,6 +218,109 @@ class TestUserViews(unittest.TestCase):
                                     headers=headers)
         message = json.loads(response.data)
         self.assertIn("log out successful", message['message'])
+        self.assertEqual(response.status_code, 200)
+
+    def test_configuration(self):
+        """ Tests the API configuration key """
+        self.assertEqual(secret_key, 'topsecret')
+
+    def test_user_cant_register_if_already_exists(self):
+        # Tests that a user cannot register again if already exists
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        user_data = {
+                    "employee_name": "ttuehe",
+                    "email": "sandranaggayi@gmail.com",
+                    "gender": "female",
+                    "username": "sandra",
+                    "password": "123456789",
+                    "confirm_password": "123456789",
+                    "role": "Admin"
+                }
+        response = self.client.post('/api/v2/auth/signup',
+                                    headers=headers,
+                                    json=user_data)
+        response = self.client.post('/api/v2/auth/signup',
+                                    headers=headers,
+                                    json=user_data)
+        msg = json.loads(response.data)
+        self.assertIn("Email already exists, login", msg['message'])
+        self.assertEqual(response.status_code, 200)
+
+    def test_fetch_all_users(self):
+        """Tests the end point that fetches all users"""
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        users_response = self.client.get('/api/v2/users',
+                                         headers=headers)
+        msg = json.loads(users_response.data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_fetch_single_user(self):
+        """ Tests fetch single user end point """
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        users_response = self.client.get('/api/v2/users/1',
+                                         headers=headers)
+        msg = json.loads(users_response.data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_user_role(self):
+        """Tests that the admin successfully updates role"""
+        login_details = {
+               "username": "Admin",
+               "password": "Administrator"
+            }
+        response = self.client.post('/api/v2/auth/login',
+                                    content_type='application/json',
+                                    json=login_details)
+        msg = json.loads(response.data)
+        admin_token = msg['token']
+        headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        details = {
+            "role": "Admin"
+        }
+        response = self.client.put('/api/v2/users/1',
+                                   headers=headers,
+                                   json=details)
+        msg = json.loads(response.data)
+        self.assertIn("role successfully updated", msg['message'])
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):

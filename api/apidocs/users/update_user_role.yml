@@ -1,0 +1,44 @@
+Endpoint for modifying a role
+---
+tags:
+  - User
+parameters:
+- name: Authorization
+  in: header
+  type: string
+  description: JWT token authorization
+  required: true
+- name: employee_id
+  in: path
+  description: Id for user to update
+  required: true
+  type: integer
+  format: int64
+definitions:
+  User:
+    type: object
+    properties:
+      employee_name:
+        type: string
+      gender:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+
+responses:
+  200:
+    description: User successfully updated 
+    schema:
+      $ref: '#/definitions/User'
+    examples:
+      [{
+        "message": "User successfully updated"
+      }]
+  400:
+    description: Index out of range

@@ -1,0 +1,57 @@
+Endpoint fetching all users
+---
+tags:
+  - User
+parameters:
+  - name: Authorization
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
+
+definitions:
+  User:
+    type: object
+    properties:
+      employee_id:
+        type: integer
+        format: int64
+      employee_name:
+        type: string
+      email:
+          type: string
+      gender:
+          type: string
+      password:
+          type: string
+      role:
+          type: string
+      
+responses:
+  200:
+    description: A list of all registered users
+    schema:
+      $ref: '#/definitions/User'
+    examples:
+      [ "Users",
+  [   
+        {
+            "email": "sa@gmail.com",
+            "employee_id": 1,
+            "employee_name": "sarah",
+            "gender": "female",
+            "password": "sha256$aRpRLsK0$49ef4bb31d8f8b957f33c6f94cb903c0228e49034d553f9a85feb362cccc7bdc",
+            "role": "Attendant",
+            "username": "HJH"
+        },
+        {
+            "email": "matthew@gmail.com",
+            "employee_id": 2,
+            "employee_name": "matthew",
+            "gender": "male",
+            "password": "sha256$FGCckQzM$077c39f6fb4e65b79bb97b7ba6f094b5146a9101f44f8b178a8d808409ddc621",
+            "role": "Admin",
+            "username": "matthew"
+        }
+  ]]
+
