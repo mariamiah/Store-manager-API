@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, jsonify, redirect
 from api.views.product_views import product
 from api.views.user_views import user
 from flasgger import Swagger
@@ -31,4 +31,9 @@ swagger = Swagger(app, template=template)
 
 @app.route('/')
 def index():
+    return jsonify({"message": "Welcome to store manager application"})
+
+
+@app.route('/apidocs')
+def showdocs():
     return redirect('/apidocs/')
