@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/mariamiah/Store-manager-challenge-2.svg?branch=develop)](https://travis-ci.org/mariamiah/Store-manager-challenge-2)
 [![Maintainability](https://api.codeclimate.com/v1/badges/618edf7cfaa304ef1853/maintainability)](https://codeclimate.com/github/mariamiah/Store-manager-challenge-2/maintainability)
 [![Coverage Status](https://coveralls.io/repos/github/mariamiah/Store-manager-challenge-2/badge.svg?branch=develop)](https://coveralls.io/github/mariamiah/Store-manager-challenge-2?branch=develop)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/95a397aa553941df879ac492bdd1411b)](https://www.codacy.com/app/mariamiah/Store-manager-challenge-2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mariamiah/Store-manager-challenge-2&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/95a397aa553941df879ac492bdd1411b)](https://www.codacy.com/app/mariamiah/Store-manager-challenge-2?utm_source=github.com&utm_medium=referral&utm_content=mariamiah/Store-manager-challenge-2&utm_campaign=Badge_Grade)
 
 Store Manager is a web application that helps store owners manage sales and product inventory records. This application is meant for use in a single store.
 
