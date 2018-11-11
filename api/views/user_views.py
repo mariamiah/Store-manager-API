@@ -23,7 +23,7 @@ def token_required(f):
                 token = request.headers['Authorization']
             if not token:
                 return jsonify({"message": "Missing Token"}), 403
-                data_token = jwt.decode(token, secret_key)
+                jwt.decode(token, secret_key)
             return f(*args, **kwargs)
         except Exception:
             return jsonify({"message": "Token signature invalid"}), 400

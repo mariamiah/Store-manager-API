@@ -12,7 +12,7 @@ app.register_blueprint(user)
 
 # Define a swagger template
 template = {
-    "openapi": "3.0.0", 
+    "openapi": "3.0.0",
     "info": {
         "title":
         "Store Manager API",

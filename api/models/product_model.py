@@ -1,5 +1,5 @@
 from database_handler import DbConn
-from flask import jsonify, request
+from flask import request
 
 
 class Product:
@@ -10,22 +10,27 @@ class Product:
         self.price = ""
         self.product_code = ""
         self.product_name = ""
+        self.date_added = ""
         conn = DbConn()
         self.cur = conn.create_connection()
 
     def add_new_product(self, product_quantity, price, product_code,
-                        product_name):
+                        product_name, date_added):
         self.product_quantity = product_quantity
         self.price = price
         self.product_code = product_code
         self.product_name = product_name
-        sql = """INSERT INTO products(product_quantity, price, product_code, product_name)
+        self.date_added = date_added
+        sql = """INSERT INTO products(product_quantity, price, product_code,
+                                      product_name, date_added)
                             VALUES ('{product_quantity}', '{price}',
-                                    '{product_code}', '{product_name}')"""
+                                    '{product_code}', '{product_name}',
+                                    '{date_added}')"""
         sql_command = sql.format(product_quantity=self.product_quantity,
                                  price=self.price,
                                  product_code=self.product_code,
-                                 product_name=self.product_name)
+                                 product_name=self.product_name,
+                                 date_added=date_added)
         self.cur.execute(sql_command)
 
     def check_if_product_exists(self, product_name):
@@ -49,7 +54,8 @@ class Product:
                 "product_quantity": row[1],
                 "price": row[2],
                 "product_code": row[3],
-                "product_name": row[4]
+                "product_name": row[4],
+                "date_added": row[5]
                 })
         return items
 

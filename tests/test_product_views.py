@@ -216,7 +216,6 @@ class TestProductViews(unittest.TestCase):
                 "price": "3000"
                 }
         msg = json.loads(response.data)
-        token = msg['token']
         headers = {
             "content_type": "application/json",
             "Authorization": "Bearer " + admin_token

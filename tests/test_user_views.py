@@ -49,7 +49,6 @@ class TestUserViews(unittest.TestCase):
 
     def test_register_with_unmatched_passwords(self):
         # Tests that the user cannot register with un matched passwords
-        user = User()
         login_details = {
                "username": "Admin",
                "password": "Administrator"
