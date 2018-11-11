@@ -10,7 +10,9 @@ class TestProductViews(unittest.TestCase):
         with app.app_context():
             conn = DbConn()
             self.cur = conn.create_connection()
+            conn.create_categories_table()
             conn.create_users_table()
+            conn.delete_default_admin()
             conn.create_default_admin()
             conn.create_products_table()
             conn.create_blacklisted_tokens()
@@ -20,6 +22,7 @@ class TestProductViews(unittest.TestCase):
         post_data = ({
             "product_name": "Leather Jacket",
             "price": "50000",
+            "category_name": "jeans",
             "product_quantity": "44"
         })
         response = self.client.post("/api/v2/products",
@@ -45,9 +48,20 @@ class TestProductViews(unittest.TestCase):
                                     json=login_details)
         msg = json.loads(response.data)
         admin_token = msg['token']
+        category_details = {
+            "category_name": "jeans"
+        }
+        admin_headers = {
+            "content_type": "application/json",
+            "Authorization": "Bearer " + admin_token
+        }
+        self.client.post('/api/v2/categories',
+                         headers=admin_headers,
+                         json=category_details)
         product_details = {
                 "product_quantity": "6",
                 "product_name": "umbrella",
+                "category_name": "jeans",
                 "price": "3000"
                 }
         headers = {
@@ -124,16 +138,22 @@ class TestProductViews(unittest.TestCase):
                                     json=login_details)
         msg = json.loads(response.data)
         admin_token = msg['token']
-        product_details = {
-                "product_quantity": "6",
-                "product_name": "umbrella",
-                "price": "3000"
-                }
-        msg = json.loads(response.data)
         headers = {
             "content_type": "application/json",
             "Authorization": "Bearer " + admin_token
         }
+        category_details = {
+            "category_name": "weather"
+        }
+        self.client.post('/api/v2/categories',
+                         headers=headers,
+                         json=category_details)
+        product_details = {
+                "product_quantity": "6",
+                "product_name": "umbrella",
+                "category_name": "weather",
+                "price": "3000"
+                }
         response = self.client.post('/api/v2/products',
                                     headers=headers,
                                     json=product_details)
@@ -181,6 +201,7 @@ class TestProductViews(unittest.TestCase):
         product_details = {
                 "product_quantity": "6",
                 "product_name": "umbrella",
+                "category_name": "weather",
                 "price": "3000"
                 }
         msg = json.loads(response.data)
@@ -210,19 +231,26 @@ class TestProductViews(unittest.TestCase):
                                     json=login_details)
         msg = json.loads(response.data)
         admin_token = msg['token']
-        product_details = {
-                "product_quantity": "6",
-                "product_name": "umbrella",
-                "price": "3000"
-                }
-        msg = json.loads(response.data)
+        category_details = {
+            "category_name": "weather"
+        }
         headers = {
             "content_type": "application/json",
             "Authorization": "Bearer " + admin_token
         }
-        response = self.client.post('/api/v2/products',
-                                    headers=headers,
-                                    json=product_details)
+        self.client.post('/api/v2/categories',
+                         headers=headers,
+                         json=category_details)
+        product_details = {
+                "product_quantity": "6",
+                "product_name": "umbrella",
+                "category_name": "weather",
+                "price": "3000"
+                }
+        msg = json.loads(response.data)
+        self.client.post('/api/v2/products',
+                         headers=headers,
+                         json=product_details)
         response = self.client.put('/api/v2/products/1',
                                    headers=headers,
                                    json=product_details)
@@ -329,14 +357,21 @@ class TestProductViews(unittest.TestCase):
             "content_type": "application/json",
             "Authorization": "Bearer " + admin_token
         }
+        category_details = {
+            "category_name": "shirts"
+        }
+        self.client.post('/api/v2/categories',
+                         headers=headers,
+                         json=category_details)
         product_details = {
             "product_name": "Teeshirt",
+            "category_name": "shirts",
             "price": "100000",
             "product_quantity": "43"
         }
-        response = self.client.post('/api/v2/products',
-                                    headers=headers,
-                                    json=product_details)
+        self.client.post('/api/v2/products',
+                         headers=headers,
+                         json=product_details)
         response = self.client.post('/api/v2/products',
                                     headers=headers,
                                     json=product_details)
@@ -349,6 +384,6 @@ class TestProductViews(unittest.TestCase):
             conn = DbConn()
             self.cur = conn.create_connection()
             conn.drop_tables('products')
+            conn.drop_tables('categories')
             conn.drop_tables('blacklisted')
-            conn.delete_default_admin()
             conn.drop_tables('users')

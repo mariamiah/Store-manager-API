@@ -18,6 +18,10 @@ class User:
         self.role = ""
         conn = DbConn()
         self.cur = conn.create_connection()
+        conn.create_users_table()
+        conn.delete_default_admin()
+        conn.create_default_admin()
+        conn.create_blacklisted_tokens()
 
     def add_user(self, employee_name, email, gender, username, password, role):
         self.employee_name = employee_name

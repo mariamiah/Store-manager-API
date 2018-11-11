@@ -43,6 +43,8 @@ class DbConn:
                       price INT NOT NULL,
                       product_code UUID NOT NULL,
                       product_name VARCHAR(100) NOT NULL UNIQUE,
+                      category_name VARCHAR(100) REFERENCES\
+                      categories(category_name) ON DELETE CASCADE,
                       date_added DATE NOT NULL); ''')
 
     def create_sales_table(self):
@@ -61,10 +63,8 @@ class DbConn:
     def create_categories_table(self):
         """A function to create the categories table"""
         self.cur.execute('''CREATE TABLE IF NOT EXISTS categories
-                           (category_id  SERIAL PRIMARY KEY   NOT NULL ,
-                            category_name VARCHAR(100) NOT NULL,
-                            product_id INT REFERENCES products(product_id) ON\
-                            DELETE CASCADE ,
+                           (category_id SERIAL PRIMARY KEY NOT NULL,
+                            category_name VARCHAR(100) NOT NULL UNIQUE,
                             created_at  DATE); ''')
 
     def create_blacklisted_tokens(self):
