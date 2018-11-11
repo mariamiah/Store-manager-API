@@ -27,7 +27,7 @@ class TestCategoriesViews(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_create_a_category(self):
-        # Tests that the category is not created if token is missing
+        # Tests that the category is created given correct credentials
         login_details = {
                "username": "Admin",
                "password": "Administrator"
@@ -51,8 +51,8 @@ class TestCategoriesViews(unittest.TestCase):
         self.assertIn("Category successfully created", msg['message'])
         self.assertEqual(response.status_code, 201)
 
-    def test_create_a_category(self):
-        # Tests that the category is not created if token is missing
+    def test_create_a_category_if_already_exists(self):
+        # Tests that the category is not created if it exists already
         login_details = {
                "username": "Admin",
                "password": "Administrator"
