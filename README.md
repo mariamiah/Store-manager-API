@@ -87,4 +87,3 @@ Test your setup using [postman](www.getpostman.com) REST-client
 ### View the Store Manager documentation on Heroku
 
 ### [StoreManager Documentation](https://storemanager15.herokuapp.com/apidocs)
-
