@@ -34,7 +34,8 @@ def create_product():
             if product.check_if_product_exists(data['product_name']):
                 return jsonify({"message": "Product already exists"})
             product.add_new_product(data['product_quantity'], data['price'],
-                                    product_code, data['product_name'])
+                                    product_code, data['product_name'],
+                                    date_added)
             return jsonify({"message":
                             "Product added successfully"}), 201
         return jsonify({"message": valid}), 400

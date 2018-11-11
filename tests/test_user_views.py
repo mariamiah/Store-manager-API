@@ -49,7 +49,6 @@ class TestUserViews(unittest.TestCase):
 
     def test_register_with_unmatched_passwords(self):
         # Tests that the user cannot register with un matched passwords
-        user = User()
         login_details = {
                "username": "Admin",
                "password": "Administrator"
@@ -218,44 +217,6 @@ class TestUserViews(unittest.TestCase):
                                     headers=headers)
         message = json.loads(response.data)
         self.assertIn("log out successful", message['message'])
-        self.assertEqual(response.status_code, 200)
-
-    def test_configuration(self):
-        """ Tests the API configuration key """
-        self.assertEqual(secret_key, 'topsecret')
-
-    def test_user_cant_register_if_already_exists(self):
-        # Tests that a user cannot register again if already exists
-        login_details = {
-               "username": "Admin",
-               "password": "Administrator"
-            }
-        response = self.client.post('/api/v2/auth/login',
-                                    content_type='application/json',
-                                    json=login_details)
-        msg = json.loads(response.data)
-        admin_token = msg['token']
-        headers = {
-            "content_type": "application/json",
-            "Authorization": "Bearer " + admin_token
-        }
-        user_data = {
-                    "employee_name": "ttuehe",
-                    "email": "sandranaggayi@gmail.com",
-                    "gender": "female",
-                    "username": "sandra",
-                    "password": "123456789",
-                    "confirm_password": "123456789",
-                    "role": "Admin"
-                }
-        response = self.client.post('/api/v2/auth/signup',
-                                    headers=headers,
-                                    json=user_data)
-        response = self.client.post('/api/v2/auth/signup',
-                                    headers=headers,
-                                    json=user_data)
-        msg = json.loads(response.data)
-        self.assertIn("Email already exists, login", msg['message'])
         self.assertEqual(response.status_code, 200)
 
     def test_fetch_all_users(self):

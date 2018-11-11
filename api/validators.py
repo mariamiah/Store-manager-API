@@ -1,7 +1,6 @@
 import re
 import jwt
 from config import secret_key
-from flask import request
 
 
 class Validate:

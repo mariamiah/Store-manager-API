@@ -206,7 +206,6 @@ class TestSaleViews(unittest.TestCase):
         response = self.client.post('/api/v2/sales',
                                     headers=attendant_headers,
                                     json=sale_details)
-        message = json.loads(response.data)
         response = self.client.get('/api/v2/sales/1',
                                    headers=admin_headers)
         msg = json.loads(response.data)

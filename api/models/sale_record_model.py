@@ -1,5 +1,4 @@
 from database_handler import DbConn
-from flask import request
 
 
 class SaleRecord:

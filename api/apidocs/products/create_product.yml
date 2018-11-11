@@ -7,7 +7,7 @@ consumes:
 produces:
   - application/json
 parameters:
-  - name: Authorization
+  - name: x-access-token
     in: header
     type: string
     description: JWT token authorization
@@ -61,5 +61,3 @@ responses:
     description: Product name should contain alphanumerics only
     description: Price should contain integers only
     description: Quantity should contain integers only
-    
-

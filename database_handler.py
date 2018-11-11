@@ -42,7 +42,8 @@ class DbConn:
                       product_quantity INT NOT NULL,
                       price INT NOT NULL,
                       product_code UUID NOT NULL,
-                      product_name VARCHAR(100) NOT NULL UNIQUE); ''')
+                      product_name VARCHAR(100) NOT NULL UNIQUE,
+                      date_added DATE NOT NULL); ''')
 
     def create_sales_table(self):
         "A function to create the sales_records table"
