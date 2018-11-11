@@ -3,7 +3,6 @@ import json
 from api import app
 from config import secret_key
 from database_handler import DbConn
-from api.models.user_models import User
 
 
 class TestUserViews(unittest.TestCase):
