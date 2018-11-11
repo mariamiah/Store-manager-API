@@ -15,6 +15,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "foods",
             "product_quantity": "4",
+            "category_name": "food",
             "price": "5000",
         }
         self.assertEqual(self.validate.validate_product(data), "Valid")
@@ -24,6 +25,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "",
             "product_quantity": "3",
+            "category_name": "food",
             "price": "5000"
         }
         with app.app_context():
@@ -57,6 +59,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "&%^&short##$$#sleeved shirt",
             "product_quantity": "54",
+            "category_name": "shirt",
             "price": "40000"
         }
         with app.app_context():
@@ -68,6 +71,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "shorts",
             "product_quantity": "54",
+            "category_name": "short",
             "price": "thisisprice"
         }
         with app.app_context():
@@ -79,6 +83,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "shirts",
             "product_quantity": "productquantity",
+            "category_name": "shirt",
             "price": "17000"
         }
         with app.app_context():
@@ -102,6 +107,7 @@ class TestValidator(unittest.TestCase):
             "product_name": "shirts",
             "product_quantity": "5000",
             "price": "17000",
+            "category_name": "shirt",
             "extra values": "many"
              }
         with app.app_context():

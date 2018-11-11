@@ -3,7 +3,6 @@ import json
 from api import app
 from config import secret_key
 from database_handler import DbConn
-from api.models.user_models import User
 
 
 class TestUserViews(unittest.TestCase):
@@ -13,6 +12,7 @@ class TestUserViews(unittest.TestCase):
             conn = DbConn()
             self.cur = conn.create_connection()
             conn.create_users_table()
+            conn.delete_default_admin()
             conn.create_default_admin()
             conn.create_blacklisted_tokens()
 

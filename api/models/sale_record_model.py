@@ -11,6 +11,7 @@ class SaleRecord:
         self.date_sold = ""
         conn = DbConn()
         self.cur = conn.create_connection()
+        conn.create_sales_table()
 
     def make_a_sale(self, total_amount, username, product_name,
                     product_quantity, price, date_sold):

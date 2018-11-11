@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, redirect
 from api.views.product_views import product
+from api.views.category_views import category
 from api.views.user_views import user
 from flasgger import Swagger
 from api.views.sale_record_views import sale
@@ -8,6 +9,7 @@ app = Flask(__name__)
 app.register_blueprint(product)
 app.register_blueprint(sale)
 app.register_blueprint(user)
+app.register_blueprint(category)
 
 
 # Define a swagger template

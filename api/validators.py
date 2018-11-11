@@ -7,13 +7,14 @@ class Validate:
     """This class contains validators for the different inputs"""
     def validate_product(self, data):
         # Validates the product fields
-        product_fields = ['product_name', 'product_quantity', 'price']
+        product_fields = ['product_name', 'product_quantity', 'price',
+                          'category_name']
         try:
             for product_field in product_fields:
                 if data[product_field] == "":
                     return product_field + " cannot be blank"
 
-            if len(data.keys()) == 0 or len(data.keys()) > 3:
+            if len(data.keys()) == 0 or len(data.keys()) > 4:
                 return "Invalid number of key fields"
             if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
                 return "productname should contain alphanumerics only"
@@ -104,3 +105,19 @@ class Validate:
                 return "productname should contain alphanumerics only"
         else:
             return "Sale_valid"
+
+    def validate_category(self, data):
+        """Validates the category name"""
+        try:
+            if data['category_name'] == "":
+                return "Category_name cannot be blank"
+            if 'category_name' not in data.keys():
+                return "Enter category_name"
+            if not re.match(r"^[a-zA-Z0-9 _]*$", data['category_name']):
+                    return "category name should contain alphanumerics only"
+            if len(data.keys()) > 1:
+                return "Invalid fields added"
+            else:
+                return "category_valid"
+        except KeyError:
+            return "Add required keys"

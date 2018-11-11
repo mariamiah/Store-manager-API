@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from api.models.product_model import Product
 from api.models.user_models import User
+from api.models.categories_model import Category
 from api.validators import Validate
 from datetime import datetime
 from flasgger import swag_from
@@ -10,6 +11,7 @@ from uuid import uuid4
 product = Blueprint('product', __name__)
 
 validate = Validate()
+category = Category()
 
 
 @product.route('/api/v2/products', methods=['POST'])
@@ -33,9 +35,12 @@ def create_product():
         if valid == "Valid":
             if product.check_if_product_exists(data['product_name']):
                 return jsonify({"message": "Product already exists"})
+            if category.check_if_category_exists(data['category_name'])\
+                    is False:
+                return jsonify({"message": "This category does not exist"})
             product.add_new_product(data['product_quantity'], data['price'],
                                     product_code, data['product_name'],
-                                    date_added)
+                                    data['category_name'], date_added)
             return jsonify({"message":
                             "Product added successfully"}), 201
         return jsonify({"message": valid}), 400
