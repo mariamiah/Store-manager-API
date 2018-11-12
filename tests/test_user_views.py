@@ -3,6 +3,7 @@ import json
 from api import app
 from config import secret_key
 from database_handler import DbConn
+from api.models.user_models import User
 
 
 class TestUserViews(unittest.TestCase):
@@ -46,6 +47,7 @@ class TestUserViews(unittest.TestCase):
         msg = json.loads(response.data)
         self.assertIn("User registered successfully", msg['message'])
         self.assertEqual(response.status_code, 201)
+        user = User
 
     def test_register_with_unmatched_passwords(self):
         # Tests that the user cannot register with un matched passwords

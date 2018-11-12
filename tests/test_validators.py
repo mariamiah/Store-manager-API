@@ -405,3 +405,38 @@ class TestValidator(unittest.TestCase):
         with app.app_context():
             self.assertEqual(self.validate.validate_user(user_data),
                              ("Enter string value"))
+
+    def test_blank_category_fields(self):
+        """Tests for blank category fields"""
+        category_data = {}
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ("Add required keys"))
+
+    def test_blank_category_name(self):
+        """Tests for blank category name"""
+        category_data = {
+            "category_name": ""
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ("Category_name cannot be blank"))
+
+    def test_invalid_category_name(self):
+        """Tests for invalid category name"""
+        category_data = {
+            "category_name": "#$#@$@@$#@"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ("category name should contain alphanumerics only"))
+
+    def test_invalid_category_fields(self):
+        """Tests for invalid category fields"""
+        category_data = {
+            "category_name": "jeans",
+            "price": "50000"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ('Invalid fields added'))

@@ -2,6 +2,7 @@ import unittest
 from api import app
 import json
 from database_handler import DbConn
+from api.models.categories_model import Category
 
 
 class TestCategoriesViews(unittest.TestCase):
@@ -78,6 +79,9 @@ class TestCategoriesViews(unittest.TestCase):
         msg = json.loads(response.data)
         self.assertIn("Category exists already", msg['message'])
         self.assertEqual(response.status_code, 400)
+        category = Category()
+        self.assertEqual(category.check_if_category_exists('Jackets'), True)
+        self.assertEqual(category.check_if_category_exists('books'), False)
 
     def tearDown(self):
         with app.app_context():
