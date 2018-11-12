@@ -1,7 +1,6 @@
 from flask import request, jsonify, Blueprint
 from api.validators import Validate
 from api.models.user_models import User
-from werkzeug.security import generate_password_hash
 from flasgger import swag_from
 from datetime import datetime, timedelta
 from functools import wraps
@@ -44,14 +43,11 @@ def register_user():
         return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()
     is_valid = validate.validate_user(data)
-    hashed_password = generate_password_hash(data['password'], 'sha256')
     try:
         if is_valid == "is_valid":
             if user_obj.check_for_existing_user(data['email']):
                 return jsonify({"message": "Email already exists, login"})
-            user_obj.add_user(data['employee_name'], data['email'],
-                              data['gender'], data['username'],
-                              hashed_password, data['role'])
+            user_obj.add_user(data)
             return jsonify({"message":
                             "User registered successfully"}), 201
         return jsonify({"message": is_valid}), 400

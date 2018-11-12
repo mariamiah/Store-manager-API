@@ -1,6 +1,6 @@
 from database_handler import DbConn
 from flask import jsonify, request
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from config import secret_key
 import jwt
 
@@ -21,22 +21,15 @@ class User:
         conn.create_users_table()
         conn.create_blacklisted_tokens()
 
-    def add_user(self, employee_name, email, gender, username, password, role):
-        self.employee_name = employee_name
-        self.email = email
-        self.gender = gender
-        self.username = username
-        self.password = password
-        self.role = role
+    def add_user(self, data):
+        hashed_password = generate_password_hash(data['password'], 'sha256')
         sql = """INSERT INTO users(employee_name, email, gender, username, password, role)
-                            VALUES ('{employee_name}', '{email}', '{gender}',
-                                    '{username}',
-                                    '{password}', '{role}')"""
-        sql_command = sql.format(employee_name=self.employee_name,
-                                 email=self.email, gender=self.gender,
-                                 username=self.username,
-                                 password=self.password,
-                                 role=self.role)
+                            VALUES ('{}', '{}', '{}', '{}', '{}', '{}')"""
+        sql_command = sql.format(data['employee_name'],
+                                 data['email'], data['gender'],
+                                 data['username'],
+                                 hashed_password,
+                                 data['role'])
         self.cur.execute(sql_command)
 
     def check_for_existing_user(self, email):
