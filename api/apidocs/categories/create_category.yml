@@ -1,0 +1,48 @@
+Endpoint for creating a category
+---
+tags:
+  - Category
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: Authorization
+    in: header
+    type: string
+    description: JWT token authorization
+    required: true
+  - name: body
+    in: body
+    description: Category Details
+    required: true
+    schema :
+      $ref: '#/definitions/create_category'
+definitions:
+  Category:
+    type: object
+    properties:
+      category_id:
+        type: integer
+        format: int64
+      category_name:
+        type: string
+      created_at:
+        type: string
+  create_category:
+    type: object
+    properties:
+      category_name:
+        type: string
+        example: "jeans"
+responses:
+  201:
+    description: Category created successfully
+    schema:
+      $ref: '#/definitions/Category'
+    examples:
+      [{
+        "message":"Category successfully created"
+      }]
+  400:
+    description: Enter category name

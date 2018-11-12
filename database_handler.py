@@ -42,7 +42,10 @@ class DbConn:
                       product_quantity INT NOT NULL,
                       price INT NOT NULL,
                       product_code UUID NOT NULL,
-                      product_name VARCHAR(100) NOT NULL UNIQUE); ''')
+                      product_name VARCHAR(100) NOT NULL UNIQUE,
+                      category_name VARCHAR(100) REFERENCES\
+                      categories(category_name) ON DELETE CASCADE,
+                      date_added DATE NOT NULL); ''')
 
     def create_sales_table(self):
         "A function to create the sales_records table"
@@ -60,10 +63,8 @@ class DbConn:
     def create_categories_table(self):
         """A function to create the categories table"""
         self.cur.execute('''CREATE TABLE IF NOT EXISTS categories
-                           (category_id  SERIAL PRIMARY KEY   NOT NULL ,
-                            category_name VARCHAR(100) NOT NULL,
-                            product_id INT REFERENCES products(product_id) ON\
-                            DELETE CASCADE ,
+                           (category_id SERIAL PRIMARY KEY NOT NULL,
+                            category_name VARCHAR(100) NOT NULL UNIQUE,
                             created_at  DATE); ''')
 
     def create_blacklisted_tokens(self):
@@ -71,6 +72,11 @@ class DbConn:
         self.cur.execute('''CREATE TABLE IF NOT EXISTS blacklisted
                             (token_id SERIAL PRIMARY KEY NOT NULL,
                             token VARCHAR(300) NOT NULL);''')
+
+    def delete_default_admin(self):
+        """Deletes default admin"""
+        sql = """DELETE FROM users WHERE username = '{}'"""
+        self.cur.execute(sql.format('Admin'))
 
     def create_default_admin(self):
         """Creates a default administrator """
@@ -80,11 +86,6 @@ class DbConn:
               ('{}', '{}', '{}', '{}', '{}', '{}')"""
         self.cur.execute(sql.format('Admin', 'admin@gmail.com', 'female',
                                     'Admin', hashed_password, 'Admin'))
-
-    def delete_default_admin(self):
-        """Deletes default admin"""
-        sql = """DELETE FROM users WHERE username = '{}'"""
-        self.cur.execute(sql.format('Admin'))
 
     def drop_tables(self, table_name):
         """ Drops the tables that exist in the database"""

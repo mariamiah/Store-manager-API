@@ -1,6 +1,6 @@
 from database_handler import DbConn
 from flask import jsonify, request
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from config import secret_key
 import jwt
 
@@ -18,23 +18,18 @@ class User:
         self.role = ""
         conn = DbConn()
         self.cur = conn.create_connection()
+        conn.create_users_table()
+        conn.create_blacklisted_tokens()
 
-    def add_user(self, employee_name, email, gender, username, password, role):
-        self.employee_name = employee_name
-        self.email = email
-        self.gender = gender
-        self.username = username
-        self.password = password
-        self.role = role
+    def add_user(self, data):
+        hashed_password = generate_password_hash(data['password'], 'sha256')
         sql = """INSERT INTO users(employee_name, email, gender, username, password, role)
-                            VALUES ('{employee_name}', '{email}', '{gender}',
-                                    '{username}',
-                                    '{password}', '{role}')"""
-        sql_command = sql.format(employee_name=self.employee_name,
-                                 email=self.email, gender=self.gender,
-                                 username=self.username,
-                                 password=self.password,
-                                 role=self.role)
+                            VALUES ('{}', '{}', '{}', '{}', '{}', '{}')"""
+        sql_command = sql.format(data['employee_name'],
+                                 data['email'], data['gender'],
+                                 data['username'],
+                                 hashed_password,
+                                 data['role'])
         self.cur.execute(sql_command)
 
     def check_for_existing_user(self, email):
@@ -84,3 +79,45 @@ class User:
         decoded_token = jwt.decode(data_token, secret_key)
         current_user = decoded_token['user']
         return current_user
+
+    def fetch_all_users(self):
+        """ Fetches all registered users in the system"""
+        users = []
+        sql = """ SELECT * FROM users"""
+        self.cur.execute(sql)
+        rows = self.cur.fetchall()
+        for row in rows:
+            users.append(
+                {
+                    "employee_id": row[0],
+                    "employee_name": row[1],
+                    "email": row[2],
+                    "gender": row[3],
+                    "username": row[4],
+                    "password": row[5],
+                    "role": row[6]
+                }
+            )
+        return users
+
+    def fetch_single_user(self, employee_id):
+        """Fetches a single user"""
+        specific_user = []
+        sql = """SELECT * FROM users WHERE employee_id = '{}'"""
+        self.cur.execute(sql.format(employee_id))
+        row = self.cur.fetchone()
+        specific_user.append({
+            "employee_id": row[0],
+            "employee_name": row[1],
+            "email": row[2],
+            "gender": row[3],
+            "username": row[4],
+            "password": row[5],
+            "role": row[6]
+        })
+        return specific_user
+
+    def update_user_role(self, new_role, employee_id):
+        """Updates the user role"""
+        sql = """UPDATE users SET role ='{}' WHERE employee_id = '{}'"""
+        self.cur.execute(sql.format(new_role, employee_id))

@@ -71,7 +71,16 @@ def fetch_sale_orders():
 
 @sale.route('/api/v2/sales/<int:sale_id>', methods=['GET'])
 @swag_from('../apidocs/sales/get_single_sale.yml')
+@token_required
 def get_single_record(sale_id):
+    user = User()
+    fetched_token = request.headers['Authorization']
+    token = fetched_token.split(" ")[1]
+    if user.validate_token(token):
+        return jsonify({"message": "Token blacklisted, login again"}), 400
+    if user.fetch_current_user() != salerecord.fetch_user_from_sale(sale_id)\
+            and validate.check_permission(token):
+        return jsonify({"message": "Not authorised to view this sale!"})
     try:
         if sale_id != 0 or salerecord.check_sale_id_exists(sale_id):
             single_sale = salerecord.view_sale_by_id(sale_id)

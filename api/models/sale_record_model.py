@@ -1,5 +1,4 @@
 from database_handler import DbConn
-from flask import request
 
 
 class SaleRecord:
@@ -12,6 +11,7 @@ class SaleRecord:
         self.date_sold = ""
         conn = DbConn()
         self.cur = conn.create_connection()
+        conn.create_sales_table()
 
     def make_a_sale(self, total_amount, username, product_name,
                     product_quantity, price, date_sold):
@@ -55,6 +55,15 @@ class SaleRecord:
                 "date_sold": row[6]
 
         }
+
+    def fetch_user_from_sale(self, sale_id):
+        """Fetches the user who made a particular sale"""
+        sql = """SELECT username FROM sales_records WHERE sale_id = '{}'"""
+        self.cur.execute(sql.format(sale_id))
+        row = self.cur.fetchone()
+        if row:
+            return row[0]
+        return False
 
     def check_sale_id_exists(self, sale_id):
         """ Checks if id exists"""

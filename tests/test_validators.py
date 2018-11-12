@@ -15,6 +15,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "foods",
             "product_quantity": "4",
+            "category_name": "food",
             "price": "5000",
         }
         self.assertEqual(self.validate.validate_product(data), "Valid")
@@ -24,6 +25,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "",
             "product_quantity": "3",
+            "category_name": "food",
             "price": "5000"
         }
         with app.app_context():
@@ -57,6 +59,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "&%^&short##$$#sleeved shirt",
             "product_quantity": "54",
+            "category_name": "shirt",
             "price": "40000"
         }
         with app.app_context():
@@ -68,6 +71,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "shorts",
             "product_quantity": "54",
+            "category_name": "short",
             "price": "thisisprice"
         }
         with app.app_context():
@@ -79,6 +83,7 @@ class TestValidator(unittest.TestCase):
         data = {
             "product_name": "shirts",
             "product_quantity": "productquantity",
+            "category_name": "shirt",
             "price": "17000"
         }
         with app.app_context():
@@ -102,6 +107,7 @@ class TestValidator(unittest.TestCase):
             "product_name": "shirts",
             "product_quantity": "5000",
             "price": "17000",
+            "category_name": "shirt",
             "extra values": "many"
              }
         with app.app_context():
@@ -365,3 +371,72 @@ class TestValidator(unittest.TestCase):
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
                              ("Sale_valid"))
+
+    def test_wrong_number_of_user_fields(self):
+        """Tests the number of user keys entered at registration"""
+        user_data = {
+            "employee_name": "sarah",
+            "gender": "female",
+            "username": "sarah",
+            "password": "475543",
+            "confirm_password": "475543",
+            "email": "sara@gmail.com",
+            "role": "admin",
+            "grade": "4",
+            "address": "Masaka"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("Wrong number of fields"))
+
+    def test_datatype_for_user_fields(self):
+        """Tests the data type for the user fields"""
+        user_data = {
+            "employee_name": 5,
+            "gender": "female",
+            "username": "sarah",
+            "password": "475543",
+            "confirm_password": "475543",
+            "email": "sara@gmail.com",
+            "role": "admin",
+            "grade": "4",
+            "address": "Masaka"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_user(user_data),
+                             ("Enter string value"))
+
+    def test_blank_category_fields(self):
+        """Tests for blank category fields"""
+        category_data = {}
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ("Add required keys"))
+
+    def test_blank_category_name(self):
+        """Tests for blank category name"""
+        category_data = {
+            "category_name": ""
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ("Category_name cannot be blank"))
+
+    def test_invalid_category_name(self):
+        """Tests for invalid category name"""
+        category_data = {
+            "category_name": "#$#@$@@$#@"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ("category name should contain alphanumerics only"))
+
+    def test_invalid_category_fields(self):
+        """Tests for invalid category fields"""
+        category_data = {
+            "category_name": "jeans",
+            "price": "50000"
+        }
+        with app.app_context():
+            self.assertEqual(self.validate.validate_category(category_data),
+                             ('Invalid fields added'))

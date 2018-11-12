@@ -35,6 +35,6 @@ Endpoint to fetch a single product
             "product_name": "covert jeans",
             "product_quantity": "4"
       }]
-    400:
-      description: Index out of range
+    404:
+      description: Product not found
 

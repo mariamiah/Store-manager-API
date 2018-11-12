@@ -61,5 +61,3 @@ responses:
     description: Product name should contain alphanumerics only
     description: Price should contain integers only
     description: Quantity should contain integers only
-    
-

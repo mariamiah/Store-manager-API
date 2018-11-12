@@ -7,7 +7,7 @@ consumes:
 produces:
   - application/json
 parameters:
-  - name: x-access-token
+  - name: Authorization
     in: header
     type: string
     description: JWT token authorization
