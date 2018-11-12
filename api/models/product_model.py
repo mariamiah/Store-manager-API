@@ -13,6 +13,8 @@ class Product:
         self.date_added = ""
         conn = DbConn()
         self.cur = conn.create_connection()
+        conn.delete_default_admin()
+        conn.create_default_admin()
         conn.create_categories_table()
         conn.create_products_table()
 

@@ -10,6 +10,8 @@ class Category:
         self.created_at = ""
         conn = DbConn()
         self.cur = conn.create_connection()
+        conn.delete_default_admin()
+        conn.create_default_admin()
         conn.create_categories_table()
 
     def add_new_category(self, category_name, created_at):
