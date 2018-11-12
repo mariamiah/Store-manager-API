@@ -73,6 +73,11 @@ class DbConn:
                             (token_id SERIAL PRIMARY KEY NOT NULL,
                             token VARCHAR(300) NOT NULL);''')
 
+    def delete_default_admin(self):
+        """Deletes default admin"""
+        sql = """DELETE FROM users WHERE username = '{}'"""
+        self.cur.execute(sql.format('Admin'))
+
     def create_default_admin(self):
         """Creates a default administrator """
         hashed_password = generate_password_hash('Administrator', 'sha256')
@@ -81,11 +86,6 @@ class DbConn:
               ('{}', '{}', '{}', '{}', '{}', '{}')"""
         self.cur.execute(sql.format('Admin', 'admin@gmail.com', 'female',
                                     'Admin', hashed_password, 'Admin'))
-
-    def delete_default_admin(self):
-        """Deletes default admin"""
-        sql = """DELETE FROM users WHERE username = '{}'"""
-        self.cur.execute(sql.format('Admin'))
 
     def drop_tables(self, table_name):
         """ Drops the tables that exist in the database"""
