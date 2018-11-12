@@ -3,10 +3,8 @@ from api.models.product_model import Product
 from api.models.user_models import User
 from api.models.categories_model import Category
 from api.validators import Validate
-from datetime import datetime
 from flasgger import swag_from
 from api.views.user_views import token_required
-from uuid import uuid4
 
 product = Blueprint('product', __name__)
 
@@ -28,9 +26,7 @@ def create_product():
         return jsonify({"message": "Permission Denied, Not Admin"}), 400
     data = request.get_json()
     product = Product()
-    product_code = uuid4()
     valid = validate.validate_product(data)
-    date_added = datetime.now()
     try:
         if valid == "Valid":
             if product.check_if_product_exists(data['product_name']):
@@ -38,9 +34,7 @@ def create_product():
             if category.check_if_category_exists(data['category_name'])\
                     is False:
                 return jsonify({"message": "This category does not exist"})
-            product.add_new_product(data['product_quantity'], data['price'],
-                                    product_code, data['product_name'],
-                                    data['category_name'], date_added)
+            product.add_new_product(data)
             return jsonify({"message":
                             "Product added successfully"}), 201
         return jsonify({"message": valid}), 400

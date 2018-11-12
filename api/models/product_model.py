@@ -1,4 +1,6 @@
 from database_handler import DbConn
+from datetime import datetime
+from uuid import uuid4
 
 
 class Product:
@@ -16,25 +18,16 @@ class Product:
         conn.create_categories_table()
         conn.create_products_table()
 
-    def add_new_product(self, product_quantity, price, product_code,
-                        product_name, category_name, date_added):
-        self.product_quantity = product_quantity
-        self.price = price
-        self.product_code = product_code
-        self.product_name = product_name
-        self.category_name = category_name
-        self.date_added = date_added
+    def add_new_product(self, data):
+        product_code = uuid4()
+        date_added = datetime.now()
         sql = """INSERT INTO products(product_quantity, price, product_code,
                                       product_name, category_name, date_added)
-                            VALUES ('{product_quantity}', '{price}',
-                                    '{product_code}', '{product_name}',
-                                    '{category_name}', '{date_added}')"""
-        sql_command = sql.format(product_quantity=self.product_quantity,
-                                 price=self.price,
-                                 product_code=self.product_code,
-                                 product_name=self.product_name,
-                                 category_name=self.category_name,
-                                 date_added=self.date_added)
+                            VALUES ('{}', '{}','{}', '{}', '{}', '{}')"""
+        sql_command = sql.format(data['product_quantity'], data['price'],
+                                 product_code,
+                                 data['product_name'],
+                                 data['category_name'], date_added)
         self.cur.execute(sql_command)
 
     def check_if_product_exists(self, product_name):
