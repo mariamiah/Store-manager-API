@@ -4,8 +4,10 @@ from api.views.category_views import category
 from api.views.user_views import user
 from flasgger import Swagger
 from api.views.sale_record_views import sale
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(product)
 app.register_blueprint(sale)
 app.register_blueprint(user)
