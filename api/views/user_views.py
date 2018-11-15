@@ -142,7 +142,7 @@ def assigns_token(data):
     if user.fetch_password():
         token = jwt.encode({'user': data['username'],
                             'exp': datetime.utcnow() +
-                            timedelta(minutes=30),
+                            timedelta(hours=24),
                             'roles': user.get_role()},
                            secret_key)
         return jsonify({'token': token.decode('UTF-8')}), 200
