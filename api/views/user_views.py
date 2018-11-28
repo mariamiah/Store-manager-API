@@ -52,7 +52,7 @@ def register_user():
                             "User registered successfully"}), 201
         return jsonify({"message": is_valid}), 400
     except Exception:
-        return jsonify({"message": "Username already taken"}), 400
+        return jsonify({"message": "Invalid"}), 400
 
 
 @user.route('/api/v2/auth/login', methods=['POST'])

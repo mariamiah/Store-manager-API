@@ -66,7 +66,7 @@ def fetch_sale_orders():
     if validate.check_permission(token):
         return jsonify({"message": "Permission Denied, Not Admin"}), 400
     fetched_sales = salerecord.view_all_sales()
-    return jsonify({"All Sales": fetched_sales}), 200
+    return jsonify({"Sales": fetched_sales}), 200
 
 
 @sale.route('/api/v2/sales/<int:sale_id>', methods=['GET'])
