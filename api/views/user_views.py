@@ -17,15 +17,12 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
-        try:
-            if 'Authorization' in request.headers:
-                token = request.headers['Authorization']
-            if not token:
-                return jsonify({"message": "Missing Token"}), 403
-                jwt.decode(token, secret_key)
-            return f(*args, **kwargs)
-        except Exception:
-            return jsonify({"message": "Invalid token signature"}), 400
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization']
+        if not token:
+            return jsonify({"message": "Missing Token"}), 403
+            jwt.decode(token, secret_key)
+        return f(*args, **kwargs)
     return decorated
 
 
