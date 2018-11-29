@@ -91,7 +91,7 @@ class Validate:
 
     def validate_sale(self, data):
         """ Validates the sale made """
-        if len(data.keys()) == 0 or len(data.keys()) > 2:
+        if len(data.keys()) == 0 or len(data.keys()) > 3:
             return "Invalid keys"
         if 'product_name' and 'product_quantity' not in data.keys():
             return "Add product name and quantity"
@@ -99,10 +99,14 @@ class Validate:
             return "Product_name cannot be blank"
         if data['product_quantity'] == "":
             return "Product_quantity cannot be blank"
+        if data['price'] == "":
+            return "Enter required price"
         if not re.match(r"^[0-9_]*$", data['product_quantity']):
                 return "quantity should contain integers only"
         if not re.match(r"^[a-zA-Z0-9 _]*$", data['product_name']):
                 return "productname should contain alphanumerics only"
+        if not re.match(r"^[0-9_]*$", data['price']):
+                return "price should contain integers only"
         else:
             return "Sale_valid"
 

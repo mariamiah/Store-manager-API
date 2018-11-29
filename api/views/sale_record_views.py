@@ -36,6 +36,8 @@ def create_sale_record():
         if valid == "Sale_valid":
             if product.check_if_product_exists(data['product_name']) is False:
                 return jsonify({"message": "Product does not exist"}), 400
+            if int(price) != int(data['price']):
+                return jsonify({"message": "Enter correct price"}), 400
             if product.compute_stock_balance(data['product_quantity'],
                                              data['product_name']) is False:
                 return jsonify({

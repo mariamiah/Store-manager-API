@@ -301,7 +301,7 @@ class TestValidator(unittest.TestCase):
                              ("gender can only be female or male"))
 
     def test_return_if_more_keys_entered(self):
-        # Tests to ensure that if more than 2 keys is not accepted
+        # Tests to ensure that if more than 3 keys is not accepted
         sale_data = {
             "product_quantity": "4",
             "product_name": "blouse",
@@ -326,7 +326,8 @@ class TestValidator(unittest.TestCase):
         # Tests to ensure that product name is not blank
         sale_data = {
             "product_quantity": "",
-            "product_name": "shorts"
+            "product_name": "shorts",
+            "price": "50000"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
@@ -336,7 +337,8 @@ class TestValidator(unittest.TestCase):
         # Tests to ensure that product name contains strings
         sale_data = {
             "product_quantity": "quantity",
-            "product_name": "shorts"
+            "product_name": "shorts",
+            "price": "50000"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
@@ -346,7 +348,8 @@ class TestValidator(unittest.TestCase):
         # Tests to ensure that product name contains special characters
         sale_data = {
             "product_quantity": "10",
-            "product_name": "s@$@#@###"
+            "product_name": "s@$@#@###",
+            "price": "50000"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
@@ -356,7 +359,8 @@ class TestValidator(unittest.TestCase):
         # Tests to ensure that product name is not blank
         sale_data = {
             "product_quantity": "5",
-            "product_name": ""
+            "product_name": "",
+            "price": "50000"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
@@ -366,7 +370,8 @@ class TestValidator(unittest.TestCase):
         # Tests to ensure that correct sales definition passes
         sale_data = {
             "product_quantity": "4",
-            "product_name": "blouse"
+            "product_name": "blouse",
+            "price": "50000"
         }
         with app.app_context():
             self.assertEqual(self.validate.validate_sale(sale_data),
@@ -428,8 +433,9 @@ class TestValidator(unittest.TestCase):
             "category_name": "#$#@$@@$#@"
         }
         with app.app_context():
-            self.assertEqual(self.validate.validate_category(category_data),
-                             ("category name should contain alphanumerics only"))
+            self.assertEqual
+            (self.validate.validate_category(category_data),
+             ("category name should contain alphanumerics only"))
 
     def test_invalid_category_fields(self):
         """Tests for invalid category fields"""
