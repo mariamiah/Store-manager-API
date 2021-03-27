@@ -35,4 +35,4 @@ requests==2.20.0
 six==1.11.0
 undecorated==0.3.0
 urllib3==1.24
-Werkzeug==0.14.1
+Werkzeug==0.15.3
