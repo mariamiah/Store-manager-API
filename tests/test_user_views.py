@@ -1,7 +1,6 @@
 import unittest
 import json
 from api import app
-from config import secret_key
 from database_handler import DbConn
 from api.models.user_models import User
 
@@ -79,10 +78,6 @@ class TestUserViews(unittest.TestCase):
         msg = json.loads(response.data)
         self.assertIn("passwords dont match", msg['message'])
         self.assertEqual(response.status_code, 400)
-
-    def test_configuration(self):
-        """ Tests the API configuration key """
-        self.assertEqual(secret_key, 'topsecret')
 
     def test_user_cant_register_if_already_exists(self):
         # Tests that a user cannot register again if already exists

@@ -1,7 +1,6 @@
 import re
 import jwt
-from config import secret_key
-
+import os
 
 class Validate:
     """This class contains validators for the different inputs"""
@@ -84,7 +83,7 @@ class Validate:
 
     def check_permission(self, token):
         """ Decodes an encoded token"""
-        decoded_token = jwt.decode(token, secret_key)
+        decoded_token = jwt.decode(token, os.getenv('SECRET_KEY'))
         if decoded_token['roles'] != ['Admin']:
             return True
         return False

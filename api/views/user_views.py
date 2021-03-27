@@ -4,7 +4,6 @@ from api.models.user_models import User
 from flasgger import swag_from
 from datetime import datetime, timedelta
 from functools import wraps
-from config import secret_key
 import jwt
 
 
@@ -21,7 +20,7 @@ def token_required(f):
             token = request.headers['Authorization']
         if not token:
             return jsonify({"message": "Missing Token"}), 403
-            jwt.decode(token, secret_key)
+            jwt.decode(token, os.getenv('SECRET_KEY'))
         return f(*args, **kwargs)
     return decorated
 
@@ -141,7 +140,7 @@ def assigns_token(data):
                             'exp': datetime.utcnow() +
                             timedelta(hours=24),
                             'roles': user.get_role()},
-                           secret_key)
+                           os.getenv('SECRET_KEY'))
         return jsonify({'token': token.decode('UTF-8')}), 200
     return jsonify({
         "message": "User either not registered or forgot password"}), 400

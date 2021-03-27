@@ -1,7 +1,6 @@
 from database_handler import DbConn
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import secret_key
 import jwt
 
 
@@ -76,7 +75,7 @@ class User:
         """ Fetches the current user"""
         token = request.headers['Authorization']
         data_token = token.split(" ")[1]
-        decoded_token = jwt.decode(data_token, secret_key)
+        decoded_token = jwt.decode(data_token, os.getenv('SECRET_KEY'))
         current_user = decoded_token['user']
         return current_user
 
