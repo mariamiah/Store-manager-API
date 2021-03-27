@@ -135,7 +135,7 @@ class TestUserViews(unittest.TestCase):
                                     content_type='application/json',
                                     json=user_details)
         msg = json.loads(response.data)
-        self.assertIn("Username doesnot exist",
+        self.assertIn("User either not registered or forgot password",
                       msg['message'])
         self.assertEqual(response.status_code, 400)
 

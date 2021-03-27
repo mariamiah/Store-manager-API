@@ -2,6 +2,7 @@ from database_handler import DbConn
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
+import os
 
 
 class User:
@@ -46,9 +47,7 @@ class User:
         sql = """SELECT password FROM users WHERE username='{}'"""
         self.cur.execute(sql.format(data['username']))
         row = self.cur.fetchone()
-        print(row[0])
-        print(check_password_hash(row[0], data['password']))
-        if check_password_hash(row[0], data['password']):
+        if row and check_password_hash(row[0], data['password']):
             return True
         return False
 
