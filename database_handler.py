@@ -8,7 +8,7 @@ class DbConn:
         """ Function that creates the database based on the application
             environment"""
         if os.environ.get('APP_SETTINGS') == 'testing':
-            database_name = "test_storemanagerdb"
+            database_name = "test_store_managerdb"
             self.conn = psycopg2.connect(dbname=database_name, user="postgres",
                                          password="123", port="5432",
                                          host="localhost")
