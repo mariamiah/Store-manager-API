@@ -4,11 +4,6 @@ python:
 services:
   - postgresql
 
-env:
-  global:
-    - APP_SETTINGS ='testing'
-    - ADMIN_PWD="testAdmin"
-
 install:
   - "pip install -r requirements.txt"
   - "pip install coveralls"
