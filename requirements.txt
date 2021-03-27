@@ -30,7 +30,7 @@ py==1.7.0
 PyJWT==1.4.2
 pytest==3.8.2
 pytest-cov==2.6.0
-PyYAML==3.13
+PyYAML==5.4
 requests==2.20.0
 six==1.11.0
 undecorated==0.3.0
