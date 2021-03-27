@@ -20,7 +20,7 @@ class TestUserViews(unittest.TestCase):
         # Tests that the user is registered
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -52,7 +52,7 @@ class TestUserViews(unittest.TestCase):
         # Tests that the user cannot register with un matched passwords
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -83,7 +83,7 @@ class TestUserViews(unittest.TestCase):
         # Tests that a user cannot register again if already exists
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -117,7 +117,7 @@ class TestUserViews(unittest.TestCase):
         """ Tests that a registered user successfully logs in """
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -199,7 +199,7 @@ class TestUserViews(unittest.TestCase):
         # Tests that a user successfully logs out
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -220,7 +220,7 @@ class TestUserViews(unittest.TestCase):
         """Tests the end point that fetches all users"""
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -240,7 +240,7 @@ class TestUserViews(unittest.TestCase):
         """ Tests fetch single user end point """
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -260,7 +260,7 @@ class TestUserViews(unittest.TestCase):
         """Tests that the admin successfully updates role"""
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',

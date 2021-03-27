@@ -31,7 +31,7 @@ class TestCategoriesViews(unittest.TestCase):
         # Tests that the category is created given correct credentials
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -56,7 +56,7 @@ class TestCategoriesViews(unittest.TestCase):
         # Tests that the category is not created if it exists already
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',

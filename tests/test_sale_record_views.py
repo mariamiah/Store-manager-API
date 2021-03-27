@@ -41,7 +41,7 @@ class TestSaleViews(unittest.TestCase):
         # Tests that the end point fetches all sales
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -60,7 +60,7 @@ class TestSaleViews(unittest.TestCase):
         # Tests that a sale is viewed if admin
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -80,7 +80,7 @@ class TestSaleViews(unittest.TestCase):
         # Tests that a product is created if admin
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -106,7 +106,7 @@ class TestSaleViews(unittest.TestCase):
         # Tests that cannot add unexistent product
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -158,7 +158,7 @@ class TestSaleViews(unittest.TestCase):
         # Tests that an administrator can view a single sale by id
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',

@@ -41,7 +41,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that a product is created if admin
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -79,7 +79,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that a user cannot add a product if they are not admin
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -131,7 +131,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that an admin can delete a product
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -168,7 +168,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that a user can not delete item if not administrator
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -224,7 +224,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that its only the administrator who can modify a product
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -262,7 +262,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that a user cannot modify a product if not admin
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -317,7 +317,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that one cannot use an invalid token to create a product
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
@@ -346,7 +346,7 @@ class TestProductViews(unittest.TestCase):
         # Tests that a user cannot add an already exisitng product
         login_details = {
                "username": "Admin",
-               "password": "Administrator"
+               "password": "testAdmin"
             }
         response = self.client.post('/api/v2/auth/login',
                                     content_type='application/json',
