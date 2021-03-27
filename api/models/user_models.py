@@ -18,6 +18,7 @@ class User:
         conn = DbConn()
         self.cur = conn.create_connection()
         conn.create_users_table()
+        conn.create_default_admin()
         conn.create_blacklisted_tokens()
 
     def add_user(self, data):
@@ -45,6 +46,8 @@ class User:
         sql = """SELECT password FROM users WHERE username='{}'"""
         self.cur.execute(sql.format(data['username']))
         row = self.cur.fetchone()
+        print(row[0])
+        print(check_password_hash(row[0], data['password']))
         if check_password_hash(row[0], data['password']):
             return True
         return False

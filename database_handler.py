@@ -80,10 +80,10 @@ class DbConn:
 
     def create_default_admin(self):
         """Creates a default administrator """
-        hashed_password = generate_password_hash('Administrator', 'sha256')
+        hashed_password = generate_password_hash(os.getenv('ADMIN_PWD'), method='pbkdf2:sha256', salt_length=8)
         sql = """INSERT INTO users(employee_name, email, gender, username,
                                    password, role) VALUES
-              ('{}', '{}', '{}', '{}', '{}', '{}')"""
+              ('{}', '{}', '{}', '{}', '{}', '{}')ON CONFLICT DO NOTHING"""
         self.cur.execute(sql.format('Admin', 'admin@gmail.com', 'female',
                                     'Admin', hashed_password, 'Admin'))
 

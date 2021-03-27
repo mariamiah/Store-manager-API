@@ -5,6 +5,7 @@ from flasgger import swag_from
 from datetime import datetime, timedelta
 from functools import wraps
 import jwt
+import os
 
 
 user = Blueprint('user', __name__)
@@ -55,13 +56,11 @@ def register_user():
 @swag_from('../apidocs/users/login_user.yml')
 def login():
     data = request.get_json()
-    try:
-        is_valid = validate.validate_login(data)
-        if is_valid == "Credentials valid":
-            return assigns_token(data)
-        return jsonify({"message": is_valid}), 400
-    except Exception:
-        return jsonify({"message": "Username doesnot exist, register"}), 400
+    is_valid = validate.validate_login(data)
+    if is_valid == "Credentials valid":
+        return assigns_token(data)
+    return jsonify({"message": is_valid}), 400
+
 
 
 @user.route('/api/v2/auth/logout', methods=['POST'])
